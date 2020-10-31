@@ -1,0 +1,43 @@
+.layout
+{
+  padding: 50px;
+}
+
+.form-1
+{
+  width: 200px;
+}
+
+.textarea
+{
+  height: 200px;
+}
+
+.button-set
+{
+  display: flex;
+}
+
+.button-set .zn-button
+{
+  flex-grow: 0;
+  margin-right: 5px;
+}
+
+.calendars
+{
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.calendars .zn-calendar
+{
+  flex-grow: 0;
+  margin-right: 20px;
+}
+
+.radio-group, .tnc
+{
+  width: 450px;
+}

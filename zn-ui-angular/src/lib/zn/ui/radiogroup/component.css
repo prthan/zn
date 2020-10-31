@@ -1,0 +1,113 @@
+.zn-radiogroup
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-radiogroup .zn-radiogroup-input
+{
+  flex-grow: 0;
+	padding: 4px;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.zn-radiogroup.horizontal .zn-radiogroup-input
+{
+  flex-direction: row;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item
+{
+  display: flex;
+  align-items: center;
+  padding: 1px 0px;
+}
+
+.zn-radiogroup.horizontal .zn-radiogroup-input .zn-radiogroup-item
+{
+  padding-right: 15px;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item i
+{
+  font-size: 12px;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item .state-on
+{
+  flex-grow: 0;
+  display: none;
+  color: #7f8d98;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item .state-off
+{
+  flex-grow: 0;
+  color: #bcbcbc;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item .text
+{
+  flex-grow: 1;
+  padding-left: 5px;
+  color: #3e4448;
+  font-size: 13px;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item[data-state="on"] .text
+{
+  font-weight: 600;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item.focused i
+{
+  color: #9da9b2;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item[data-state="on"] .state-off
+{
+  display: none;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item[data-state="on"] .state-on
+{
+  display: inline-block;
+}
+
+.zn-radiogroup .zn-radiogroup-input .zn-radiogroup-item:hover i
+{
+  color: #9da9b2;
+}
+
+.zn-radiogroup.error .zn-radiogroup-input .zn-radiogroup-item .text
+{
+  color: #d4746d;
+}
+
+.zn-radiogroup .zn-radiogroup-label
+{
+  flex-grow: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+
+.zn-radiogroup.error .zn-radiogroup-label
+{
+  color: #d4746d;
+}
+
+.zn-radiogroup .zn-radiogroup-msg
+{
+  flex-grow: 0;
+  min-height: 20px;
+  font-size: 11px;
+}
+
+.zn-radiogroup.error .zn-radiogroup-msg
+{
+  color: #d4746d;
+}

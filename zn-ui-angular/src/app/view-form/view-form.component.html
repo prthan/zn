@@ -1,0 +1,27 @@
+<div class="layout">
+  <div class="form-1">
+    <div zn-textfield name="associate-name" label="Associate Name" [(value)]="form.associateName"></div>
+    <div zn-textfield name="userid" [(value)]="form.userid" icon="fas fa-user-tie" placeholder="User ID"></div>
+    <div zn-textfield name="password" [(value)]="form.password" icon="fas fa-lock" password=true placeholder="Password"></div>
+    <div zn-dropdownfield name="network" label="Network" [(value)]="form.network" [items]="typesOfNetwork"></div>
+    <div zn-datefield name="activedate" label="Active On" [(value)]="form.activeDate" placeholder="Select date"></div>
+    <div zn-textarea name="descr" label="Description" [(value)]="form.descr" class="textarea" placeholder="Please enter the details here"></div>
+  </div>
+  <div class="radio-group">
+    <div zn-radiogroup name="networkopts" label="Network Options" [(value)]="form.networkopts" [items]="typesOfNetwork"></div>
+  </div>
+  <div class="tnc">
+    <div zn-checkboxfield name="agreement" text="I agree to the terms and conditions of the fair use of this software" [(value)]="form.agreement" onValue="Y" offValue="N"></div>
+  </div>
+  <div class="button-set">
+    <div zn-button name="add-calendar" text="Add Calendar" action="add-calendar" icon="far fa-calendar-plus"></div>
+    <div zn-button name="bookmark" text="Bookmark" action="bookmark" icon="fas fa-bookmark"></div>
+    <div zn-button name="delete" text="Delete" action="delete" icon="fas fa-trash" type="critical"></div>
+    <div zn-button name="update" text="Update Form Data" action="update-form-data" (onAction)="onUpdateFormData($event)"></div>
+  </div>
+  <div class="calendars">
+    <div zn-calendar name="start-date" [(date)]="form.startDateCal" (onDateSelect)="onStartDateSelect($event)"></div>
+    <div zn-calendar name="end-date"  [(date)]="form.endDateCal" (onDateSelect)="onEndDateSelect($event)"></div>
+  </div>
+</div>
+
