@@ -93,7 +93,6 @@
       if(evt.keyCode!=32) return;
       radiogroup.$target.find(".zn-radiogroup-input .zn-radiogroup-item[data-state='on']").attr("data-state", "off");
       let $item=$(evt.currentTarget);
-      console.log($item);
       $item.attr("data-state", "on");
 
       let oldValue=radiogroup.value;

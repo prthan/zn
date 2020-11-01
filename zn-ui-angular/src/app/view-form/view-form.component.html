@@ -17,7 +17,7 @@
     <div zn-button name="add-calendar" text="Add Calendar" action="add-calendar" icon="far fa-calendar-plus"></div>
     <div zn-button name="bookmark" text="Bookmark" action="bookmark" icon="fas fa-bookmark"></div>
     <div zn-button name="delete" text="Delete" action="delete" icon="fas fa-trash" type="critical"></div>
-    <div zn-button name="update" text="Update Form Data" action="update-form-data" (onAction)="onUpdateFormData($event)"></div>
+    <div zn-button name="update" text="Update Form Data" action="update-form-data" (onAction)="onUpdateFormData($event)" type="warning"></div>
   </div>
   <div class="calendars">
     <div zn-calendar name="start-date" [(date)]="form.startDateCal" (onDateSelect)="onStartDateSelect($event)"></div>
