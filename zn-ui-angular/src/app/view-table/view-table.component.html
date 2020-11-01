@@ -1,5 +1,5 @@
 <div class="layout">
   <div class="table" zn-table [columns]="columns" [rows]="rows" [rowActions]="rowActions" name="table-demo" multiSelect="Y"
-      headerHeight="50" (onRowSelect)="onRowSelect($event)" pageSize="25"
+      headerHeight="50" (onRowSelect)="onRowSelect($event)" pageSize="25" [actions]="tableActions" (onAction)="onAction($event)"
   ></div>
 </div>

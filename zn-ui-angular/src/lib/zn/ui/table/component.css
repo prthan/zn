@@ -739,7 +739,8 @@
 {
 	flex-grow: 0;
 	background-color: #f4f4f4;
-  display: none;
+	display: none;
+	padding: 5px;
 }
 
 .zn-table.zn-table-actions .zn-table-footer, .zn-table.zn-table-pagination .zn-table-footer
@@ -750,7 +751,6 @@
 .zn-table .zn-table-footer .zn-table-page-numbers
 {
 	flex-grow: 0;
-	padding: 5px 0px;
 	display: flex;
 	align-items: center;
 }
@@ -794,4 +794,45 @@
 {
 	flex-grow: 1;
 	flex-basis: 0;
+	display: flex;
+	align-items: center;
+}
+
+.zn-table .zn-table-footer .zn-table-actions .zn-table-action
+{
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  padding: 5px;
+  text-decoration: none;
+  border-radius: 2px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  background-color: #18a689;
+	border: 1px solid #18a689;
+	margin-right: 5px;
+}
+
+.zn-table .zn-table-footer .zn-table-actions .zn-table-action:hover
+{
+  background-color: #1ab394;
+}
+
+.zn-table .zn-table-footer .zn-table-actions .zn-table-action .icon
+{
+  flex-grow: 0;
+  color: #ffffff;
+  font-size: 15px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.zn-table .zn-table-footer .zn-table-actions .zn-table-action .text
+{
+  flex-grow: 0;
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
 }

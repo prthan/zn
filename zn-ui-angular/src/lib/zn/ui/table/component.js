@@ -60,6 +60,7 @@
     if(table.options.fill) table.$target.addClass("zn-table-fill");
     if(table.options.containerScroll) table.$target.addClass("zn-table-container-scroll");
     if(table.options.rowActions) table.$target.addClass("zn-table-row-actions");
+    if(table.options.actions && table.options.actions.length>1) table.$target.addClass("zn-table-actions");
     if(table.options.paging) table.$target.addClass("zn-table-pagination");
 
     table.setupUI();
@@ -104,6 +105,7 @@
     table.$filterPopup=table.$target.find(".zn-table-filter-popup");
     table.$footer=table.$target.find(".zn-table-footer");
     table.$pageNumbers=table.$target.find(".zn-table-page-numbers");
+    table.$actions=table.$target.find(".zn-table-actions");
     
 
     table.$fixedHeader.html(component.html.fixedHeader(table.fixedCols));
@@ -128,6 +130,8 @@
     fixedWidth=table.fixedCols.reduce((a, c)=>a+c.width, fixedWidth);
     table.$fixed.width(fixedWidth);
     if(fixedWidth==0) table.$fixed.hide();
+
+    if(table.options.actions && table.options.actions.length>0) table.$actions.html(component.html.tableActions(table.options.actions));
   }
 
   Table.prototype.setupEventHandlers=function()
@@ -152,6 +156,13 @@
       table.fireEvent("row-selection-change", {source: table, selection: table.getSelectedRows()});
     });
 
+    table.$actions.find(".zn-table-action").on("click", (evt)=>
+    {
+      evt.preventDefault();
+      let $action=$(evt.currentTarget);
+      let action=$action.attr("data-action");
+      table.fireEvent("action", {action: action});
+    })
     table.setupRowSelectionEventHandlers();
     table.setupColHeaderEventHandlers();
     table.setupFilterPopupEventHandlers();
@@ -212,7 +223,7 @@
           table.selectedRowIndex=index;
           table.$target.find(`.zn-table-row.selected`).removeClass("selected");
           table.$target.find(`.zn-table-row[data-row='${index}']`).addClass("selected");
-          table.fireEvent("row-select", {source: table, selectedRowIndex: index, selectedRow: table.rows[index]});
+          table.fireEvent("row-select", {source: table, index: index, row: table.rows[index]});
         }
       }
     })
@@ -459,12 +470,17 @@
     })
 
     let p=$cell.position();
-    let tableP=table.$target.position();
-    let top=p.top+55;
-    if(top+table.$rowActionsMenu.height() > tableP.top+table.$target.height()) top=table.$target.height()-table.$rowActionsMenu.height()-20;
+    let tp=table.$target.position();
+    let tw=table.$target.width();
+    let th=table.$target.height();
+    let top=tp.top + p.top + table.$fixedHeader.height() + 2;
+    let left=tp.left + p.left + 2;
+    let ch=$(document).height();
+
+    if(top + table.$rowActionsMenu.height() > ch) top = ch - table.$rowActionsMenu.height() - 5;
 
     table.$rowActionsMenu.css("top", top+"px")
-                         .css("left", p.left+5+"px")
+                         .css("left",left+"px")
                          .show();
 
   }
@@ -561,13 +577,20 @@
       if(evt.keyCode==27) table.hideFilterPopup();
     });
     
-    let $parent=$cell.parent().parent().parent();
-    let parentP=$parent.position();
-    let cellP=$cell.position();
-    let tableP=table.$target.position();
-    let top=parentP.top + cellP.top + 1;
-    let left=parentP.left + cellP.left + 1;
-    if(left+table.$filterPopup.width() > tableP.left+table.$target.width()) left=table.$target.width()-table.$filterPopup.width();
+    let $header=$cell.parent().parent();
+    let offset=$header.position().left;
+    if($header.hasClass("zn-table-scrollable-header")) offset += table.$fixed.width();
+
+    let p=$cell.position();
+    let tp=table.$target.position();
+    let tw=table.$target.width();
+    let th=table.$target.height();
+    let top=tp.top + p.top + 2;
+    let left=tp.left + p.left + 2 + offset;
+    let ch=$(document).height();
+    let cw=$(document).width();
+
+    if(left+table.$filterPopup.width() > cw) left=cw-table.$filterPopup.width()-5;
     table.$filterPopup.css("top", top+"px")
                       .css("left", left+"px")
                       .css("display", "flex");
@@ -875,6 +898,7 @@
       </div>
     </div>`;
   }
+
   component.html.page=(pageNumber, selectedPage)=>
   {
     return `<a class="zn-table-page-number ${pageNumber==selectedPage?'selected':''}" href="#page-${pageNumber}" data-page="${pageNumber}">${pageNumber}</a>`;
@@ -887,6 +911,21 @@
     ${pageNumbers.reduce((a, c)=> a + component.html.page(c, selectedPage), "")}
     <a class="zn-table-page-number page-nav" href="#next-page" data-page="next"><i class="fas fa-arrow-right"></i></a>
     `;
+  }
+
+  component.html.icon=(icon)=>
+  {
+    return `<i class="icon ${icon}"></i>`
+  }
+
+  component.html.tableAction=(item)=>
+  {
+    return `<a class="zn-table-action" data-action="${item.action}">${item.icon ? component.html.icon(item.icon) : ''}<span class="text">${item.label || ''}</span></a>`;
+  }
+
+  component.html.tableActions=(actions)=>
+  {
+    return actions.reduce((a,c) => a + component.html.tableAction(c), '');
   }
 
   component.format=(v, t, f)=>

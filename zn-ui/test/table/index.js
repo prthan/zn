@@ -3813,6 +3813,12 @@ $(()=>
     {action: "debug", label: "Debug", icon: "fas fa-bug"}
   ]
 
+  let tableActions=
+  [
+    {action: "add-column", label: "Add Column", icon: "fas fa-plus"},
+    {action: "delete-columns", label: "Delete Columns", icon: "fas fa-trash-alt"},
+  ]
+
   let table=zn.ui.table.create({
       name: "sample-table",
       target: ".table",
@@ -3821,14 +3827,16 @@ $(()=>
       rowActions: rowActions,
       multiSelect: true,
       headerHeight: 50,
-      paging: false,
-      pageSize: 5,
+      paging: true,
+      pageSize: 25,
+      actions: tableActions
       //containerScroll: true
   });
 
   table.on("row-select", evt => console.log("row-select", evt));
   table.on("row-selection-change", evt => console.log("row-selection-change", evt));
   table.on("row-action", evt => console.log("row-action", evt));
+  table.on("action", evt => console.log("action", evt));
 
   console.log(rows.length);
   table.init();

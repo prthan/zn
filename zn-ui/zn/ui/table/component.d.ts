@@ -9,9 +9,10 @@ declare interface znTableOptions
   fill? :string;
   containerScroll? :boolean;
   rowActions? :Array<any>;
-  rows? :Array<any>,
-  paging? :boolean,
-  pageSize? :number
+  actions? :Array<any>;
+  rows? :Array<any>;
+  paging? :boolean;
+  pageSize? :number;
 }
 
 declare class znTable

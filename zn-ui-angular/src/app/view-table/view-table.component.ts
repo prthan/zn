@@ -3821,6 +3821,12 @@ export class ViewTableComponent implements OnInit {
     {action: "debug", label: "Debug", icon: "fas fa-bug"}
   ]
 
+  private _tableActions=
+  [
+    {action: "add-column", label: "Add Column", icon: "fas fa-plus"},
+    {action: "delete-columns", label: "Delete Columns", icon: "fas fa-trash-alt"},
+  ]
+
   constructor() { }
 
   ngOnInit(): void {
@@ -3829,10 +3835,16 @@ export class ViewTableComponent implements OnInit {
   get columns() {return this._columns};
   get rows() {return this._rows};
   get rowActions() {return this._rowActions};
+  get tableActions() {return this._tableActions};
 
   onRowSelect($event :any)
   {
     console.log($event);
+  }
+
+  onAction($event :any)
+  {
+    console.log($event)
   }
 
 }
