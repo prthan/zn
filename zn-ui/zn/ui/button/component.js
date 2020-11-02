@@ -99,45 +99,6 @@
            point.y <= (offset.top+content.height());
   }
 
-  component.html.directiveTemplate= ()=>
-  {
-    return ``;
-  }
-
-  component.directiveLinkFn=function(scope, element, attrs)
-  {
-    let htmlElement=element.get()[0];
-    
-    scope.$watch("columns",function(nv,ov)
-    {
-      if(!nv) return;
-      let options={};
-      options.target=htmlElement;
-
-      let znc=new Button(options);
-      znc.init();
-    });
-  }
-
-  component.directive=function()
-  {
-    let directive=
-    {
-      scope: 
-      {
-        name         : "@",
-        value        : "=",
-        onchange     : "=",
-        onaction     : "="
-      },
-      restrict: "E",
-      template: component.html.directiveTemplate(),
-      replace : true,
-      link: component.directiveLinkFn
-    }
-    return directive;
-  };
-
   component.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[component.name]=component;
 
 })(window);

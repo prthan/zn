@@ -74,7 +74,7 @@
   TextArea.prototype.setupEventHandlers=function()
   {
     let textarea=this;
-    textarea.$target.find(".zn-textarea-input input").on("change", (evt)=>
+    textarea.$target.find(".zn-textarea-input textarea").on("change", (evt)=>
     {
       let $input=$(evt.currentTarget);
       let oldValue=textarea.getValue();

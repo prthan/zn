@@ -1,4 +1,4 @@
-declare class znTextField
+declare class znComponent
 {
   constructor();
 }

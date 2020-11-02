@@ -59,7 +59,7 @@
   {
     let dropdownfield=this;
     dropdownfield.value=value;
-    let item=component.itemForValue(dropdownfield.options.items, value);
+    let item=component.itemForValue(dropdownfield.options.items, dropdownfield.value);
     if(item) dropdownfield.$value.text(item.label);
   }
 
@@ -173,6 +173,7 @@
 
   component.html.dropdownMenu=(items)=>
   {
+    if(!items) return "";
     return items.reduce((a, item)=> a + `<a class="zn-popup-menu-item" zn-value='${item.value}' title='${item.label}'><span class="zn-popup-menu-item-text">${item.label}</span></a>`, "");
   }
 

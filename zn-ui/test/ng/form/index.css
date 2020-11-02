@@ -1,0 +1,43 @@
+body
+{
+  background-color: #ffffff;
+  padding: 50px;
+}
+
+.layout
+{
+  
+}
+
+.field
+{
+  width: 200px;
+}
+
+.field.calendar-1, .field.calendar-2
+{
+  width: unset;
+}
+
+.textarea
+{
+  height: 200px;
+}
+
+.calendars
+{
+  padding: 20px 0px 0px 0px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.calendars .calendar
+{
+  flex-grow: 0;
+  margin-right: 20px;
+}
+
+.buttons
+{
+
+}

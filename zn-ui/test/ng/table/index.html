@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>zn.ui.Table</title>
+    <link rel="icon" type="image/png" href="../../../images/logo/icon.png" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/table/component.css"/>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  </head>
+  <body>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../fuse.js"></script>
+    <script src="../../../numeral.js"></script>
+    <script src="../../../moment.js"></script>
+    <script src="../../../angular-1.8.js"></script>
+    <script src="../../../zn/ui/table/component.js"></script>
+    <script src="../../../zn/ui/table/ng-directive.js"></script>
+    <script src="index.js"></script>
+
+    <div ng-controller="ctrl" class="layout">
+      <div zn-table class="table"
+           columns="columns" rows="rows" rowActions="rowActions" actions="tableActions"
+           multiselect="true" headerHeight="50" paging="true" pagesize="25" 
+           onrowselect="dump($event)" onrowaction="dump($event)" onrowselectionchange="dump($event)" onaction="dump($event)"></div>
+      </div>
+
+  </body>
+</html>

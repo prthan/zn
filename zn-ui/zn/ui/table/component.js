@@ -60,7 +60,7 @@
     if(table.options.fill) table.$target.addClass("zn-table-fill");
     if(table.options.containerScroll) table.$target.addClass("zn-table-container-scroll");
     if(table.options.rowActions) table.$target.addClass("zn-table-row-actions");
-    if(table.options.actions && table.options.actions.length>1) table.$target.addClass("zn-table-actions");
+    if(table.options.actions && table.options.actions.length>0) table.$target.addClass("zn-table-actions");
     if(table.options.paging) table.$target.addClass("zn-table-pagination");
 
     table.setupUI();
@@ -944,72 +944,6 @@
            point.y >= offset.top &&
            point.y <= (offset.top+content.height());
   }
-
-  component.html.directiveTemplate= ()=>
-  {
-    return `<div class="zn-table {{fill=='Y' ? 'zn-table-fill':''}} {{multiselect=='Y' ? 'zn-table-multi-select':''}} {{clazz}}" zn-table="{{name}}"></div>`;
-  }
-
-  component.directiveLinkFn=function(scope, element, attrs)
-  {
-    let htmlElement=element.get()[0];
-    
-    scope.$watch("columns",function(nv,ov)
-    {
-      if(!nv) return;
-      let options={name: scope.name, columns: nv, multiselect: (scope.multiselect==="Y")};
-      if(scope.headerheight) options.headerHeight=scope.headerheight;
-      if(scope.rowheight) options.rowHeight=scope.rowheight;
-      if(scope.rowactions) options.rowActions=scope.rowactions;
-      options.target=htmlElement;
-
-      let znc=new Table(options);
-      znc.name=scope.name;
-
-      if(scope.onRowSelect) tabl.on("row-select", scope.onRowSelect);
-      if(scope.onRowAction) tabl.on("row-action", scope.onRowAction);
-      if(scope.onRowSelectionChange) tabl.on("row-selection-change", scope.onRowSelectionChange);
-
-      znc.init();
-      htmlElement.znc=znc;
-    });
-
-    scope.$watch("rows",function(nv,ov)
-    {
-      if(nv) htmlElement.znc.setRows(nv);
-    });
-
-    scope.$watch("rowactions",function(nv,ov)
-    {
-      if(nv) htmlElement.znc.setRowActions(nv);
-    });
-
-  }
-
-  component.directive=function()
-  {
-    let directive=
-    {
-      scope: 
-      {
-        name         : "@",
-        columns      : "=",
-        headerheight : "@",
-        rowheight    : "@",
-        fill         : "@",
-        clazz        : "@",
-        rows         : "=",
-        rowactions   : "=",
-        handler      : "=",
-        multiselect  : "@"
-      },
-      restrict: "E",
-      template: component.html.directiveTemplate(),
-      replace : true,
-      link: component.directiveLinkFn
-    }
-    return directive;
-  };
 
   let iff=(condition, truthValue, falseValue)=>
   {

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Form Components</title>
+    <link rel="icon" type="image/png" href="../../../images/logo/icon.png" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/textfield/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/textarea/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/dropdownfield/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/checkboxfield/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/radiogroup/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/calendar/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/datefield/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/button/component.css"/>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  </head>
+  <body>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../fuse.js"></script>
+    <script src="../../../numeral.js"></script>
+    <script src="../../../moment.js"></script>
+    <script src="../../../angular-1.8.js"></script>
+    <script src="../../../zn/ui/button/component.js"></script>
+    <script src="../../../zn/ui/button/ng-directive.js"></script>
+    <script src="../../../zn/ui/textfield/component.js"></script>
+    <script src="../../../zn/ui/textfield/ng-directive.js"></script>
+    <script src="../../../zn/ui/textarea/component.js"></script>
+    <script src="../../../zn/ui/textarea/ng-directive.js"></script>
+    <script src="../../../zn/ui/calendar/component.js"></script>
+    <script src="../../../zn/ui/calendar/ng-directive.js"></script>
+    <script src="../../../zn/ui/checkboxfield/component.js"></script>
+    <script src="../../../zn/ui/checkboxfield/ng-directive.js"></script>
+    <script src="../../../zn/ui/dropdownfield/component.js"></script>
+    <script src="../../../zn/ui/dropdownfield/ng-directive.js"></script>
+    <script src="../../../zn/ui/radiogroup/component.js"></script>
+    <script src="../../../zn/ui/radiogroup/ng-directive.js"></script>
+    <script src="../../../zn/ui/datefield/component.js"></script>
+    <script src="../../../zn/ui/datefield/ng-directive.js"></script>
+    <script src="index.js"></script>
+
+    <div ng-controller="ctrl">
+      <div class="form layout">
+        <div zn-textfield name="customer-name" label="Customer Name" value="model.form.name" class="textfield field" onaction="onAction($event)"></div>
+        <div zn-textfield name="searc" placeholder="Search" value="model.form.search" icon="fas fa-search" class="textfield field"></div>
+        <div zn-textfield name="userid" placeholder="User ID" value="model.form.userid" icon="fas fa-user-tie" class="textfield field"></div>
+        <div zn-textfield name="password" placeholder="Password" value="model.form.password" icon="fas fa-lock" class="textfield field"></div>
+        <div zn-textarea name="descr" label="Description" value="model.form.descr" class="textarea field"></div>
+        <div zn-checkboxfield name="agreement" text="This is a test checkbox" value="model.form.agreement" onvalue="Y" offvalue="N" class="checkboxfield field"></div>
+        <div zn-dropdownfield name="options" lable="Types of Network" value="model.form.network" items="model.networkItems" class="dropdownfield field"></div>
+        <div zn-datefield name="join-date" lable="Active On" value="model.form.activeOn" class="datefield field"></div>
+        <div zn-radiogroup name="nwk" label="Type of Network" value="model.form.networkOpt" items="model.networkItems" class="radiogroup field"></div>        
+      </div>
+
+      <div class="buttons">
+        <div zn-button text="Add Calendar" icon="far fa-calendar-plus" action="add-calendar" class="button-1"></div>
+        <div zn-button text="Bookmark" icon="fas fa-bookmark" action="bookmark" class="button-2"></div>
+        <div zn-button text="Delete" icon="fas fa-trash" action="delete" type="critical" class="button-3"></div>
+        <div zn-button text="Reresh" icon="fas fa-sync-alt" action="refresh" type="warning" class="button-4"></div>
+        <div zn-button text="Dump Form Data" action="dump" onaction="dump(model)" class="button-5"></div>
+      </div>
+  
+      <div class="calendars">
+        <div zn-calendar date="model.form.startDate" class="calendar calendar-1"></div>
+        <div zn-calendar date="model.form.endDate" class="calendar calendar-2"></div>
+      </div>      
+    </div>
+  </body>
+</html>

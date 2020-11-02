@@ -25,31 +25,30 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/lib/zn/ui/button/component.css",
-              "src/lib/zn/ui/calendar/component.css",
-              "src/lib/zn/ui/checkboxfield/component.css",
-              "src/lib/zn/ui/datefield/component.css",
-              "src/lib/zn/ui/dropdownfield/component.css",
-              "src/lib/zn/ui/radiogroup/component.css",
-              "src/lib/zn/ui/table/component.css",
-              "src/lib/zn/ui/textarea/component.css",
-              "src/lib/zn/ui/textfield/component.css"
-
+              "../zn-ui/zn/ui/button/component.css",
+              "../zn-ui/zn/ui/calendar/component.css",
+              "../zn-ui/zn/ui/checkboxfield/component.css",
+              "../zn-ui/zn/ui/datefield/component.css",
+              "../zn-ui/zn/ui/dropdownfield/component.css",
+              "../zn-ui/zn/ui/radiogroup/component.css",
+              "../zn-ui/zn/ui/table/component.css",
+              "../zn-ui/zn/ui/textarea/component.css",
+              "../zn-ui/zn/ui/textfield/component.css"
             ],
             "scripts": [
-              "src/lib/fuse.js",
-              "src/lib/jquery.js",
-              "src/lib/moment.js",
-              "src/lib/numeral.js",
-              "src/lib/zn/ui/button/component.js",
-              "src/lib/zn/ui/calendar/component.js",
-              "src/lib/zn/ui/checkboxfield/component.js",
-              "src/lib/zn/ui/datefield/component.js",
-              "src/lib/zn/ui/dropdownfield/component.js",
-              "src/lib/zn/ui/radiogroup/component.js",
-              "src/lib/zn/ui/table/component.js",
-              "src/lib/zn/ui/textarea/component.js",
-              "src/lib/zn/ui/textfield/component.js"
+              "../zn-ui/fuse.js",
+              "../zn-ui/jquery.js",
+              "../zn-ui/moment.js",
+              "../zn-ui/numeral.js",
+              "../zn-ui/zn/ui/button/component.js",
+              "../zn-ui/zn/ui/calendar/component.js",
+              "../zn-ui/zn/ui/checkboxfield/component.js",
+              "../zn-ui/zn/ui/datefield/component.js",
+              "../zn-ui/zn/ui/dropdownfield/component.js",
+              "../zn-ui/zn/ui/radiogroup/component.js",
+              "../zn-ui/zn/ui/table/component.js",
+              "../zn-ui/zn/ui/textarea/component.js",
+              "../zn-ui/zn/ui/textfield/component.js"
             ]
           },
           "configurations": {

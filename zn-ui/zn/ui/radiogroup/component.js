@@ -60,9 +60,10 @@
   RadioGroup.prototype.setValue=function(value) 
   {
     let radiogroup=this;
+    radiogroup.options.value=value;
     radiogroup.value=value;
     radiogroup.$input.find(`.zn-radiogroup-item[data-state='on']`).attr("data-state", "off");
-    if(value) radiogroup.$input.find(`.zn-radiogroup-item[data-value='${value}']`).attr("data-state", "on");
+    if(radiogroup.value) radiogroup.$input.find(`.zn-radiogroup-item[data-value='${radiogroup.value}']`).attr("data-state", "on");
   }
 
   RadioGroup.prototype.getValue=function() {return this.value;}
@@ -113,7 +114,7 @@
       $item.removeClass("focused");
     })
   }
-
+  
   component.html={};
 
   component.html.radiogroup=(options)=>
@@ -121,7 +122,7 @@
     return `
     ${options.label ? component.html.label(options.label) : ''}
     <div class="zn-radiogroup-input">
-      ${options.items.reduce((a,c) => a + component.html.item(c), "")}
+      ${component.html.items(options.items, options.value)}
     </div>
     <div class="zn-radiogroup-msg"></div>
     `;
@@ -137,10 +138,15 @@
     return `<div class="zn-radiogroup-label">${label}</div>`
   }
 
-  component.html.item=(item)=>
+  component.html.items=(items, value)=>
+  {
+    return items.reduce((a,c) => a + component.html.item(c, value), "");
+  }
+
+  component.html.item=(item, value)=>
   {
     return `
-    <div class="zn-radiogroup-item" tabindex="0" data-state="off" data-value="${item.value}">
+    <div class="zn-radiogroup-item" tabindex="0" data-state="${item.value==value ? 'on' : 'off'}" data-value="${item.value}">
       <i class="state-off far fa-circle"></i><i class="state-on fas fa-check-circle"></i>
       <span class="text">${item.label}</span>
     </div>
