@@ -3,7 +3,7 @@
   var component =
   {
     name: "textarea",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>

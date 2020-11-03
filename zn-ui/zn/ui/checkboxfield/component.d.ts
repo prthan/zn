@@ -12,6 +12,7 @@ declare class znCheckboxField
   on(eventName :string, eventHandler :(event :znCheckboxFieldEvent)=>void) :void;  
   setValue(value :string|boolean) :void;
   getValue() :string|boolean;
+  message(text :string, type :string) :void;
 }
 
 declare interface znCheckboxFieldOptions
@@ -22,6 +23,8 @@ declare interface znCheckboxFieldOptions
   value? :string|boolean;
   text? :string;
   values? :znCheckboxValues;
+  error :string;
+  message :string;
 }
 
 declare interface znCheckboxValues

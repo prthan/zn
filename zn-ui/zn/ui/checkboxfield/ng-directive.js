@@ -3,7 +3,7 @@
   var directive =
   {
     name: "checkboxfield",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -24,7 +24,7 @@
       message: scope.message
     }
 
-    let checkboxfield=zn.ui.checkboxfield.create(options);
+    let checkboxfield=zn.ui.components.checkboxfield.create(options);
 
     checkboxfield.on("init", ()=>
     {

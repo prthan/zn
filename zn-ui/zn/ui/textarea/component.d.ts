@@ -12,6 +12,7 @@ declare class znTextArea
   on(eventName :string, eventHandler :(event :znTextAreaEvent)=>void) :void;  
   setValue(value :string) :void;
   getValue() :string;
+  message(text :string, type :string) :void;
 }
 
 declare interface znTextAreaOptions
@@ -22,6 +23,8 @@ declare interface znTextAreaOptions
   value? :string;
   placeholder? :string;
   readonly? :boolean;
+  error :string;
+  message :string;
 }
 
 declare interface znTextAreaEvent

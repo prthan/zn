@@ -12,6 +12,7 @@ declare class znDateField
   on(eventName :string, eventHandler :(event :znDateFieldEvent)=>void) :void;  
   setValue(value :Date) :void;
   getValue() :Date;  
+  message(text :string, type :string) :void;
 }
 
 declare interface znDateFieldOptions
@@ -24,6 +25,8 @@ declare interface znDateFieldOptions
   icon? :string;
   placeholder? :string;
   readonly? :boolean;
+  error :string;
+  message :string;
 }
 
 declare interface znDateFieldEvent

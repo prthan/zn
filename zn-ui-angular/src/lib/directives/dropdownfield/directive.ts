@@ -45,7 +45,7 @@ export class znDropdownFieldDirective implements OnInit, OnChanges
       message: this.message      
     };
 
-    this.dropdownfield=zn.ui.dropdownfield.create(options);
+    this.dropdownfield=zn.ui.components.dropdownfield.create(options);
 
     if(this.onSelect.observers.length>0) this.dropdownfield.on("change", (evt: znDropdownFieldEvent)=>this.onSelect.emit(evt));
     this.dropdownfield.on("change", (evt :any)=>

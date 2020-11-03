@@ -12,6 +12,7 @@ declare class znTextField
   on(eventName :string, eventHandler :(event :znTextFieldEvent)=>void) :void;
   setValue(value :string|number) :void;
   getValue() :string|number;
+  message(text :string, type :string) :void;
 }
 
 declare interface znTextFieldOptions
@@ -24,6 +25,8 @@ declare interface znTextFieldOptions
   icon? :string;
   placeholder? :string;
   readonly? :boolean;
+  error :string;
+  message :string;
 }
 
 declare interface znTextFieldEvent

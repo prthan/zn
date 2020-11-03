@@ -53,7 +53,7 @@ export class znTableDirective implements OnInit, OnChanges
     }
 
 
-    this.table=zn.ui.table.create(options);
+    this.table=zn.ui.components.table.create(options);
     
     if(this.onRowSelect.observers.length>0) this.table.on("row-select", (tableEvent: znTableEvent)=>this.onRowSelect.emit(tableEvent));
     if(this.onRowAction.observers.length>0) this.table.on("row-action", (tableEvent: znTableEvent)=>this.onRowAction.emit(tableEvent));

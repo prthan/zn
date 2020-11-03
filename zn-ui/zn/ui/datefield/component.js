@@ -3,7 +3,7 @@
   var component =
   {
     name: "datefield",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>
@@ -131,22 +131,22 @@
     var $body=$("body");
     let hide=()=>
     {
-      $body.off("mousedown.zn.ui.datefield.calendarpopup");
-      $body.off("keydown.zn.ui.datefield.calendarpopup");
+      $body.off("mousedown.zn.ui.components.datefield.calendarpopup");
+      $body.off("keydown.zn.ui.components.datefield.calendarpopup");
       datefield.$calendar.hide();
       datefield.$calendar.removeClass("showing");
       datefield.$input.focus();
     }
-    $body.on("mousedown.zn.ui.datefield.calendarpopup",(evt)=>
+    $body.on("mousedown.zn.ui.components.datefield.calendarpopup",(evt)=>
     {
       if(!component.pointInContent({x:evt.pageX,y:evt.pageY}, datefield.$calendar)) hide();
     });
-    $body.on("keydown.zn.ui.datefield.calendarpopup",(evt)=>
+    $body.on("keydown.zn.ui.components.datefield.calendarpopup",(evt)=>
     {
       if(evt.keyCode==27) hide();
     });
 
-    let calendar=zn.ui.calendar.create({
+    let calendar=zn.ui.components.calendar.create({
       name: datefield.name,
       target: datefield.$calendar,
       date: datefield.value || new Date()

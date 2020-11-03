@@ -3,7 +3,7 @@
   var component =
   {
     name: "table",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>
@@ -466,15 +466,15 @@
     var $body=$("body");
     let hide=()=>
     {
-      $body.off("mousedown.zn.ui.table.menupopup");
-      $body.off("keydown.zn.ui.table.menupopup");
+      $body.off("mousedown.zn.ui.components.table.menupopup");
+      $body.off("keydown.zn.ui.components.table.menupopup");
       table.$rowActionsMenu.hide();
     }
-    $body.on("mousedown.zn.ui.table.menupopup",(evt)=>
+    $body.on("mousedown.zn.ui.components.table.menupopup",(evt)=>
     {
       if(!component.pointInContent({x:evt.pageX,y:evt.pageY}, table.$rowActionsMenu)) hide();
     });
-    $body.on("keydown.zn.ui.table.menupopup",(evt)=>
+    $body.on("keydown.zn.ui.components.table.menupopup",(evt)=>
     {
       if(evt.keyCode==27) hide();
     });
@@ -585,12 +585,12 @@
     table.$filterPopup.ctx={$cell: $cell, index: index, column: column, lov: lov, hasBlanks: hasBlanks, filterstate: filterstate};
 
     var $body=$("body");
-    $body.on("mousedown.zn.ui.table.filterpopup",(evt)=>
+    $body.on("mousedown.zn.ui.components.table.filterpopup",(evt)=>
     {
       if(!component.pointInContent({x:evt.pageX,y:evt.pageY}, table.$filterPopup)) table.hideFilterPopup();
     });
     
-    $body.on("keydown.zn.ui.table.filterpopup",(evt)=>
+    $body.on("keydown.zn.ui.components.table.filterpopup",(evt)=>
     {
       if(evt.keyCode==27) table.hideFilterPopup();
     });
@@ -620,8 +620,8 @@
     let table=this;
     var $body=$("body");
 
-    $body.off("mousedown.zn.ui.table.filterpopup");
-    $body.off("keydown.zn.ui.table.filterpopup");
+    $body.off("mousedown.zn.ui.components.table.filterpopup");
+    $body.off("keydown.zn.ui.components.table.filterpopup");
     table.$filterPopup.hide();
   }
 

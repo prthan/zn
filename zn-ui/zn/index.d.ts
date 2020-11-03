@@ -1,4 +1,4 @@
-declare interface znUi
+declare interface znUiComponents
 {
   table :znTableFactory,
   textfield :znTextFieldFactory,
@@ -11,7 +11,13 @@ declare interface znUi
   button: znButtonFactory
 }
 
+declare interface znUi
+{
+  components :znUiComponents
+}
+
 declare interface zn
 {
   ui :znUi
 }
+

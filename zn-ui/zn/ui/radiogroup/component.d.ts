@@ -12,6 +12,7 @@ declare class znRadioGroup
   on(eventName :string, eventHandler :(event :znRadioGroupEvent)=>void) :void;  
   setValue(value :string|boolean) :void;
   getValue() :string|boolean;  
+  message(text :string, type :string) :void;
 }
 
 declare interface znRadioGroupOptions
@@ -22,6 +23,8 @@ declare interface znRadioGroupOptions
   value? :string;
   layout? :string;
   items? :Array<znRadioGroupItem>;
+  error :string;
+  message :string;
 }
 
 declare interface znRadioGroupItem

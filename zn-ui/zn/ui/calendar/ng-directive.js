@@ -3,7 +3,7 @@
   var directive =
   {
     name: "calendar",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -20,7 +20,7 @@
       date: scope.date || new Date()
     }
 
-    let calendar=zn.ui.calendar.create(options);
+    let calendar=zn.ui.components.calendar.create(options);
 
     scope.$watch("date", (nv, ov)=>
     {

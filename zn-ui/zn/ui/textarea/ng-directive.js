@@ -3,7 +3,7 @@
   var directive =
   {
     name: "textarea",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -25,7 +25,7 @@
       message: scope.message
     }
 
-    let textarea=zn.ui.textarea.create(options);
+    let textarea=zn.ui.components.textarea.create(options);
 
     textarea.on("init", ()=>
     {

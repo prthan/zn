@@ -3,7 +3,7 @@
   let component =
   {
     name: "calendar",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>

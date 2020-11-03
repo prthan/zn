@@ -3,7 +3,7 @@
   var directive =
   {
     name: "textfield",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -27,7 +27,7 @@
       message: scope.message
     }
 
-    let textfield=zn.ui.textfield.create(options);
+    let textfield=zn.ui.components.textfield.create(options);
 
     textfield.on("init", ()=>
     {

@@ -12,6 +12,7 @@ declare class znDropdownField
   on(eventName :string, eventHandler :(event :znDropdownFieldEvent)=>void) :void;  
   setValue(value :string|boolean) :void;
   getValue() :string|boolean;  
+  message(text :string, type :string) :void;
 }
 
 declare interface znDropdownFieldOptions
@@ -21,6 +22,8 @@ declare interface znDropdownFieldOptions
   label? :string;
   value? :string;
   items? :Array<znDropdownItem>;
+  error :string;
+  message :string;
 }
 
 declare interface znDropdownItem

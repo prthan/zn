@@ -3,7 +3,7 @@
   var directive =
   {
     name: "table",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -34,7 +34,7 @@
         options.paging=true;
         options.pageSize=parseInt(scope.pagesize);
       }
-      let table=zn.ui.table.create(options);
+      let table=zn.ui.components.table.create(options);
 
       table.on("row-select", (evt)=>{scope.onrowselect({$event: evt})});
       table.on("row-action", (evt)=>{scope.onrowaction({$event: evt})});

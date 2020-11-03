@@ -3,7 +3,7 @@
   var component =
   {
     name: "dropdownfield",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>
@@ -127,16 +127,16 @@
     var $body=$("body");
     let hide=()=>
     {
-      $body.off("mousedown.zn.ui.dropdownfield.itemspopup");
-      $body.off("keydown.zn.ui.dropdownfield.itemspopup");
+      $body.off("mousedown.zn.ui.components.dropdownfield.itemspopup");
+      $body.off("keydown.zn.ui.components.dropdownfield.itemspopup");
       dropdownfield.$items.hide();
       dropdownfield.$items.removeClass("showing");
     }
-    $body.on("mousedown.zn.ui.dropdownfield.itemspopup",(evt)=>
+    $body.on("mousedown.zn.ui.components.dropdownfield.itemspopup",(evt)=>
     {
       if(!component.pointInContent({x:evt.pageX,y:evt.pageY}, dropdownfield.$items)) hide();
     });
-    $body.on("keydown.zn.ui.dropdownfield.itemspopup",(evt)=>
+    $body.on("keydown.zn.ui.components.dropdownfield.itemspopup",(evt)=>
     {
       if(evt.keyCode==27) hide();
     });

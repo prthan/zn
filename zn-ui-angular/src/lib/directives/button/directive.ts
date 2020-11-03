@@ -41,7 +41,7 @@ export class znButtonDirective implements OnInit, OnChanges
       type: this.type
     };
 
-    this.button=zn.ui.button.create(options);
+    this.button=zn.ui.components.button.create(options);
 
     if(this.onAction.observers.length>0) this.button.on("action",(evt: znButtonEvent)=>this.onAction.emit(evt));
 

@@ -3,7 +3,7 @@
   var component =
   {
     name: "button",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>

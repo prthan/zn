@@ -3,7 +3,7 @@
   var component =
   {
     name: "checkboxfield",
-    package: "zn.ui"
+    package: "zn.ui.components"
   }
 
   component.create=(options)=>

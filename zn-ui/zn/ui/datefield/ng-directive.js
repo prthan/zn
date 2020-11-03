@@ -3,7 +3,7 @@
   var directive =
   {
     name: "datefield",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -26,7 +26,7 @@
       message: scope.message      
     }
 
-    let datefield=zn.ui.datefield.create(options);
+    let datefield=zn.ui.components.datefield.create(options);
 
     datefield.on("init", ()=>
     {

@@ -3,7 +3,7 @@
   var directive =
   {
     name: "radiogroup",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -29,7 +29,7 @@
         message: scope.message        
       }
   
-      let radiogroup=zn.ui.radiogroup.create(options);
+      let radiogroup=zn.ui.components.radiogroup.create(options);
   
       radiogroup.on("init", ()=>
       {

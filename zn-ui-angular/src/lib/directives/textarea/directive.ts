@@ -42,7 +42,7 @@ export class znTextAreaDirective implements OnInit, OnChanges
       message: this.message      
     };
 
-    this.textarea=zn.ui.textarea.create(options);
+    this.textarea=zn.ui.components.textarea.create(options);
 
     this.textarea.on("change", (evt :any)=>
     {

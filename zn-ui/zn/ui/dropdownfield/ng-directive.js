@@ -3,7 +3,7 @@
   var directive =
   {
     name: "dropdownfield",
-    package: "zn.ui.ng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -28,7 +28,7 @@
         message: scope.message
       }
 
-      let dropdownfield=zn.ui.dropdownfield.create(options);
+      let dropdownfield=zn.ui.components.dropdownfield.create(options);
 
       dropdownfield.on("init",()=>
       {
