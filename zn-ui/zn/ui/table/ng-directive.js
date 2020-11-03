@@ -13,7 +13,6 @@
 
   directive.linkFn=function(scope, element, attrs)
   {
-    console.log(scope);
     scope.$watch("columns",function(nv,ov)
     {
       if(!nv) return;
@@ -23,13 +22,18 @@
         name: scope.name, 
         columns: nv, 
         rows: scope.rows,
-        multiSelect: (scope.multiselect==="true")
+        multiSelect: (scope.multiselect==="true"),
+        containerScroll: (scope.containerscroll==="true")
       };
       if(scope.headerheight) options.headerHeight=scope.headerheight;
       if(scope.rowheight) options.rowHeight=scope.rowheight;
       if(scope.rowactions) options.rowActions=scope.rowactions;
       if(scope.actions) options.actions=scope.actions;
-
+      if(scope.pagesize)
+      {
+        options.paging=true;
+        options.pageSize=parseInt(scope.pagesize);
+      }
       let table=zn.ui.table.create(options);
 
       table.on("row-select", (evt)=>{scope.onrowselect({$event: evt})});
@@ -41,7 +45,7 @@
       {
         scope.$watch("rows",function(nv,ov)
         {
-          if(nv) table.setRows(nv);
+          if(nv) table.initRows(nv);
         });
     
         scope.$watch("rowactions",function(nv,ov)
@@ -72,6 +76,8 @@
         rowactions   : "=",
         actions      : "=",
         multiselect  : "@",
+        pagesize     : "@",
+        containerscroll : "@",
         onrowselect  : "&",
         onrowaction  : "&",
         onrowselectionchange : "&",

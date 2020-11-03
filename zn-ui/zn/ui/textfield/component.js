@@ -31,6 +31,7 @@
 
     textfield.$target.addClass("zn-textfield");
     textfield.$target.attr("zn-textfield", textfield.options.name);
+    if(textfield.options.error) textfield.$target.addClass("error");
     
     textfield.setupUI();
     textfield.setupEventHandlers();
@@ -63,11 +64,29 @@
 
   TextField.prototype.getValue=function() {return this.value;}
 
+  TextField.prototype.message=function(msg, type)
+  {
+    let textfield=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      textfield.$msg.text(msg);
+      if(type=="error") textfield.$target.addClass("error");
+      else textfield.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      textfield.$msg.text("");
+      textfield.$target.removeClass("error").removeClass("message");
+    }
+  }
+
   TextField.prototype.setupUI=function()
   {
     let textfield=this;
     textfield.$target.html(component.html.textfield(textfield.options));
     textfield.$input=textfield.$target.find(".zn-textfield-input input");
+    textfield.$msg=textfield.$target.find(".zn-textfield-msg");
   }
 
   TextField.prototype.setupEventHandlers=function()
@@ -103,7 +122,7 @@
     return `
     ${options.label ? component.html.label(options.label) : ''}
     <div class="zn-textfield-input">${options.icon ? component.html.icon(options.icon) : ''}<input type="${options.password ? 'password' : 'text'}" value="${options.value || ''}" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}/></div>
-    <div class="zn-textfield-msg"></div>
+    <div class="zn-textfield-msg">${options.error || options.message || ''}</div>
     `;
   };
 

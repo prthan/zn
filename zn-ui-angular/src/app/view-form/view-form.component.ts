@@ -21,6 +21,18 @@ export class ViewFormComponent implements OnInit {
     activeDate: null,
   }
   
+  validationErrors :any=
+  {
+    associateName: "",
+    userid: "",
+    password: "",
+    descr: "",
+    agreement: "",
+    network: "",
+    networkopts: "",
+    activeDate: "",
+  }
+
   typesOfNetwork :Array<znDropdownItem>=
   [
     {value: "PAN", label: "Personal Area Network"},
@@ -50,6 +62,12 @@ export class ViewFormComponent implements OnInit {
     this.form.network="WLAN";
     this.form.networkopts="MAN";
     this.form.activeDate=new Date();
+    //this.validationErrors.associateName="This is an invalid name";
+    //this.validationErrors.descr="This is an invalid descr";
+    //this.validationErrors.agreement="Please check 0";
+    this.validationErrors.network="Please check 1";
+    //this.validationErrors.networkopts="Please check 2 ";
+    this.validationErrors.activeDate="Please check 3";
   }
 
   onStartDateSelect($evt: znCalendarEvent)

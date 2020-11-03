@@ -23,26 +23,27 @@
         name: scope.name, 
         label: scope.label, 
         value: scope.value,
-        items: scope.items
+        items: scope.items,
+        error: scope.error,
+        message: scope.message
       }
 
       let dropdownfield=zn.ui.dropdownfield.create(options);
 
-      dropdownfield.on("change", (evt)=>
+      dropdownfield.on("init",()=>
       {
-        scope.value=evt.newValue;
-        scope.$apply();
+        dropdownfield.on("change", (evt)=>
+        {
+          scope.value=evt.newValue;
+          scope.$apply();
+        })
+    
+        scope.$watch("value", (nv, ov)=>dropdownfield.setValue(nv));
+        scope.$watch("error", (nv, ov)=>dropdownfield.message(nv, "error"));
+        scope.$watch("message", (nv, ov)=>dropdownfield.message(nv, "message"));
       })
-  
+
       dropdownfield.init();
-
-      //dropdownfield.setItems(nv);
-
-      scope.$watch("value", (nv, ov)=>
-      {
-        dropdownfield.setValue(nv);
-      })
-  
     })
 
   }
@@ -57,7 +58,9 @@
         name         : "@",
         label        : "@",
         value        : "=",
-        items        : "="
+        items        : "=",
+        error        : "=",
+        message      : "="        
       },
       restrict: "A",
       template: "",

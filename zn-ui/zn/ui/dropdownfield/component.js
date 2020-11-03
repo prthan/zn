@@ -31,7 +31,8 @@
 
     dropdownfield.$target.addClass("zn-dropdownfield");
     dropdownfield.$target.attr("zn-dropdownfield", dropdownfield.options.name);
-    
+    if(dropdownfield.options.error) dropdownfield.$target.addClass("error");
+
     dropdownfield.setupUI();
     dropdownfield.setupEventHandlers();
 
@@ -67,7 +68,23 @@
   {
     return this.value;
   }
-
+  
+  DropdownField.prototype.message=function(msg, type)
+  {
+    let dropdownfield=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      dropdownfield.$msg.text(msg);
+      if(type=="error") dropdownfield.$target.addClass("error");
+      else dropdownfield.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      dropdownfield.$msg.text("");
+      dropdownfield.$target.removeClass("error").removeClass("message");
+    }
+  }
   DropdownField.prototype.setupUI=function()
   {
     let dropdownfield=this;
@@ -75,6 +92,7 @@
     dropdownfield.$value=dropdownfield.$target.find(".value");
     dropdownfield.$input=dropdownfield.$target.find(".zn-dropdownfield-input");
     dropdownfield.$items=dropdownfield.$target.find(".zn-dropdownfield-items");
+    dropdownfield.$msg=dropdownfield.$target.find(".zn-dropdownfield-msg");
   }
 
   DropdownField.prototype.setupEventHandlers=function()
@@ -156,7 +174,7 @@
     return `
     ${options.label ? component.html.label(options.label) : ''}
     <div class="zn-dropdownfield-input" tabindex="0"><span class="value"></span><span class="action"><i class="fas fa-caret-down"></i></span></div>
-    <div class="zn-dropdownfield-msg"></div>
+    <div class="zn-dropdownfield-msg">${options.error || options.message || ''}</div>
     <div class="zn-dropdownfield-items zn-popup-menu-items"></div>
     `;
   };

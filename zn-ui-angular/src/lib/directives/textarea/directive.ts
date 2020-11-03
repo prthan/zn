@@ -18,6 +18,8 @@ export class znTextAreaDirective implements OnInit, OnChanges
   @Input() label :string;
   @Input() placeholder :string;
   @Input() readonly :boolean;
+  @Input() error :string;
+  @Input() message :string;  
 
   @Input() value :string;
   @Output() valueChange :EventEmitter<string> = new EventEmitter<string>();
@@ -35,7 +37,9 @@ export class znTextAreaDirective implements OnInit, OnChanges
       value: this.value, 
       label: this.label, 
       placeholder: this.placeholder,
-      readonly: this.readonly
+      readonly: this.readonly,
+      error: this.error,
+      message: this.message      
     };
 
     this.textarea=zn.ui.textarea.create(options);
@@ -52,6 +56,9 @@ export class znTextAreaDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.textarea) this.textarea.setValue(changes.value.currentValue);
+    if(!this.textarea) return;
+    if(changes.value) this.textarea.setValue(changes.value.currentValue);
+    if(changes.error) this.textarea.message(changes.error.currentValue, "error");
+    if(changes.message) this.textarea.message(changes.message.currentValue, "message");
   }  
 }

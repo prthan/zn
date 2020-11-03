@@ -21,26 +21,26 @@
       value: scope.value, 
       placeholder: scope.placeholder, 
       icon: scope.icon,
-      readonly: scope.readonly === "true"
+      readonly: scope.readonly === "true",
+      error: scope.error,
+      message: scope.message      
     }
 
     let datefield=zn.ui.datefield.create(options);
 
-    datefield.on("change", (evt)=>
+    datefield.on("init", ()=>
     {
-      scope.value=evt.newValue;
-      scope.$apply();
+      datefield.on("change", (evt)=>
+      {
+        scope.value=evt.newValue;
+        scope.$apply();
+      })
+      datefield.on("action", (evt)=>scope.onaction({$event: evt}));
+  
+      scope.$watch("value", (nv, ov)=>datefield.setValue(nv));
+      scope.$watch("error", (nv, ov)=>datefield.message(nv, "error"));
+      scope.$watch("message", (nv, ov)=>datefield.message(nv, "message"));      
     })
-
-    scope.$watch("value", (nv, ov)=>
-    {
-      datefield.setValue(nv);
-    })
-
-    datefield.on("action", (evt)=>
-    {
-      scope.onaction({$event: evt});
-    });
 
     datefield.init();
   }
@@ -58,7 +58,9 @@
         placeholder  : "@",
         icon         : "@",
         readonly     : "@",
-        onaction     : "&"
+        onaction     : "&",
+        error        : "=",
+        message      : "="        
       },
       restrict: "A",
       template: "",

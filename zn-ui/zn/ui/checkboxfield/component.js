@@ -32,7 +32,8 @@
 
     checkboxfield.$target.addClass("zn-checkboxfield");
     checkboxfield.$target.attr("zn-checkboxfield", checkboxfield.options.name);
-    
+    if(checkboxfield.options.error) checkboxfield.$target.addClass("error");
+
     checkboxfield.setupUI();
     checkboxfield.setupEventHandlers();
 
@@ -65,11 +66,29 @@
 
   CheckboxField.prototype.getValue=function() {return this.value;}
 
+  CheckboxField.prototype.message=function(msg, type)
+  {
+    let checkboxfield=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      checkboxfield.$msg.text(msg);
+      if(type=="error") checkboxfield.$target.addClass("error");
+      else checkboxfield.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      checkboxfield.$msg.text("");
+      checkboxfield.$target.removeClass("error").removeClass("message");
+    }
+  }
+
   CheckboxField.prototype.setupUI=function()
   {
     let checkboxfield=this;
     checkboxfield.$target.html(component.html.checkboxfield(checkboxfield.options));
     checkboxfield.$input=checkboxfield.$target.find(".zn-checkboxfield-input");
+    checkboxfield.$msg=checkboxfield.$target.find(".zn-checkboxfield-msg");
   }
 
   CheckboxField.prototype.setupEventHandlers=function()
@@ -119,7 +138,7 @@
       <i class="state-off far fa-square"></i><i class="state-on fas fa-check-square"></i>
       <span class="text">${options.text || ''}</span>
     </div>
-    <div class="zn-checkboxfield-msg"></div>
+    <div class="zn-checkboxfield-msg">${options.error || options.message || ''}</div>
     `;
   };
 

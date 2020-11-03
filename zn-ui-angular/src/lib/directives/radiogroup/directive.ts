@@ -18,6 +18,8 @@ export class znRadioGroupDirective implements OnInit, OnChanges
   @Input() label :string;
   @Input() layout :string;
   @Input() items :Array<znDropdownItem>;
+  @Input() error :string;
+  @Input() message :string;
 
   @Output() onSelect :EventEmitter<any> = new EventEmitter<any>();
 
@@ -33,7 +35,17 @@ export class znRadioGroupDirective implements OnInit, OnChanges
 
   ngOnInit()
   {
-    let options :znRadioGroupOptions={target: this.hostElementRef.nativeElement, name: this.name, value: this.value, label: this.label, items: this.items, layout: this.layout};
+    let options :znRadioGroupOptions=
+    {
+      target: this.hostElementRef.nativeElement, 
+      name: this.name, 
+      value: this.value, 
+      label: this.label, 
+      items: this.items, 
+      layout: this.layout,
+      error: this.error,
+      message: this.message      
+    };
 
     this.radiogroup=zn.ui.radiogroup.create(options);
 
@@ -50,6 +62,9 @@ export class znRadioGroupDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.radiogroup) this.radiogroup.setValue(changes.value.currentValue);
+    if(!this.radiogroup) return;
+    if(changes.value) this.radiogroup.setValue(changes.value.currentValue);
+    if(changes.error) this.radiogroup.message(changes.error.currentValue, "error");
+    if(changes.message) this.radiogroup.message(changes.message.currentValue, "message");
   }  
 }

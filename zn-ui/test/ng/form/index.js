@@ -37,7 +37,11 @@ $(()=>
       {value: "CAN", label: "Campus Area Network"},
       {value: "MAN", label: "Metropolitan Area Network"},
       {value: "WAN", label: "Wide Area Network"}
-    ]
+    ],
+    validation:
+    {
+      name: ""
+    }
   }
 
   $scope = angular.element($ctrl).scope();
@@ -54,7 +58,7 @@ $(()=>
     m.form.activeOn=new Date();
     m.form.network="CAN";
     m.form.networkOpt="CAN";
-
+    m.validation.name="This is an error value";
     $scope.$apply();
   }
 

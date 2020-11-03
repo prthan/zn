@@ -20,6 +20,8 @@ export class znCheckboxFieldDirective implements OnInit, OnChanges
   @Input() icon :string;
   @Input() onValue :string;
   @Input() offValue :string;
+  @Input() error :string;
+  @Input() message :string;
 
   @Input() value :string|boolean;
   @Output() valueChange :EventEmitter<string|boolean> = new EventEmitter<string|boolean>();
@@ -38,7 +40,9 @@ export class znCheckboxFieldDirective implements OnInit, OnChanges
       target: this.hostElementRef.nativeElement, 
       name: this.name, 
       value: this.value, 
-      text: this.text
+      text: this.text,
+      error: this.error,
+      message: this.message      
     };
     if(this.onValue || this.offValue) options.values={on: this.onValue, off: this.offValue};
 
@@ -56,6 +60,10 @@ export class znCheckboxFieldDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.checkboxfield) this.checkboxfield.setValue(changes.value.currentValue);
+    if(!this.checkboxfield) return;
+
+    if(changes.value) this.checkboxfield.setValue(changes.value.currentValue);
+    if(changes.error) this.checkboxfield.message(changes.error.currentValue, "error");
+    if(changes.message) this.checkboxfield.message(changes.message.currentValue, "message");    
   }  
 }

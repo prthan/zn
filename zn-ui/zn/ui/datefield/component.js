@@ -32,7 +32,8 @@
 
     datefield.$target.addClass("zn-datefield");
     datefield.$target.attr("zn-datefield", datefield.options.name);
-    
+    if(datefield.options.error) datefield.$target.addClass("error");
+
     datefield.setupUI();
     datefield.setupEventHandlers();
 
@@ -65,12 +66,30 @@
 
   DateField.prototype.getValue=function() {return this.value;}
 
+  DateField.prototype.message=function(msg, type)
+  {
+    let datefield=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      datefield.$msg.text(msg);
+      if(type=="error") datefield.$target.addClass("error");
+      else datefield.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      datefield.$msg.text("");
+      datefield.$target.removeClass("error").removeClass("message");
+    }
+  }
+
   DateField.prototype.setupUI=function()
   {
     let datefield=this;
     datefield.$target.html(component.html.datefield(datefield.options));
     datefield.$input=datefield.$target.find(".zn-datefield-input input");
     datefield.$calendar=datefield.$target.find(".calendar");
+    datefield.$msg=datefield.$target.find(".zn-datefield-msg");
   }
 
   DateField.prototype.setupEventHandlers=function()
@@ -171,8 +190,8 @@
       <input type="text" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}/>
       <span class="action"><i class="far fa-calendar-alt"></i></span>
     </div>
+    <div class="zn-datefield-msg">${options.error || options.message || ''}</div>
     <div class="calendar zn-calendar"></div>
-    <div class="zn-datefield-msg"></div>
     `;
   };
 

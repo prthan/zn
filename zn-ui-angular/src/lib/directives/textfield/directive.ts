@@ -20,6 +20,8 @@ export class znTextFieldDirective implements OnInit, OnChanges
   @Input() icon :string;
   @Input() placeholder :string;
   @Input() readonly :boolean;
+  @Input() error :string;
+  @Input() message :string;
 
   @Output() onAction :EventEmitter<any> = new EventEmitter<any>();
 
@@ -44,7 +46,9 @@ export class znTextFieldDirective implements OnInit, OnChanges
       password: this.password, 
       icon: this.icon,
       placeholder: this.placeholder,
-      readonly: this.readonly
+      readonly: this.readonly,
+      error: this.error,
+      message: this.message
     };
 
     this.textfield=zn.ui.textfield.create(options);
@@ -62,6 +66,10 @@ export class znTextFieldDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.textfield) this.textfield.setValue(changes.value.currentValue);
+    if(!this.textfield) return;
+    if(changes.value) this.textfield.setValue(changes.value.currentValue);
+    if(changes.error) this.textfield.message(changes.error.currentValue, "error");
+    if(changes.message) this.textfield.message(changes.message.currentValue, "message");
+
   }  
 }

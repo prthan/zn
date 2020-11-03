@@ -21,6 +21,8 @@ export class znDateFieldDirective implements OnInit, OnChanges
   @Input() format :string;
   @Input() placeholder :string;
   @Input() readonly :boolean;
+  @Input() error :string;
+  @Input() message :string;
 
   @Output() onDateSelect :EventEmitter<any> = new EventEmitter<any>();
   @Output() onAction :EventEmitter<any> = new EventEmitter<any>();
@@ -46,7 +48,9 @@ export class znDateFieldDirective implements OnInit, OnChanges
       icon: this.icon, 
       format: this.format,
       placeholder: this.placeholder,
-      readonly: this.readonly
+      readonly: this.readonly,
+      error: this.error,
+      message: this.message      
     };
 
     this.datefield=zn.ui.datefield.create(options);
@@ -66,6 +70,11 @@ export class znDateFieldDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.datefield) this.datefield.setValue(changes.value.currentValue);
+    if(!this.datefield) return;
+    
+    if(changes.value) this.datefield.setValue(changes.value.currentValue);
+    if(changes.error) this.datefield.message(changes.error.currentValue, "error");
+    if(changes.message) this.datefield.message(changes.message.currentValue, "message");
+
   }  
 }

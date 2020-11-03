@@ -33,7 +33,8 @@
     radiogroup.$target.addClass("zn-radiogroup");
     radiogroup.$target.attr("zn-radiogroup", radiogroup.options.name);
     if(radiogroup.options.layout==="horizontal") radiogroup.$target.addClass("horizontal");
-    
+    if(radiogroup.options.error) radiogroup.$target.addClass("error");
+
     radiogroup.setupUI();
     radiogroup.setupEventHandlers();
 
@@ -68,11 +69,29 @@
 
   RadioGroup.prototype.getValue=function() {return this.value;}
 
+  RadioGroup.prototype.message=function(msg, type)
+  {
+    let radiogroup=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      radiogroup.$msg.text(msg);
+      if(type=="error") radiogroup.$target.addClass("error");
+      else radiogroup.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      radiogroup.$msg.text("");
+      radiogroup.$target.removeClass("error").removeClass("message");
+    }
+  }
+
   RadioGroup.prototype.setupUI=function()
   {
     let radiogroup=this;
     radiogroup.$target.html(component.html.radiogroup(radiogroup.options));
     radiogroup.$input=radiogroup.$target.find(".zn-radiogroup-input");
+    radiogroup.$msg=radiogroup.$target.find(".zn-radiogroup-msg");
   }
 
   RadioGroup.prototype.setupEventHandlers=function()
@@ -124,7 +143,7 @@
     <div class="zn-radiogroup-input">
       ${component.html.items(options.items, options.value)}
     </div>
-    <div class="zn-radiogroup-msg"></div>
+    <div class="zn-radiogroup-msg">${options.error || options.message || ''}</div>
     `;
   };
 

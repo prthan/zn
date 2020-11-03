@@ -91,6 +91,17 @@
     (table.eventHandlers[eventName] || []).forEach((eh)=>eh(evt));
   }
 
+  Table.prototype.initRows=function(rows)
+  {
+    let table=this;
+    table.options.rows=rows;
+    table.baseRows=JSON.stringify(table.options.rows);
+    table.getData("init", table.dataOptions, (rows)=>
+    {
+      table.setRows(rows);
+    })
+  }
+
   Table.prototype.setupUI=function()
   {
     let table=this;
@@ -405,6 +416,13 @@
     }
     fixedWidth=table.fixedCols.reduce((a, c)=>a+c.width, fixedWidth);
     table.$fixed.width(fixedWidth);
+    /*table.$scrollableContent.find(".zn-table-row").each((i,e)=>
+    {
+      let $row=$(e);
+      let rownum=$row.attr("data-row");
+      table.$fixedContent.find(`.zn-table-row[data-row='${rownum}']`).height($row.height());
+    })*/
+
     if(fixedWidth==0) table.$fixed.hide();
     if(rows.length>0) table.isEmpty=false;
     if(table.options.paging) table.setPages();

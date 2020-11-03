@@ -22,26 +22,26 @@
       placeholder: scope.placeholder, 
       icon: scope.icon, 
       password: scope.password === "true",
-      readonly: scope.readonly === "true"
+      readonly: scope.readonly === "true",
+      error: scope.error,
+      message: scope.message
     }
 
     let textfield=zn.ui.textfield.create(options);
 
-    textfield.on("change", (evt)=>
+    textfield.on("init", ()=>
     {
-      scope.value=evt.newValue;
-      scope.$apply();
+      textfield.on("change", (evt)=>
+      {
+        scope.value=evt.newValue;
+        scope.$apply();
+      })
+      textfield.on("action", (evt)=>scope.onaction({$event: evt}));
+      
+      scope.$watch("value", (nv, ov)=>textfield.setValue(nv))
+      scope.$watch("error", (nv, ov)=>textfield.message(nv, "error"));
+      scope.$watch("message", (nv, ov)=>textfield.message(nv, "message"));
     })
-
-    scope.$watch("value", (nv, ov)=>
-    {
-      textfield.setValue(nv);
-    })
-
-    textfield.on("action", (evt)=>
-    {
-      scope.onaction({$event: evt});
-    });
     textfield.init();
   }
 
@@ -59,7 +59,9 @@
         icon         : "@",
         password     : "@",
         readonly     : "@",
-        onaction     : "&"
+        onaction     : "&",
+        error        : "=",
+        message      : "="        
       },
       restrict: "A",
       template: "",

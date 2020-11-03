@@ -31,6 +31,7 @@
 
     textarea.$target.addClass("zn-textarea");
     textarea.$target.attr("zn-textarea", textarea.options.name);
+    if(textarea.options.error) textarea.$target.addClass("error");
 
     textarea.setupUI();
     textarea.setupEventHandlers();
@@ -64,11 +65,29 @@
 
   TextArea.prototype.getValue=function() {return this.value;}
 
+  TextArea.prototype.message=function(msg, type)
+  {
+    let textarea=this;
+    if(!msg) return;
+    if(msg!="")
+    {
+      textarea.$msg.text(msg);
+      if(type=="error") textarea.$target.addClass("error");
+      else textarea.$target.addClass("message");
+    }
+    else if(msg=="")
+    {
+      textarea.$msg.text("");
+      textarea.$target.removeClass("error").removeClass("message");
+    }
+  }
+
   TextArea.prototype.setupUI=function()
   {
     let textarea=this;
     textarea.$target.html(component.html.textarea(textarea.options));
     textarea.$textarea=textarea.$target.find(".zn-textarea-input textarea");
+    textarea.$msg=textarea.$target.find(".zn-textarea-msg");
   }
 
   TextArea.prototype.setupEventHandlers=function()
@@ -99,7 +118,7 @@
     return `
     ${options.label ? component.html.label(options.label) : ''}
     <div class="zn-textarea-input"><textarea value="${options.value || ''}" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}></textarea></div>
-    <div class="zn-textarea-msg"></div>
+    <div class="zn-textarea-msg">${options.error || options.message || ''}</div>
     `;
   };
 

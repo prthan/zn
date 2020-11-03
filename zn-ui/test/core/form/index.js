@@ -86,7 +86,7 @@ $(()=>
   checkboxfield.on("action", evt => console.log("action", evt));
   checkboxfield.on("init", evt => console.log("init", evt));
   checkboxfield.init();
-
+  
   let radiogroup=zn.ui.radiogroup.create({
     name: "choices",
     target: ".radiogroup",
@@ -100,7 +100,7 @@ $(()=>
       {value: "CAN", label: "Campus Area Network"},
       {value: "MAN", label: "Metropolitan Area Network"},
       {value: "WAN", label: "Wide Area Network"}
-    ]    
+    ]
   });
   radiogroup.on("change", evt => console.log("change", evt));
   radiogroup.on("action", evt => console.log("action", evt));
@@ -124,13 +124,12 @@ $(()=>
       target: ".datefield",
       label: "Start Date",
       value: new Date(),
-      format: "MM/DD/YYYY"
+      format: "MM/DD/YYYY",
   });
   datefield.on("change", evt => console.log("change", evt));
   datefield.on("action", evt => console.log("action", evt));
   datefield.on("init", evt => console.log("init", evt));
   datefield.init();  
-
 
   let button1=zn.ui.button.create({
     name: "b1",

@@ -20,20 +20,24 @@
       label: scope.label, 
       value: scope.value, 
       placeholder: scope.placeholder,
-      readonly: scope.readonly === "true"
+      readonly: scope.readonly === "true",
+      error: scope.error,
+      message: scope.message
     }
 
     let textarea=zn.ui.textarea.create(options);
 
-    textarea.on("change", (evt)=>
+    textarea.on("init", ()=>
     {
-      scope.value=evt.newValue;
-      scope.$apply();
-    })
-
-    scope.$watch("value", (nv, ov)=>
-    {
-      textarea.setValue(nv);
+      textarea.on("change", (evt)=>
+      {
+        scope.value=evt.newValue;
+        scope.$apply();
+      })
+  
+      scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
+      scope.$watch("error", (nv, ov)=>textarea.message(nv, "error"));
+      scope.$watch("message", (nv, ov)=>textarea.message(nv, "message"));
     })
 
     textarea.init();
@@ -50,7 +54,9 @@
         label        : "@",
         value        : "=",
         placeholder  : "@",
-        readonly     : "@"
+        readonly     : "@",
+        error        : "=",
+        message      : "="        
       },
       restrict: "A",
       template: "",

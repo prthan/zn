@@ -46,14 +46,14 @@
 
     <div ng-controller="ctrl">
       <div class="form layout">
-        <div zn-textfield name="customer-name" label="Customer Name" value="model.form.name" class="textfield field" onaction="onAction($event)"></div>
+        <div zn-textfield name="customer-name" label="Customer Name" value="model.form.name" class="textfield field" onaction="onAction($event)" error="model.validation.name"></div>
         <div zn-textfield name="searc" placeholder="Search" value="model.form.search" icon="fas fa-search" class="textfield field"></div>
         <div zn-textfield name="userid" placeholder="User ID" value="model.form.userid" icon="fas fa-user-tie" class="textfield field"></div>
         <div zn-textfield name="password" placeholder="Password" value="model.form.password" icon="fas fa-lock" class="textfield field"></div>
         <div zn-textarea name="descr" label="Description" value="model.form.descr" class="textarea field"></div>
         <div zn-checkboxfield name="agreement" text="This is a test checkbox" value="model.form.agreement" onvalue="Y" offvalue="N" class="checkboxfield field"></div>
-        <div zn-dropdownfield name="options" lable="Types of Network" value="model.form.network" items="model.networkItems" class="dropdownfield field"></div>
-        <div zn-datefield name="join-date" lable="Active On" value="model.form.activeOn" class="datefield field"></div>
+        <div zn-dropdownfield name="options" label="Types of Network" value="model.form.network" items="model.networkItems" class="dropdownfield field"></div>
+        <div zn-datefield name="join-date" label="Active On" value="model.form.activeOn" class="datefield field"></div>
         <div zn-radiogroup name="nwk" label="Type of Network" value="model.form.networkOpt" items="model.networkItems" class="radiogroup field"></div>        
       </div>
 

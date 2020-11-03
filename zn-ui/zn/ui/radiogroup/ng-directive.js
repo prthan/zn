@@ -24,23 +24,28 @@
         label: scope.label, 
         value: scope.value,
         items: nv,
-        layout: scope.layout
+        layout: scope.layout,
+        error: scope.error,
+        message: scope.message        
       }
   
       let radiogroup=zn.ui.radiogroup.create(options);
   
-      radiogroup.on("change", (evt)=>
+      radiogroup.on("init", ()=>
       {
-        scope.value=evt.newValue;
-        scope.$apply();
+        radiogroup.on("change", (evt)=>
+        {
+          scope.value=evt.newValue;
+          scope.$apply();
+        })
+
+        scope.$watch("value", (nv, ov)=>radiogroup.setValue(nv));
+        scope.$watch("error", (nv, ov)=>radiogroup.message(nv, "error"));
+        scope.$watch("message", (nv, ov)=>radiogroup.message(nv, "message"));
+    
       })
   
       radiogroup.init();
-
-      scope.$watch("value", (nv, ov)=>
-      {
-        radiogroup.setValue(nv);
-      })
 
     })
   }
@@ -56,7 +61,9 @@
         label        : "@",
         value        : "=",
         items        : "=",
-        layout       : "@"
+        layout       : "@",
+        error        : "=",
+        message      : "="        
       },
       restrict: "A",
       template: "",

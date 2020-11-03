@@ -1,17 +1,17 @@
 <div class="layout">
   <div class="form-1">
-    <div zn-textfield name="associate-name" label="Associate Name" [(value)]="form.associateName"></div>
+    <div zn-textfield name="associate-name" label="Associate Name" [(value)]="form.associateName" [error]="validationErrors.associateName"></div>
     <div zn-textfield name="userid" [(value)]="form.userid" icon="fas fa-user-tie" placeholder="User ID"></div>
     <div zn-textfield name="password" [(value)]="form.password" icon="fas fa-lock" password=true placeholder="Password"></div>
-    <div zn-dropdownfield name="network" label="Network" [(value)]="form.network" [items]="typesOfNetwork"></div>
-    <div zn-datefield name="activedate" label="Active On" [(value)]="form.activeDate" placeholder="Select date"></div>
-    <div zn-textarea name="descr" label="Description" [(value)]="form.descr" class="textarea" placeholder="Please enter the details here"></div>
+    <div zn-dropdownfield name="network" label="Network" [(value)]="form.network" [items]="typesOfNetwork" [error]="validationErrors.network"></div>
+    <div zn-datefield name="activedate" label="Active On" [(value)]="form.activeDate" placeholder="Select date" [error]="validationErrors.activeDate"></div>
+    <div zn-textarea name="descr" label="Description" [(value)]="form.descr" class="textarea" placeholder="Please enter the details here" [error]="validationErrors.descr"></div>
   </div>
   <div class="radio-group">
-    <div zn-radiogroup name="networkopts" label="Network Options" [(value)]="form.networkopts" [items]="typesOfNetwork"></div>
+    <div zn-radiogroup name="networkopts" label="Network Options" [(value)]="form.networkopts" [items]="typesOfNetwork" [error]="validationErrors.networkopts"></div>
   </div>
   <div class="tnc">
-    <div zn-checkboxfield name="agreement" text="I agree to the terms and conditions of the fair use of this software" [(value)]="form.agreement" onValue="Y" offValue="N"></div>
+    <div zn-checkboxfield name="agreement" text="I agree to the terms and conditions of the fair use of this software" [(value)]="form.agreement" onValue="Y" offValue="N" [error]="validationErrors.agreement"></div>
   </div>
   <div class="button-set">
     <div zn-button name="add-calendar" text="Add Calendar" action="add-calendar" icon="far fa-calendar-plus"></div>

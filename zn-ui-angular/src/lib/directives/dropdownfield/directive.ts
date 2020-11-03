@@ -17,6 +17,8 @@ export class znDropdownFieldDirective implements OnInit, OnChanges
   @Input() name :string;
   @Input() label :string;
   @Input() items :Array<znDropdownItem>;
+  @Input() error :string;
+  @Input() message :string;
 
   @Output() onSelect :EventEmitter<any> = new EventEmitter<any>();
 
@@ -32,7 +34,16 @@ export class znDropdownFieldDirective implements OnInit, OnChanges
 
   ngOnInit()
   {
-    let options :znDropdownFieldOptions={target: this.hostElementRef.nativeElement, name: this.name, value: this.value, label: this.label, items: this.items};
+    let options :znDropdownFieldOptions=
+    {
+      target: this.hostElementRef.nativeElement, 
+      name: this.name, 
+      value: this.value, 
+      label: this.label, 
+      items: this.items,
+      error: this.error,
+      message: this.message      
+    };
 
     this.dropdownfield=zn.ui.dropdownfield.create(options);
 
@@ -49,6 +60,9 @@ export class znDropdownFieldDirective implements OnInit, OnChanges
 
   ngOnChanges(changes :SimpleChanges)
   {
-    if(this.dropdownfield) this.dropdownfield.setValue(changes.value.currentValue);
+    if(!this.dropdownfield) return;
+    if(changes.value) this.dropdownfield.setValue(changes.value.currentValue);
+    if(changes.error) this.dropdownfield.message(changes.error.currentValue, "error");
+    if(changes.message) this.dropdownfield.message(changes.message.currentValue, "message");
   }  
 }

@@ -19,20 +19,24 @@
       name: scope.name, 
       text: scope.text, 
       value: scope.value, 
-      values: {on: scope.onvalue, off: scope.offvalue}
+      values: {on: scope.onvalue, off: scope.offvalue},
+      error: scope.error,
+      message: scope.message
     }
 
     let checkboxfield=zn.ui.checkboxfield.create(options);
 
-    checkboxfield.on("change", (evt)=>
+    checkboxfield.on("init", ()=>
     {
-      scope.value=evt.newValue;
-      scope.$apply();
-    })
-
-    scope.$watch("value", (nv, ov)=>
-    {
-      checkboxfield.setValue(nv);
+      checkboxfield.on("change", (evt)=>
+      {
+        scope.value=evt.newValue;
+        scope.$apply();
+      })
+  
+      scope.$watch("value", (nv, ov)=>checkboxfield.setValue(nv));
+      scope.$watch("error", (nv, ov)=>checkboxfield.message(nv, "error"));
+      scope.$watch("message", (nv, ov)=>checkboxfield.message(nv, "message"));
     })
 
     checkboxfield.init();
@@ -50,6 +54,8 @@
         value        : "=",
         onvalue      : "@",
         offvalue     : "@",
+        error        : "=",
+        message      : "="
       },
       restrict: "A",
       template: "",
