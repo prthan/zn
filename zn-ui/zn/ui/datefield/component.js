@@ -187,7 +187,7 @@
     ${options.label ? component.html.label(options.label) : ''}
     <div class="zn-datefield-input">
       ${options.icon ? component.html.icon(options.icon) : ''}
-      <input type="text" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}/>
+      <input type="text" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''} size="1"/>
       <span class="action"><i class="far fa-calendar-alt"></i></span>
     </div>
     <div class="zn-datefield-msg">${options.error || options.message || ''}</div>
