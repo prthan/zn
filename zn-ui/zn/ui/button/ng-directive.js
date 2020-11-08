@@ -3,7 +3,7 @@
   var directive =
   {
     name: "button",
-    package: "zn.ui.componentsng"
+    package: "zn.ui.components.ng"
   }
 
   directive.html=function()
@@ -23,7 +23,7 @@
       type: scope.type
     }
 
-    let button=zn.ui.componentsbutton.create(options);
+    let button=zn.ui.components.button.create(options);
 
     button.on("action", (evt)=>
     {

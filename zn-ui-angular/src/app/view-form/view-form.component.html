@@ -19,9 +19,21 @@
     <div zn-button name="delete" text="Delete" action="delete" icon="fas fa-trash" type="critical"></div>
     <div zn-button name="update" text="Update Form Data" action="update-form-data" (onAction)="onUpdateFormData($event)" type="warning"></div>
   </div>
+  <div class="button-set">
+    <div zn-button name="show-popup-cal" class="show-popup-cal" text="Show Calendar Popup" action="show-popup-cal" (onAction)="onShowPopupCal($event)"></div>
+    <div zn-button name="show-dialog-cal" class="show-dialog-cal" text="Show Calendar Dialog" action="show-dialog-cal" (onAction)="onShowDialogCal($event)"></div>
+  </div>
   <div class="calendars">
     <div zn-calendar name="start-date" [(date)]="form.startDateCal" (onDateSelect)="onStartDateSelect($event)"></div>
     <div zn-calendar name="end-date"  [(date)]="form.endDateCal" (onDateSelect)="onEndDateSelect($event)"></div>
   </div>
+  <div zn-popup class="popup" name="popup-cal" source=".show-popup-cal" showAt="right">
+    <div zn-calendar name="popup-date" (onDateSelect)="onStartDateSelect($event)"></div>
+  </div>
+
+  <zn-dialog class="dialog" name="dialog-cal" dialog-title="Select Date" [actions]="dialogActions" (onAction)="onDialogAction($event)">
+    <div zn-calendar name="dialog-date" (onDateSelect)="onStartDateSelect($event)"></div>
+  </zn-dialog>
+
 </div>
 

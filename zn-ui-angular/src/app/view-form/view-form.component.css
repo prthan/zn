@@ -16,6 +16,7 @@
 .button-set
 {
   display: flex;
+  margin-bottom: 20px;
 }
 
 .button-set .zn-button
@@ -40,4 +41,15 @@
 .radio-group, .tnc
 {
   width: 450px;
+}
+
+.zn-popup .zn-calendar
+{
+  border: none;
+}
+
+.zn-dialog .zn-calendar
+{
+  border: none;
+  background-color: transparent;
 }

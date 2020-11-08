@@ -1,0 +1,174 @@
+.zn-list
+{
+}
+
+.zn-list .zn-list-item
+{
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.zn-list .zn-list-item.hover
+{
+  background-color: #dcfaff;
+}
+
+
+.zn-list .zn-list-item.selected
+{
+  background-color: #dcfaff;
+}
+ 
+.zn-list .zn-list-item .zn-multi-select
+{
+  flex-grow: 0;
+  padding-left: 10px;
+  display: none;
+}
+
+.zn-list.zn-multi-select .zn-list-item.hover .zn-multi-select
+{
+  display: inline-block;
+}
+
+.zn-list.zn-multi-select .zn-list-item.checked .zn-multi-select
+{
+  display: inline-block !important;
+}
+
+.zn-list .zn-list-item .icon
+{
+  flex-grow: 0;
+  padding-right: 10px;
+  font-size: 30px;
+  color: #999c9e;
+}
+
+.zn-list .zn-list-item .img
+{
+  flex-grow: 0;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.zn-list .zn-list-item .img img
+{
+  width: 40px;
+  border-radius: 50%;
+}
+
+.zn-list .zn-list-item .zn-list-item-content
+{
+  flex-grow: 1;
+  flex-basis: 0;
+  cursor: default;
+}
+
+.zn-list .zn-list-item .zn-list-item-content .text
+{
+  display: flex;
+  align-items: center;
+  height: 21px;
+}
+
+.zn-list .zn-list-item .zn-list-item-content .text span
+{
+	color: #565656;
+  font-weight: 500;
+  flex-grow: 0;
+}
+
+.zn-list .zn-list-item .zn-list-item-content .text .zn-multi-select
+{
+  flex-grow: 0;
+}
+
+.zn-list .zn-list-item .zn-list-item-content .subtext
+{
+  font-size: 11px;
+  color: #888888;
+}
+
+.zn-list .zn-list-item .zn-list-item-actions
+{
+  flex-grow: 0;
+  align-items: center;
+  display: none;
+}
+
+.zn-list .zn-list-item.hover .zn-list-item-actions
+{
+  display: flex;
+}
+
+.zn-list .zn-list-item.selected .zn-list-item-actions
+{
+  display: flex !important;
+}
+
+.zn-list .zn-list-item .zn-list-item-actions .zn-action
+{
+  color: #565656;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 5px;
+}
+
+.zn-list .zn-list-item .zn-list-item-actions .zn-action:hover
+{
+  color: #5e8fef;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox
+{
+	display: inline-block;
+	color: #999c9e;
+	text-decoration: none;
+  font-size: 11px;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox:hover
+{
+	/*color: #19967d;*/
+	color: #5e8fef;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox[data-checked='Y']
+{
+	color: #5e8fef;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox[data-checked='Y'] .checked
+{
+  display: inline;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox[data-checked='Y'] .unchecked
+{
+  display: none;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox[data-checked='N'] .checked
+{
+  display: none;
+}
+
+.zn-list .zn-list-item .zn-multi-select .checkbox[data-checked='N'] .unchecked
+{
+  display: inline;
+}
+
+.zn-list .zn-list-more
+{
+  display: none;
+  padding: 7px 5px 5px 5px;
+  justify-content: center;
+}
+
+@keyframes zn-list-moonspin {from {transform: rotate(0deg);} to {transform: rotate(360deg);}}
+.zn-list .zn-loader-moon {display: inline-block; width: 25px; height: 25px; background-color: rgb(255,255,255); box-sizing: border-box; box-shadow: 0 0 4px 0px rgba(0,0,0,0.25); border-bottom: 5px solid rgb(102,102,102); border-radius: 50%; animation: zn-list-moonspin 1.15s ease infinite;}

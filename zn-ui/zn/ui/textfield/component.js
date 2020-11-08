@@ -36,7 +36,7 @@
     textfield.setupUI();
     textfield.setupEventHandlers();
 
-    textfield.$target.znc=textfield;
+    textfield.$target.get()[0].znc=textfield;
     textfield.fireEvent("init");
   }
 
@@ -121,7 +121,10 @@
   {
     return `
     ${options.label ? component.html.label(options.label) : ''}
-    <div class="zn-textfield-input">${options.icon ? component.html.icon(options.icon) : ''}<input type="${options.password ? 'password' : 'text'}" value="${options.value || ''}" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}/></div>
+    <div class="zn-textfield-input">
+      ${options.icon ? component.html.icon(options.icon) : ''}
+      <input type="${options.password ? 'password' : 'text'}" value="${options.value || ''}" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''} size="1"/>
+    </div>
     <div class="zn-textfield-msg">${options.error || options.message || ''}</div>
     `;
   };

@@ -37,7 +37,7 @@
     checkboxfield.setupUI();
     checkboxfield.setupEventHandlers();
 
-    checkboxfield.$target.znc=checkboxfield;
+    checkboxfield.$target.get()[0].znc=checkboxfield;
     checkboxfield.setValue(checkboxfield.options.value);
     checkboxfield.fireEvent("init");
   }

@@ -38,7 +38,7 @@
     radiogroup.setupUI();
     radiogroup.setupEventHandlers();
 
-    radiogroup.$target.znc=radiogroup;
+    radiogroup.$target.get()[0].znc=radiogroup;
     radiogroup.setValue(radiogroup.options.value);
     radiogroup.fireEvent("init");
   }

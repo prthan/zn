@@ -36,7 +36,7 @@
     textarea.setupUI();
     textarea.setupEventHandlers();
 
-    textarea.$target.znc=textarea;
+    textarea.$target.get()[0].znc=textarea;
     textarea.setValue(textarea.options.value);
     textarea.fireEvent("init");
   }

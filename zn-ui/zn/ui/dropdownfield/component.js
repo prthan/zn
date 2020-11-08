@@ -36,7 +36,7 @@
     dropdownfield.setupUI();
     dropdownfield.setupEventHandlers();
 
-    dropdownfield.$target.znc=dropdownfield;
+    dropdownfield.$target.get()[0].znc=dropdownfield;
     dropdownfield.setValue(dropdownfield.options.value);
     dropdownfield.fireEvent("init");
   }

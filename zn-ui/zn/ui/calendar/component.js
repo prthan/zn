@@ -21,6 +21,7 @@
   {
     this.options=options;
     this.value=options.date;
+    this.name=options.name;
     this.eventHandlers={};
   }
 
@@ -34,7 +35,7 @@
 
     calendar.setupUI();
     calendar.setupEventHandlers();
-    calendar.$target.znc=calendar;
+    calendar.$target.get()[0].znc=calendar;
     calendar.fireEvent("init");
   }
 

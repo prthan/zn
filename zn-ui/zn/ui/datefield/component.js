@@ -37,7 +37,7 @@
     datefield.setupUI();
     datefield.setupEventHandlers();
 
-    datefield.$target.znc=datefield;
+    datefield.$target.get()[0].znc=datefield;
     datefield.setValue(datefield.options.value);
     datefield.fireEvent("init");
   }

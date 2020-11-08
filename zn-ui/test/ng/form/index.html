@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/calendar/component.css"/>
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/datefield/component.css"/>
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/button/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/popup/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/dialog/component.css"/>
     <link rel="stylesheet" type="text/css" href="index.css"/>
     
     <meta charset="utf-8" />
@@ -42,6 +44,10 @@
     <script src="../../../zn/ui/radiogroup/ng-directive.js"></script>
     <script src="../../../zn/ui/datefield/component.js"></script>
     <script src="../../../zn/ui/datefield/ng-directive.js"></script>
+    <script src="../../../zn/ui/popup/component.js"></script>
+    <script src="../../../zn/ui/popup/ng-directive.js"></script>
+    <script src="../../../zn/ui/dialog/component.js"></script>
+    <script src="../../../zn/ui/dialog/ng-directive.js"></script>
     <script src="index.js"></script>
 
     <div ng-controller="ctrl">
@@ -62,13 +68,55 @@
         <div zn-button text="Bookmark" icon="fas fa-bookmark" action="bookmark" class="button-2"></div>
         <div zn-button text="Delete" icon="fas fa-trash" action="delete" type="critical" class="button-3"></div>
         <div zn-button text="Reresh" icon="fas fa-sync-alt" action="refresh" type="warning" class="button-4"></div>
-        <div zn-button text="Dump Form Data" action="dump" onaction="dump(model)" class="button-5"></div>
       </div>
-  
+      
+      <div class="buttons">
+        <div zn-button text="Dump Form Data" action="dump" onaction="dump(model)" class="button-5"></div>
+        <div zn-button text="Show Calendar Popup" action="showcalpopup" onaction="showCalendarPopup()" class="button-6"></div>
+        <div zn-button text="Show Calendar Dialog" action="showcaldialog" onaction="showCalendarDialog()" class="button-7"></div>
+        <div zn-button text="Show Form" action="showform" onaction="showFormDialog()" class="button-8"></div>
+      </div>
+      
       <div class="calendars">
         <div zn-calendar date="model.form.startDate" class="calendar calendar-1"></div>
         <div zn-calendar date="model.form.endDate" class="calendar calendar-2"></div>
       </div>      
+
+      <div zn-popup name="popup-cal" source=".button-6" showat="right">
+        <div zn-calendar name="calendar-3" class="calendar calendar-3" ondateselect="onDateSelect($event)"></div>
+      </div>
+
+      <div zn-dialog name="dialog-cal" dialogtitle="Select Start Date" actions="model.dialogActions" onaction="onDialogAction($event)">
+        <div zn-calendar name="calendar-4" class="calendar calendar-4" ondateselect="onDateSelect($event)"></div>
+      </div>
+    
+      <div zn-dialog name="edit-contact-dialog" dialogtitle="Edit Contact" actions="model.editActions" onaction="onEditContactDialogAction($event)">
+        <div class="edit-form fl fl-column">
+          <div class="fl fl-top">
+            <div class="fl-g1 fl fl-column mr-20">
+              <div zn-textfield class="fl-g0" name="firstname" label="First Name" value="model.editContact.firstName" error="model.contactValidation.firstName"></div>
+              <div zn-textfield class="fl-g0" name="lastname" label="Last Name" value="model.editContact.lastName" error="model.contactValidation.lastName"></div>
+              <div zn-textfield class="fl-g0" name="designation" label="Designation" value="model.editContact.designation" error="model.contactValidation.designation"></div>
+              <div class="fl fl-g0">
+                <div zn-dropdownfield class="fl-g1 mr-20" name="phonetype" label="Phone Type" value="model.editContact.phoneType" items="model.phoneTypes" error="model.contactValidation.phoneType"></div>
+                <div zn-textfield class="fl-g1" name="phonenumber" label="Phone Number" value="model.editContact.phoneNumber" error="model.contactValidation.phoneNumber"></div>
+              </div>
+            </div>
+            <div class="fl-g1 fl fl-column">
+              <div zn-textfield class="fl-g0" name="addressLine" label="Address Line" value="model.editContact.addressLine" error="model.contactValidation.addressLine"></div>
+              <div class="fl">
+                <div zn-textfield class="fl-g1 mr-20" name="area" label="Area" value="model.editContact.area" error="model.contactValidation.area"></div>
+                <div zn-textfield class="fl-g1" name="city" label="City" value="model.editContact.city" error="model.contactValidation.city"></div>
+              </div>
+              <div class="fl">
+                <div zn-textfield class="fl-g1 mr-20" name="state" label="State" value="model.editContact.state" error="model.contactValidation.state"></div>
+                <div zn-textfield class="fl-g1" name="pincode" label="Pincode" value="model.editContact.pincode" error="model.contactValidation.pincode"></div>
+              </div>
+            </div>
+          </div>
+          <div zn-textarea class="fl-g1" name="notes" label="Notes" value="model.editContact.notes" error="model.contactValidation.notes"></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

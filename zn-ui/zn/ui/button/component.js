@@ -14,7 +14,7 @@
 
   component.get=(name)=>
   {
-    return $(`[zn-text-field='${name}']`).get()[0].znc;
+    return $(`[zn-button='${name}']`).get()[0].znc;
   }
 
   let Button=function(options)
@@ -30,10 +30,10 @@
     button.$target.addClass("zn-button");
     button.$target.attr("title", button.options.title);
     button.$target.attr("data-type", button.options.type);
-
+    button.$target.attr("zn-button", button.options.name);
     button.setupUI();
     button.setupEventHandlers();
-    button.$target.znc=button;
+    button.$target.get()[0].znc=button;
     button.fireEvent("init");
   }
 

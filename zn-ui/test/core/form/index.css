@@ -37,7 +37,22 @@ body
   margin-right: 20px;
 }
 
-.buttons
+.calendar-3
 {
-
+  margin-right: 0px;
 }
+
+.zn-popup .zn-calendar
+{
+  border: none;
+}
+
+.zn-dialog .zn-calendar
+{
+  border: none;
+  background-color: transparent;
+}
+
+/*.dialog-cal .zn-dialog-wrapper {width: 230px;}*/
+
+.buttons-2 {margin-top: 20px;}

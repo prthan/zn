@@ -33,7 +33,10 @@
               "../zn-ui/zn/ui/radiogroup/component.css",
               "../zn-ui/zn/ui/table/component.css",
               "../zn-ui/zn/ui/textarea/component.css",
-              "../zn-ui/zn/ui/textfield/component.css"
+              "../zn-ui/zn/ui/textfield/component.css",
+              "../zn-ui/zn/ui/list/component.css",
+              "../zn-ui/zn/ui/popup/component.css",
+              "../zn-ui/zn/ui/dialog/component.css"
             ],
             "scripts": [
               "../zn-ui/fuse.js",
@@ -48,7 +51,10 @@
               "../zn-ui/zn/ui/radiogroup/component.js",
               "../zn-ui/zn/ui/table/component.js",
               "../zn-ui/zn/ui/textarea/component.js",
-              "../zn-ui/zn/ui/textfield/component.js"
+              "../zn-ui/zn/ui/textfield/component.js",
+              "../zn-ui/zn/ui/list/component.js",
+              "../zn-ui/zn/ui/popup/component.js",
+              "../zn-ui/zn/ui/dialog/component.js"
             ]
           },
           "configurations": {
@@ -111,9 +117,38 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "../zn-ui/zn/ui/button/component.css",
+              "../zn-ui/zn/ui/calendar/component.css",
+              "../zn-ui/zn/ui/checkboxfield/component.css",
+              "../zn-ui/zn/ui/datefield/component.css",
+              "../zn-ui/zn/ui/dropdownfield/component.css",
+              "../zn-ui/zn/ui/radiogroup/component.css",
+              "../zn-ui/zn/ui/table/component.css",
+              "../zn-ui/zn/ui/textarea/component.css",
+              "../zn-ui/zn/ui/textfield/component.css",
+              "../zn-ui/zn/ui/list/component.css",
+              "../zn-ui/zn/ui/popup/component.css",
+              "../zn-ui/zn/ui/dialog/component.css"
             ],
-            "scripts": []
+            "scripts": [
+              "../zn-ui/fuse.js",
+              "../zn-ui/jquery.js",
+              "../zn-ui/moment.js",
+              "../zn-ui/numeral.js",
+              "../zn-ui/zn/ui/button/component.js",
+              "../zn-ui/zn/ui/calendar/component.js",
+              "../zn-ui/zn/ui/checkboxfield/component.js",
+              "../zn-ui/zn/ui/datefield/component.js",
+              "../zn-ui/zn/ui/dropdownfield/component.js",
+              "../zn-ui/zn/ui/radiogroup/component.js",
+              "../zn-ui/zn/ui/table/component.js",
+              "../zn-ui/zn/ui/textarea/component.js",
+              "../zn-ui/zn/ui/textfield/component.js",
+              "../zn-ui/zn/ui/list/component.js",
+              "../zn-ui/zn/ui/popup/component.js",
+              "../zn-ui/zn/ui/dialog/component.js"
+            ]
           }
         },
         "lint": {

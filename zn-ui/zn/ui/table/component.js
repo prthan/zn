@@ -73,7 +73,7 @@
         table.setRows(rows);
       })
     }
-    table.$target.znc=table;
+    table.$target.get()[0].znc=table;
     table.fireEvent("init");
   }
 

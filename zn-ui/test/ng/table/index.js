@@ -4,7 +4,7 @@ $(()=>
 
   let module=angular.module("test-table", []);
   module.controller("ctrl", [ "$scope", function($scope){}]);
-  module.directive(zn.ui.ng.table.tag, zn.ui.ng.table.factory);
+  module.directive(zn.ui.components.ng.table.tag, zn.ui.components.ng.table.factory);
 
   angular.bootstrap($ctrl,["test-table"]);
 

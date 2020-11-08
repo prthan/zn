@@ -1,0 +1,10 @@
+<div class="layout">
+
+  <div class="list-container">
+    <div zn-list class="list" name="list1"
+    [items]="items" [itemActions]="itemActions" 
+    multiselect="true" [trackScroll]="trackScroll" scrollContainer=".list-container"
+    (onSelect)="onSelect($event)" (onSelectionChange)="onSelectionChange($event)" (onScrollEnd)="loadItemsToList($event)"></div>
+  </div>
+
+</div>

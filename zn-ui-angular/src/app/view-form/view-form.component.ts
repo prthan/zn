@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { znDialogComponent } from 'src/lib/components/dialog/component';
+
+declare global
+{
+  var zn :zn;
+}
 
 @Component({
   selector: 'app-view-form',
@@ -43,6 +49,13 @@ export class ViewFormComponent implements OnInit {
     {value: "WAN", label: "Wide Area Network"}
   ];
 
+  dialogActions :Array<any>=
+  [
+    {action: "ok", label: "OK", autohide: false}, 
+    {action: "cancel", label: "Cancel"}, 
+    {action: "clear", label: "Clear", slot: "left"}
+  ]  
+
   constructor() { }
 
   ngOnInit(): void 
@@ -78,5 +91,24 @@ export class ViewFormComponent implements OnInit {
   onEndDateSelect($evt: znCalendarEvent)
   {
     console.log("selected end date:", $evt);
+  }
+
+  onShowPopupCal($evt: znButtonEvent)
+  {
+    let popup=zn.ui.components.popup.get("popup-cal");
+    console.log(popup);
+    popup.show();
+  }
+
+  onShowDialogCal($evt: znButtonEvent)
+  {
+    let dialog=zn.ui.components.dialog.get("dialog-cal");
+    dialog.show();
+  }
+
+  onDialogAction($evt: znDialogEvent)
+  {
+    console.log($evt);
+    $evt.source.hide();
   }
 }

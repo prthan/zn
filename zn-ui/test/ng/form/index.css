@@ -39,5 +39,38 @@ body
 
 .buttons
 {
-
+  margin-bottom: 10px;
 }
+
+.calendars .calendar.calendar-3
+{
+  margin-right: 0px;
+}
+
+.zn-popup .zn-calendar
+{
+  border: none
+}
+
+.zn-dialog .zn-calendar
+{
+  border: none;
+  background-color: transparent;
+}
+
+[zn-dialog='edit-contact-dialog'] .zn-dialog-wrapper {width: 700px;}
+
+[zn-textarea='notes'] {height: 200px;}
+
+.fl {display: flex;}
+.fl.fl-column {flex-direction: column;}
+.fl.fl-center {align-items: center;}
+.fl.fl-top {align-items: flex-start;}
+.fl-g0 {flex-grow: 0}
+.fl-g1 {flex-grow: 1; flex-basis: 0;}
+
+.mr-20 {margin-right: 20px}
+.mb-20 {margin-bottom: 20px}
+
+.pr-20 {padding-right: 20px}
+.pb-20 {padding-bottom: 20px}

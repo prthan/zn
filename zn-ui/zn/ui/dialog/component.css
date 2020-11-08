@@ -1,0 +1,165 @@
+.zn-dialog
+{
+  position:fixed;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index:1111800;
+  display: none;
+  padding: 0px;
+  margin:0px;
+  background-color: rgba(0,0,0,0.5);
+  overflow: auto;
+}
+
+.zn-dialog::-webkit-scrollbar {width: 5px; height: 5px}
+.zn-dialog::-webkit-scrollbar-track {background: #ddd;}
+.zn-dialog::-webkit-scrollbar-thumb {background: #bbb;}
+
+
+.zn-dialog.centered
+{
+  align-items: center;
+  justify-content: center;
+}
+
+.zn-dialog-wrapper
+{
+  z-index:1111850;
+	border-radius: 5px;
+  background-color: #ffffff;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.133) 0px 3.2px 7.2px 0px, rgba(0, 0, 0, 0.11) 0px 0.6px 1.8px 0px;
+  border: 1px solid rgba(0,0,0,.15);
+  width: 270px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.zn-dialog.centered .zn-dialog-wrapper
+{
+  margin: 0px;
+}
+
+.zn-dialog .zn-dialog-header
+{
+  flex-grow: 0;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 1px solid #dee2e6;
+  color: #676a6c;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.zn-dialog.title-none .zn-dialog-header
+{
+  display: none;
+}
+
+.zn-dialog .zn-dialog-content
+{
+  flex-grow: 1;
+  flex-basis: 0;
+  background: #f8fafb;
+  padding: 20px;
+}
+
+.zn-dialog.title-none .zn-dialog-content
+{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.zn-dialog.actions-none .zn-dialog-content
+{
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.zn-dialog .zn-dialog-footer
+{
+  flex-grow: 0;
+  padding: 10px;
+  border-top: 1px solid #dee2e6;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.zn-dialog.actions-none .zn-dialog-footer
+{
+  display: none;
+}
+
+.zn-dialog .zn-dialog-footer
+{
+  display: flex;
+  align-items: center;
+}
+
+.zn-dialog .zn-dialog-footer .left-actions
+{
+  flex-grow: 0;
+}
+
+.zn-dialog .zn-dialog-footer .right-actions
+{
+  flex-grow: 1;
+  flex-basis: 0;
+  justify-content: flex-end;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions
+{
+	display: flex;
+	align-items: center;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions .zn-action
+{
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  padding: 2px 3px;
+  text-decoration: none;
+  border-radius: 2px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  background-color: #18a689;
+	border: 1px solid #18a689;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions.left-actions .zn-action
+{
+  margin-right: 10px;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions.right-actions .zn-action
+{
+  margin-left: 10px;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions .zn-action:hover
+{
+  background-color: #1ab394;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions .zn-action .icon
+{
+  flex-grow: 0;
+  color: #ffffff;
+  font-size: 13px;
+  padding-left: 2px;
+}
+
+.zn-dialog .zn-dialog-footer .zn-actions .zn-action .text
+{
+  flex-grow: 0;
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}

@@ -1,0 +1,29 @@
+html 
+{
+
+}
+body
+{
+}
+
+.layout
+{
+  padding: 50px 50px 0px 50px;
+}
+
+.layout-1
+{
+  padding: 0px;
+  display: none;
+}
+
+.list-container
+{
+  /*position: absolute;
+  left: 50px;
+  top: 50px;*/
+  width: 350px;
+  border: 1px solid #bcbcbc;
+  height: 500px;
+  overflow-y: auto;
+}

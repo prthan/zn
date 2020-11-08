@@ -11,6 +11,6 @@
   ],
   "include": [
     "src/**/*.d.ts",
-    "../zn-ui/**/*.d.ts"
+    "../zn-ui/zn/**/*.d.ts"
   ]
 }
