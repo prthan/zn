@@ -1,0 +1,13 @@
+.zn-surface
+{
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+
+.zn-surface .zn-surface-stage
+{
+  width: 100%;
+  height: 100%;
+}
