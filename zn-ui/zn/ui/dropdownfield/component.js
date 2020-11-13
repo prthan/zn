@@ -72,14 +72,13 @@
   DropdownField.prototype.message=function(msg, type)
   {
     let dropdownfield=this;
-    if(!msg) return;
     if(msg!="")
     {
       dropdownfield.$msg.text(msg);
       if(type=="error") dropdownfield.$target.addClass("error");
       else dropdownfield.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       dropdownfield.$msg.text("");
       dropdownfield.$target.removeClass("error").removeClass("message");

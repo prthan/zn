@@ -67,14 +67,13 @@
   TextField.prototype.message=function(msg, type)
   {
     let textfield=this;
-    if(!msg) return;
     if(msg!="")
     {
       textfield.$msg.text(msg);
       if(type=="error") textfield.$target.addClass("error");
       else textfield.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       textfield.$msg.text("");
       textfield.$target.removeClass("error").removeClass("message");

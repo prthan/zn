@@ -69,14 +69,13 @@
   CheckboxField.prototype.message=function(msg, type)
   {
     let checkboxfield=this;
-    if(!msg) return;
     if(msg!="")
     {
       checkboxfield.$msg.text(msg);
       if(type=="error") checkboxfield.$target.addClass("error");
       else checkboxfield.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       checkboxfield.$msg.text("");
       checkboxfield.$target.removeClass("error").removeClass("message");

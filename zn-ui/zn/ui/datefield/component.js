@@ -69,14 +69,13 @@
   DateField.prototype.message=function(msg, type)
   {
     let datefield=this;
-    if(!msg) return;
     if(msg!="")
     {
       datefield.$msg.text(msg);
       if(type=="error") datefield.$target.addClass("error");
       else datefield.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       datefield.$msg.text("");
       datefield.$target.removeClass("error").removeClass("message");

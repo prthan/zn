@@ -68,14 +68,13 @@
   TextArea.prototype.message=function(msg, type)
   {
     let textarea=this;
-    if(!msg) return;
     if(msg!="")
     {
       textarea.$msg.text(msg);
       if(type=="error") textarea.$target.addClass("error");
       else textarea.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       textarea.$msg.text("");
       textarea.$target.removeClass("error").removeClass("message");

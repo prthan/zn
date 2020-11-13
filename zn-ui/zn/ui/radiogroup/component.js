@@ -72,14 +72,13 @@
   RadioGroup.prototype.message=function(msg, type)
   {
     let radiogroup=this;
-    if(!msg) return;
     if(msg!="")
     {
       radiogroup.$msg.text(msg);
       if(type=="error") radiogroup.$target.addClass("error");
       else radiogroup.$target.addClass("message");
     }
-    else if(msg=="")
+    else
     {
       radiogroup.$msg.text("");
       radiogroup.$target.removeClass("error").removeClass("message");
