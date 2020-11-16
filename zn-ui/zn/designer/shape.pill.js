@@ -5,6 +5,7 @@
 
   let props=zn.designer.Properties;
   let utils=zn.designer.Utils;
+  let base=zn.designer.shape.Base;
 
   let Component=function(x, y, w, h, ctx)
   {
@@ -12,10 +13,11 @@
     component.ctx=ctx;
     component.$shape=new Konva.Group({x: x, y: y, width: w, height: h, draggable: true});
     component.$shape.setAttr("zn-ctx", ctx);
-    component.$shape.addName("ellipse");
+    component.$shape.addName("pill");
 
 
     component.addHitRegion(w, h, ctx);
+    component.addSelectArea(w, h, ctx);
     component.addConnectorPoints();
     component.addShapeDetails(w, h, ctx);
     component.addText(w, h, ctx);
@@ -56,9 +58,34 @@
       listening: false
     })
     pill.addName("pill");
-    group.add(pill);    
+    group.add(pill);
+    component.pill=pill;
   }
 
+  Component.prototype.addSelectArea=function(w, h, ctx)
+  {
+    let component=this;
+    let group=component.$shape;
+
+    let size=props["shape.select.offset"];
+    let selection=new Konva.Rect({
+      x: -size + 0, 
+      y: -size + 0, 
+      width: w + size * 2, 
+      height: h + size * 2,
+      fill: props["shape.select.fill"],
+      strokeWidth: props["shape.select.stroke.size"],
+      stroke: props["shape.select.stroke"],
+      cornerRadius: h/2 + size,
+      dash: [4 , 4],
+      visible: false,
+      listening: false
+    });
+    selection.addName("selection");
+    group.add(selection);
+    component.selection=selection;
+  }
+    
   Component.prototype.addText=function(w, h, ctx)
   {
     let component=this;
@@ -83,6 +110,7 @@
     });
     text.addName("text");
     group.add(text);
+    component.text=text;
   }
 
   Component.prototype.addConnectorPoints=function()
@@ -94,27 +122,38 @@
     Object.values(component.connectorPoints).forEach(point=>group.add(point.$shape));
   }
 
+  Component.prototype.updateShape=function(w, h)
+  {
+    let component=this;
+    let group=component.$shape;
+    let s={width: w, height: h};
+
+    group.setSize(s);
+
+    let hitSize=props["connector.size"] * 2;
+    component.hitRegion.size({width: w + hitSize * 2, height: h + hitSize * 2});
+    component.pill.size(s);
+    component.pill.cornerRadius(h/2);
+    
+    let offset=props["shape.select.offset"];
+    component.selection.size({width: w + offset * 2, height: h + offset * 2});
+    component.selection.cornerRadius(h/2 + offset);
+
+    component.text.size(s);
+
+    zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
+  }
+
   Component.prototype.setupEventHandlers=function()
   {
     let component=this;
     let group=component.$shape;
 
-    group.on("dragend", ()=>
-    {
-      utils.snap(group);
-      utils.fireConnectorPointUpdateEvent(group);
-    });
-
-    group.on("dragmove", ()=>
-    {
-      utils.fireConnectorPointUpdateEvent(group);
-    });
-
-    component.hitRegion.on("mouseenter", ()=>
-    {
-      group.getStage().fire("shape-select", {source: group});
-    });
-  }
+    group.on("dragend", ()=>base.handleShapeDragEnd(component));
+    group.on("dragmove", ()=>base.handleShapeDragMove(component));
+    group.on("mouseenter", ()=>base.handleShapeHover(component));
+    group.on("click", ()=>base.handleShapeClick(component));    
+}
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;
 
