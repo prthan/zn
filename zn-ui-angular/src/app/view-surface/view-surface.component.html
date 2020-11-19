@@ -1,0 +1,25 @@
+<div class="layout">
+  <div class="actions">
+    <div zn-button text="Invoke" action="add-invoke" class="button-1" (onAction)="addShape($event)"></div>
+    <div zn-button text="Receive" action="add-receive" class="button-2" (onAction)="addShape($event)"></div>
+    <div zn-button text="Return" action="add-return" class="button-3" (onAction)="addShape($event)"></div>
+    <div zn-button text="Assign" action="add-assign" class="button-4" (onAction)="addShape($event)"></div>
+    <div zn-button text="Check" action="add-check" class="button-5" (onAction)="addShape($event)"></div>
+    <div zn-button text="Var Person" action="add-var-person" class="button-6" (onAction)="addShape($event)"></div>
+    <div zn-button text="Var Address" action="add-var-address" class="button-7" (onAction)="addShape($event)"></div>
+    <div zn-button text="Var Contact" action="add-var-contact" class="button-8" (onAction)="addShape($event)"></div>
+    <div zn-button text="Export" action="exportToJson" class="button-9" (onAction)="exportToJson($event)"></div>
+    <div zn-button text="Import" action="imporFromJson" class="button-10" (onAction)="importFromJson($event)"></div>
+    <div zn-button text="Download" action="download" class="button-11" (onAction)="downloadAsImage($event)"></div>
+  </div>
+  <div zn-surface name="surface" class="surface" (binding)="surface=$event"
+    (onPosition)="onPosition($event)"
+    (onObjSelect)="onObjSelect($event)"
+    (onRelSelect)="onRelSelect($event)"
+    (onRelCreate)="onRelCreate($event)"
+    (onSelectionChange)="onSelectionChange($event)"
+    (onDelete)="onDelete($event)"
+    ></div>
+</div>
+
+

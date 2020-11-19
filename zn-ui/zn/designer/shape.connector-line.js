@@ -10,6 +10,9 @@
   let Component=function(cp0, cp1, ctx)
   {
     let component=this;
+    component.$class=`${__package}.${__name}`;
+    component.$type="line";
+    
     component.cp0=cp0;
     component.cp1=cp1;
     component.ctx=ctx;
@@ -33,6 +36,12 @@
     component.$shape.setAttr("zn-ctx", ctx);
     component.$shape.addName("connector-line");
     
+    component.cp0.$lines=(component.cp0.$lines || []);
+    component.cp0.$lines.push(component.ctx.name);
+
+    component.cp1.$lines=(component.cp1.$lines || []);
+    component.cp1.$lines.push(component.ctx.name);
+
     component.setupEventHandlers();
   }
 
@@ -50,8 +59,9 @@
       line.getLayer().batchDraw();
     }
 
-    component.cp0.on("connector-update", updateLine);
-    component.cp1.on("connector-update", updateLine);
+    component.ehname=`eh${new Date().getTime()}`;
+    component.cp0.on(`connector-update.${component.ehname}`, updateLine);
+    component.cp1.on(`connector-update.${component.ehname}`, updateLine);
 
     line.on("mouseover",()=>
     {
@@ -61,14 +71,35 @@
 
     line.on("mouseout",()=>
     {
-      line.stroke(props["connector.line.stroke"]);
+      if(line.hasName("selected")) line.stroke(props["connector.line.select"]);
+      else line.stroke(props["connector.line.stroke"]);
       line.getLayer().batchDraw();
     });
 
     line.on("mousedown",()=>
     {
+      base.resetConnectorLineSelection(line.getLayer());
+      line.addName("selected");
+      line.stroke(props["connector.line.select"]);
+      line.getLayer().batchDraw();
       line.getStage().fire("connection-select", {source: line});
     })
+  }
+
+  Component.prototype.removePointUpdateEventHandlers=function()
+  {
+    let component=this;
+    component.cp0.off(`connector-update.${component.ehname}`);
+    component.cp1.off(`connector-update.${component.ehname}`);
+  }
+
+  Component.prototype.destroy=function()
+  {
+    let component=this;
+    component.removePointUpdateEventHandlers();
+    component.cp0.$lines=component.cp0.$lines.filter((name)=>name!=component.ctx.name);
+    component.cp1.$lines=component.cp1.$lines.filter((name)=>name!=component.ctx.name);
+    component.$shape.destroy();
   }
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;

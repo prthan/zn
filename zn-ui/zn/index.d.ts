@@ -19,8 +19,14 @@ declare interface znUi
   components :znUiComponents
 }
 
+declare interface znDesigner
+{
+  surface :znSurfaceFactory
+}
+
 declare interface zn
 {
-  ui :znUi
+  ui :znUi,
+  designer: znDesigner
 }
 

@@ -10,6 +10,9 @@
   let Component=function(x, y, w, h, ctx)
   {
     let component=this;
+    component.$class=`${__package}.${__name}`;
+    component.$type="node";
+
     component.ctx=ctx;
     component.$shape=new Konva.Group({x: x, y: y, width: w, height: h});
     component.$shape.setAttr("zn-ctx", ctx);
@@ -67,7 +70,7 @@
     
     let text=new Konva.Text({
       x: offset, y: 0, 
-      width: w - offset, height: h, 
+      width: w - offset - 20, height: h, 
       stroke: props["text.color"],
       text: ctx.text,
       align: "left",
@@ -77,6 +80,8 @@
       fontSize: props["text.size"],
       fontStyle: props["text.style"],
       lineHeight: props["text.lineheight"],
+      wrap: "none",
+      ellipsis: true,
       shadowForStrokeEnabled: false,
       listening: false
     });
@@ -111,16 +116,28 @@
     component.hitRegion.size({width: w + hitSize * 2, height: h + hitSize * 2});
     component.rect.size(s);
     
-    component.text.size(s);
+    component.text.size({width: w-20, height: h});
 
     zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
+  }
+
+  Component.prototype.getRect=function()
+  {
+    let component=this;
+    let size=component.$shape.getSize();
+    let pos=component.$shape.getPosition();
+
+    return {x: pos.x, y: pos.y, width: size.width, height: size.height};
   }
 
   Component.prototype.setupEventHandlers=function()
   {
     let component=this;
     let group=component.$shape;
-    group.on("mouseenter", ()=>base.handleShapeHover(component));
+    group.on("mouseenter", ()=>
+    {
+      if(!group.getParent().hasName("transform")) base.handleShapeHover(component);
+    });
   }
 
   Component.prototype.mark=function(state)
@@ -131,6 +148,18 @@
     component.$shape.getLayer().batchDraw();
   }
 
+  Component.prototype.destroy=function()
+  {
+    let component=this;
+    component.$shape.destroy();
+  }
+
+  Component.prototype.connectorLines=function()
+  {
+    let component=this;
+    return base.getConnetorLines(component);
+  }
+    
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;
 
 })(window);

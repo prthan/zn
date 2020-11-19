@@ -10,13 +10,18 @@
   let Component=function(x, y, w, h, ctx)
   {
     let component=this;
+    component.$class=`${__package}.${__name}`;
+    component.$type="list";
+
     component.ctx=ctx;
 
     component.list=utils.flattenList(ctx.list);
     component.ch=25 + component.list.length * props["node.height"];
     if(h>component.ch) component.ch=h;
 
-    component.$shape=new Konva.Group({x: x, y: y, width: w, height: h, draggable: true});
+    component.nodes=[];
+
+    component.$shape=new Konva.Group({x: x, y: y, width: w, height: component.ch, draggable: true});
     component.$shape.setAttr("zn-ctx", ctx);
     component.$shape.addName("list");
 
@@ -41,7 +46,7 @@
       width: w + hitSize * 2, 
       height: component.ch + hitSize * 2,
       strokeWidth: 0,
-      fill: "rgba(255,0,0,0)"
+      fill: props["hitregion.fill"]
     });
     hitRegion.addName("hit-region");
     group.add(hitRegion);
@@ -83,14 +88,6 @@
     foreground.addName("foreground");
     group.add(foreground);
     component.foreground=foreground;
-
-    let line=new Konva.Line({
-      points: [0, 25, w, 25],
-      stroke: props["rect.stroke"],
-      strokeWidth: 1,
-      listening: false
-    })
-    group.add(line);
   }
 
   Component.prototype.addSelectArea=function(w, h, ctx)
@@ -122,37 +119,10 @@
     let component=this;
     let group=component.$shape;
     
-    let headerRect=new Konva.Rect({
-      x: 0, 
-      y: 0, 
-      width: w, 
-      height: 30,
-      fill:props["rect.stroke"],
-      listening: false,
-      cornerRadius: 5
-    });
-    headerRect.addName(`headerrect`);
-    group.add(headerRect);
-    component.headerRect=headerRect;
+    component.headerNode=new zn.designer.shape.HeaderNode(0, 0, w, props["node.height"], {name: `item$`, list: ctx.name, type: "list-header", text: ctx.text});
+    component.headerNode.rect.cornerRadius([5, 5, 0, 0]);
+    group.add(component.headerNode.$shape);
 
-    let headerText=new Konva.Text({
-      x: 10, y: 1, 
-      width: w, height: 25, 
-      stroke: props["text.color"],
-      text: ctx.text,
-      align: "left",
-      verticalAlign: "middle",
-      strokeWidth: 1,
-      fontFamily: props["text.family"],
-      fontSize: props["text.size"],
-      fontStyle: props["text.style"],
-      lineHeight: props["text.lineheight"],
-      shadowForStrokeEnabled: false,
-      listening: false
-    });
-    headerText.addName(`headertext`);
-    group.add(headerText);
-    component.headerText=headerText;
   }
 
   Component.prototype.addShapeDetails=function(w, h, ctx)
@@ -164,10 +134,9 @@
     let y=25;
     let dy=25;
 
-    component.nodes=[];
     component.list.forEach((e,i)=>
     {
-      let node=new zn.designer.shape.Node(x, y, w, props["node.height"], {name: `item$${i}`, index: i, parent: ctx, type: "list-item", ...e});
+      let node=new zn.designer.shape.Node(x, y, w, props["node.height"], {name: `item$${i}`, index: i, list: ctx.name, type: "list-item", ...e});
       component.nodes.push(node);
       group.add(node.$shape);
       y+=dy;
@@ -178,20 +147,30 @@
   {
     let component=this;
     let group=component.$shape;
-    let s={width: w, height: h};
+    let s={width: w, height: component.ch};
 
     group.setSize(s);
 
     let hitSize=props["connector.size"] * 2;
-    component.hitRegion.size({width: w + hitSize * 2, height: h + hitSize * 2});
-    component.rect.size(s);
-    
+    component.hitRegion.size({width: w + hitSize * 2, height: component.ch + hitSize * 2});
+    component.background.size(s);
+    component.foreground.size(s);
+
     let offset=props["shape.select.offset"];
-    component.selection.size({width: w + offset * 2, height: h + offset * 2});
+    component.selection.size({width: w + offset * 2, height: component.ch + offset * 2});
 
-    component.text.size(s);
-
+    component.headerNode.updateShape(w, 25);
+    component.nodes.forEach((node)=>node.updateShape(w, 25));
     zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
+  }
+
+  Component.prototype.getRect=function()
+  {
+    let component=this;
+    let size=component.$shape.getSize();
+    let pos=component.$shape.getPosition();
+
+    return {x: pos.x, y: pos.y, width: size.width, height: component.ch};
   }
 
   Component.prototype.setupEventHandlers=function()
@@ -202,13 +181,42 @@
     group.on("dragend", ()=>
     {
       base.snap(group);
+      base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
       component.nodes.forEach((node)=>base.fireConnectorPointUpdateEvent(node.$shape));
+      base.snapOtherSelectedObjects(group.getLayer(), group);
     });
-    group.on("dragmove", ()=>
+    group.on("dragmove", (event)=>
     {
+      base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
       component.nodes.forEach((node)=>base.fireConnectorPointUpdateEvent(node.$shape));
+      base.moveOtherSelectedObjects(group.getLayer(), group, event);
     });
-    group.on("click", ()=>base.handleShapeSelect(component));
+    group.on("mousedown", (event)=>
+    {
+      if(!event.evt.ctrlKey) base.handleShapeMouseDown(component)
+    });
+    group.on("click", (event)=>
+    {
+      if(!event.evt.ctrlKey) base.handleShapeClick(component);
+      else base.handleShapeSelectAdd(component);
+    });
+
+  }
+
+  Component.prototype.destroy=function()
+  {
+    let component=this;
+    component.$shape.destroy();
+  }
+
+  Component.prototype.connectorLines=function()
+  {
+    let component=this;
+    let lines=[];
+    lines.push(...component.headerNode.connectorLines());
+    component.nodes.forEach((node)=>lines.push(...node.connectorLines()));
+
+    return lines;
   }
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;

@@ -56,6 +56,30 @@
     return points;
   }
 
+  Component.getRect=(p0, p1)=>
+  {
+    let rect={x: p0.x, y:p0.y};
+    if(p1.x < rect.x) rect.x=p1.x;
+    if(p1.y < rect.y) rect.y=p1.y;
+    rect.width=Math.abs(p0.x-p1.x);
+    rect.height=Math.abs(p0.y-p1.y);
+
+    return rect;
+    
+  }
+
+  Component.pointInRect=(p, r)=>
+  {
+    return p.x>=r.x && p.y>=r.y && p.x<=r.x+r.width && p.y<=r.y+r.height;
+  }
+  
+  Component.intersect=(r1, r2)=>
+  {
+    let p={x: r2.x + r2.width, y: r2.y + r2.height};
+    //console.log(r1.x, "<=", p.x, "<=", r1.x + r1.width,"||", r1.y, "<=", p.y, "<", r1.y + r1.height);
+    return Component.pointInRect({x: r2.x, y: r2.y}, r1) || Component.pointInRect(p, r1);
+  }
+
   Component.flattenList=(list, level)=>
   {
     let flatList=[];
@@ -76,6 +100,33 @@
       a[c]=item[c];
       return a;
     },{})
+  }
+
+  Component.findClass=(name)=>
+  {
+    let obj=window;
+    name.split(".").forEach((part)=>
+    {
+      if(obj) obj=obj[part];
+    });
+    return obj;
+  }
+
+  Component.shortid=()=>
+  {
+    let rval=[];
+    let a=Array.from(Math.random().toString(36).substr(2));
+    let b=Array.from(new Date().getTime().toString(36));
+    a.forEach((x,i)=>
+    {
+      rval.push(x);
+      if(i<b.length)
+      {
+        rval.push(b.shift());
+      }
+    });
+    if(b.length!=0) rval=rval.concat(b);
+    return rval.join("");
   }
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;

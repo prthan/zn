@@ -23,6 +23,7 @@
     
     "connector.line.stroke": "#CE93D8",
     "connector.line.hilight": "#ba68c8",
+    "connector.line.select": "#8e24aa",
 
     "rect.fill": "#B3E5FC",
     "rect.stroke": "#039be529",
@@ -46,14 +47,18 @@
     "node.height": 25,
     "node.mark.color": "#1c4155",
 
+    "list.header.fill": "#7ecff5",
+    
     "hitregion.fill": "rgba(255,0,0,0)",
 
+    "grid.show": true,
     "grid.fill": "#f9f9f9",
-    "grid.minorTick.size": 10,
     "grid.minorTick.stroke": "#efefef",
-    "grid.majorTick.size": 100,
     "grid.majorTick.stroke": "#dfdfdf",
-    "grid.snap.size": 5
+    "grid.minorTick.size": 10,
+    "grid.majorTick.size": 100,
+    "grid.snap.size": 5,
+
 
   }
 

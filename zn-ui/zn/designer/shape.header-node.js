@@ -1,7 +1,7 @@
 (function(window)
 {
   let __package  = "zn.designer.shape";
-  let __name     = "Rectangle";
+  let __name     = "HeaderNode";
 
   let props=zn.designer.Properties;
   let utils=zn.designer.Utils;
@@ -11,15 +11,14 @@
   {
     let component=this;
     component.$class=`${__package}.${__name}`;
-    component.$type="rectangle";
-
+    component.$type="header-node";    
+    
     component.ctx=ctx;
-    component.$shape=new Konva.Group({x: x, y: y, width: w, height: h, draggable: true});
+    component.$shape=new Konva.Group({x: x, y: y, width: w, height: h});
     component.$shape.setAttr("zn-ctx", ctx);
     component.$shape.addName("rectangle");
 
     component.addHitRegion(w, h, ctx);
-    component.addSelectArea(w, h, ctx);
     component.addConnectorPoints();
     component.addShapeDetails(w, h, ctx);
     component.addText(w, h, ctx);
@@ -33,10 +32,10 @@
 
     let hitSize=props["connector.size"] * 2;
     let hitRegion=new Konva.Rect({
-      x: -hitSize + 0.5, 
-      y: -hitSize + 0.5, 
+      x: -hitSize, 
+      y: 0, 
       width: w + hitSize * 2, 
-      height: h + hitSize * 2,
+      height: h,
       strokeWidth: 0,
       fill: props["hitregion.fill"]
     });
@@ -51,41 +50,25 @@
     let group=component.$shape;
 
     let rect=new Konva.Rect({
-      x: 0.5, y: 0.5, 
+      x: 0, y: 0, 
       width: w, height: h, 
-      fill: props["rect.fill"], 
-      stroke: props["rect.stroke"],
-      strokeWidth: 3,
-      cornerRadius: 5,
+      fill: props["list.header.fill"], 
+      strokeWidth: 0,
       listening: false
     });
     rect.addName("rect");
     group.add(rect);
     component.rect=rect;
-  }
 
-  Component.prototype.addSelectArea=function(w, h, ctx)
-  {
-    let component=this;
-    let group=component.$shape;
+    let line=new Konva.Line({
+      points: [0, h, w, h],
+      stroke: props["rect.stroke"],
+      strokeWidth: 1,
+      listening: false
+    })
+    group.add(line);
+    component.line=line;
 
-    let size=props["shape.select.offset"];
-    let selection=new Konva.Rect({
-      x: -size + 0, 
-      y: -size + 0, 
-      width: w + size * 2, 
-      height: h + size * 2,
-      fill: props["shape.select.fill"],
-      strokeWidth: props["shape.select.stroke.size"],
-      stroke: props["shape.select.stroke"],
-      dash: [4 , 4],
-      visible: false,
-      listening: false,
-      cornerRadius: 5
-    });
-    selection.addName("selection");
-    group.add(selection);
-    component.selection=selection;
   }
 
   Component.prototype.addText=function(w, h, ctx)
@@ -93,14 +76,14 @@
     let component=this;
     let group=component.$shape;
 
-    if(!component.ctx.text) return;
-
+    let offset=props["node.level.offset"] ;
+    
     let text=new Konva.Text({
-      x: 0, y: 0, 
-      width: w, height: h, 
+      x: offset, y: 0, 
+      width: w - offset, height: h, 
       stroke: props["text.color"],
       text: ctx.text,
-      align: "center",
+      align: "left",
       verticalAlign: "middle",
       strokeWidth: 1,
       fontFamily: props["text.family"],
@@ -120,7 +103,12 @@
     let component=this;
     let group=component.$shape;
 
-    component.connectorPoints=zn.designer.shape.ConnectorPoint.generateForRectangularShape(group);
+    component.connectorPoints=
+    {
+      left: zn.designer.shape.ConnectorPoint.generateForShape(group, "left"),
+      right: zn.designer.shape.ConnectorPoint.generateForShape(group, "right")
+    }
+    
     Object.values(component.connectorPoints).forEach(point=>group.add(point.$shape));
   }
 
@@ -134,12 +122,10 @@
 
     let hitSize=props["connector.size"] * 2;
     component.hitRegion.size({width: w + hitSize * 2, height: h + hitSize * 2});
-    component.rect.size(s);
     
-    let offset=props["shape.select.offset"];
-    component.selection.size({width: w + offset * 2, height: h + offset * 2});
-
+    component.rect.size(s);
     component.text.size(s);
+    component.line.points([0,h,w,h]);
 
     zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
   }
@@ -149,7 +135,6 @@
     let component=this;
     let size=component.$shape.getSize();
     let pos=component.$shape.getPosition();
-    let hitSize=props["connector.size"] * 2;
 
     return {x: pos.x, y: pos.y, width: size.width, height: size.height};
   }
@@ -158,20 +143,15 @@
   {
     let component=this;
     let group=component.$shape;
-    
-    group.on("dragend", ()=>base.handleShapeDragEnd(component));
-    group.on("dragmove", (event)=>base.handleShapeDragMove(component, event));
     group.on("mouseenter", ()=>base.handleShapeHover(component));
-    group.on("mousedown", (event)=>
-    {
-      if(!event.evt.ctrlKey) base.handleShapeMouseDown(component)
-    });
-    group.on("click", (event)=>
-    {
-      if(!event.evt.ctrlKey) base.handleShapeClick(component);
-      else base.handleShapeSelectAdd(component);
-    });
+  }
 
+  Component.prototype.mark=function(state)
+  {
+    let component=this;
+    if(state) component.text.stroke(props["node.mark.color"]);
+    else component.text.stroke(props["text.color"]);
+    component.$shape.getLayer().batchDraw();
   }
 
   Component.prototype.destroy=function()
@@ -185,7 +165,7 @@
     let component=this;
     return base.getConnetorLines(component);
   }
-  
+    
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;
 
 })(window);

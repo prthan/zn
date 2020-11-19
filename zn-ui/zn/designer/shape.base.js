@@ -13,12 +13,24 @@
     let shape=shapeComponent.$shape;
     Component.snap(shape);
     Component.fireConnectorPointUpdateEvent(shape);
+
+    if(shape.hasName("selected")) Component.snapOtherSelectedObjects(shape.getLayer(), shape);
   }
 
-  Component.handleShapeDragMove=(shapeComponent)=>
+  Component.handleShapeDragMove=(shapeComponent, event)=>
   {
     let shape=shapeComponent.$shape;
     Component.fireConnectorPointUpdateEvent(shape);
+
+    if(shape.hasName("selected")) Component.moveOtherSelectedObjects(shape.getLayer(), shape, event);
+  }
+
+  Component.handleShapeMouseDown=(shapeComponent)=>
+  {
+    let shape=shapeComponent.$shape;
+    let layer=shape.getLayer();
+
+    if(!shape.hasName("selected")) Component.resetSelection(layer);
   }
 
   Component.handleShapeHover=(shapeComponent)=>
@@ -59,6 +71,25 @@
     shape.getStage().fire("shape-select", {source: shapeComponent});
   }
 
+  Component.handleShapeSelectAdd=(shapeComponent)=>
+  {
+    let shape=shapeComponent.$shape;
+    let layer=shape.getLayer();
+
+    //Component.resetSelection(layer);
+    if(shape.hasName("selected"))
+    {
+      shape.removeName("selected");
+      Component.showSelection(shape, false);  
+    }
+    else
+    {
+      shape.addName("selected");
+      Component.showSelection(shape, true);
+    }
+    shape.getStage().fire("selection-set-modify", {source: shapeComponent});
+  }
+
   Component.handleShapeTransform=(shapeComponent)=>
   {
     let shape=shapeComponent.$shape;
@@ -69,6 +100,44 @@
     shape.addName("transform");
     shape.draggable(false);
     shape.getStage().fire("shape-transform", {source: shapeComponent});
+  }
+
+  Component.getConnetorLines=(shapeComponent)=>
+  {
+    if(!shapeComponent.connectorPoints) return [];
+    let lineNames=Object.values(shapeComponent.connectorPoints).reduce((a,c)=>
+    {
+      if(c.$shape.$lines) a.push(...c.$shape.$lines);
+      return a;
+    },[]);
+
+    return lineNames;
+  }
+
+  Component.moveOtherSelectedObjects=(layer, shape, event)=>
+  {
+    layer.find(".selected").each((selected)=>
+    {
+      if(selected==shape) return;
+
+      let pos=selected.getPosition();
+      pos.x+=event.evt.movementX;
+      pos.y+=event.evt.movementY;
+      selected.setPosition(pos);
+      Component.fireConnectorPointUpdateEvent(selected);
+    });    
+    layer.batchDraw();
+  }
+
+  Component.snapOtherSelectedObjects=(layer, shape)=>
+  {
+    layer.find(".selected").each((selected)=>
+    {
+      if(selected==shape) return;
+      Component.snap(selected);
+      Component.fireConnectorPointUpdateEvent(selected);
+    });
+    layer.batchDraw();
   }
 
   Component.showConnectors=(shape, state)=>
@@ -95,14 +164,23 @@
 
   Component.resetSelection=(layer)=>
   {
-    let currentSelected=layer.findOne(".selected");
-    if(currentSelected!=null)
+    layer.find(".selected").each((selected)=>
     {
-      Component.showSelection(currentSelected, false);
-      currentSelected.removeName("selected");
-    }
+      Component.showSelection(selected, false);
+      selected.removeName("selected");
+    })
   }
-
+  
+  Component.resetConnectorLineSelection=(layer)=>
+  {
+    layer.find(".selected").each((selected)=>
+    {
+      selected.removeName("selected");
+      selected.stroke(props["connector.line.stroke"]);
+    });    
+    layer.batchDraw();
+  }
+  
   Component.resetTransform=(shapeComponent)=>
   {
     let shape=shapeComponent.$shape;
@@ -124,7 +202,6 @@
 
   Component.pointOf=(connector)=>
   {
-    let shape=connector.getParent();
     let clientRect=connector.getClientRect();
     return {x: clientRect.x + clientRect.width/2, y: clientRect.y + clientRect.height/2};
   }

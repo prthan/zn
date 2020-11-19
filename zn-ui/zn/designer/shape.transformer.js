@@ -9,6 +9,8 @@
   let Component=function(layer, target)
   {
     let component=this;
+    component.$class=`${__package}.${__name}`;
+    
     component.target=target;
 
     component.$shape=new Konva.Rect({

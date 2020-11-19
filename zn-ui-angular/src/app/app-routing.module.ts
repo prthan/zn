@@ -4,6 +4,7 @@ import { ViewFormComponent } from './view-form/view-form.component';
 import { ViewHomeComponent } from './view-home/view-home.component';
 import { ViewTableComponent } from './view-table/view-table.component';
 import { ViewListComponent } from './view-list/view-list.component';
+import { ViewSurfaceComponent } from './view-surface/view-surface.component';
 
 const routes: Routes = [
   {path: '', component: ViewHomeComponent},
@@ -11,6 +12,7 @@ const routes: Routes = [
   {path: 'zn-ui/table', component: ViewTableComponent},
   {path: 'zn-ui/form', component: ViewFormComponent},
   {path: 'zn-ui/list', component: ViewListComponent},
+  {path: 'zn-ui/surface', component: ViewSurfaceComponent},
 ];
 
 @NgModule({

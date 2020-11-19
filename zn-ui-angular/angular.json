@@ -36,13 +36,15 @@
               "../zn-ui/zn/ui/textfield/component.css",
               "../zn-ui/zn/ui/list/component.css",
               "../zn-ui/zn/ui/popup/component.css",
-              "../zn-ui/zn/ui/dialog/component.css"
+              "../zn-ui/zn/ui/dialog/component.css",
+              "../zn-ui/zn/designer/surface/component.css"
             ],
             "scripts": [
               "../zn-ui/fuse.js",
               "../zn-ui/jquery.js",
               "../zn-ui/moment.js",
               "../zn-ui/numeral.js",
+              "../zn-ui/konva.js",
               "../zn-ui/zn/ui/button/component.js",
               "../zn-ui/zn/ui/calendar/component.js",
               "../zn-ui/zn/ui/checkboxfield/component.js",
@@ -54,7 +56,25 @@
               "../zn-ui/zn/ui/textfield/component.js",
               "../zn-ui/zn/ui/list/component.js",
               "../zn-ui/zn/ui/popup/component.js",
-              "../zn-ui/zn/ui/dialog/component.js"
+              "../zn-ui/zn/ui/dialog/component.js",
+              "../zn-ui/zn/designer/properties.js",
+              "../zn-ui/zn/designer/utils.js",
+              "../zn-ui/zn/designer/shape.base.js",
+              "../zn-ui/zn/designer/shape.connector-point.js",
+              "../zn-ui/zn/designer/shape.connector-line.js",
+              "../zn-ui/zn/designer/shape.rectangle.js",
+              "../zn-ui/zn/designer/shape.ellipse.js",
+              "../zn-ui/zn/designer/shape.diamond.js",
+              "../zn-ui/zn/designer/shape.pill.js",
+              "../zn-ui/zn/designer/shape.node.js",
+              "../zn-ui/zn/designer/shape.header-node.js",
+              "../zn-ui/zn/designer/shape.list.js",
+              "../zn-ui/zn/designer/shape.transformer.js",
+              "../zn-ui/zn/designer/layer.grid.js",
+              "../zn-ui/zn/designer/op.draw.connector.js",
+              "../zn-ui/zn/designer/op.select.objects.js",
+              "../zn-ui/zn/designer/op.draw.object.js",              
+              "../zn-ui/zn/designer/surface/component.js"
             ]
           },
           "configurations": {
@@ -129,13 +149,15 @@
               "../zn-ui/zn/ui/textfield/component.css",
               "../zn-ui/zn/ui/list/component.css",
               "../zn-ui/zn/ui/popup/component.css",
-              "../zn-ui/zn/ui/dialog/component.css"
+              "../zn-ui/zn/ui/dialog/component.css",
+              "../zn-ui/zn/designer/surface/component.css"
             ],
             "scripts": [
               "../zn-ui/fuse.js",
               "../zn-ui/jquery.js",
               "../zn-ui/moment.js",
               "../zn-ui/numeral.js",
+              "../zn-ui/konva.js",
               "../zn-ui/zn/ui/button/component.js",
               "../zn-ui/zn/ui/calendar/component.js",
               "../zn-ui/zn/ui/checkboxfield/component.js",
@@ -147,7 +169,25 @@
               "../zn-ui/zn/ui/textfield/component.js",
               "../zn-ui/zn/ui/list/component.js",
               "../zn-ui/zn/ui/popup/component.js",
-              "../zn-ui/zn/ui/dialog/component.js"
+              "../zn-ui/zn/ui/dialog/component.js",
+              "../zn-ui/zn/designer/properties.js",
+              "../zn-ui/zn/designer/utils.js",
+              "../zn-ui/zn/designer/shape.base.js",
+              "../zn-ui/zn/designer/shape.connector-point.js",
+              "../zn-ui/zn/designer/shape.connector-line.js",
+              "../zn-ui/zn/designer/shape.rectangle.js",
+              "../zn-ui/zn/designer/shape.ellipse.js",
+              "../zn-ui/zn/designer/shape.diamond.js",
+              "../zn-ui/zn/designer/shape.pill.js",
+              "../zn-ui/zn/designer/shape.node.js",
+              "../zn-ui/zn/designer/shape.header-node.js",
+              "../zn-ui/zn/designer/shape.list.js",
+              "../zn-ui/zn/designer/shape.transformer.js",
+              "../zn-ui/zn/designer/layer.grid.js",
+              "../zn-ui/zn/designer/op.draw.connector.js",
+              "../zn-ui/zn/designer/op.select.objects.js",
+              "../zn-ui/zn/designer/op.draw.object.js",              
+              "../zn-ui/zn/designer/surface/component.js"
             ]
           }
         },

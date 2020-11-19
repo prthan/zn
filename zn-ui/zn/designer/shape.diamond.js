@@ -10,6 +10,9 @@
   let Component=function(x, y, w, h, ctx)
   {
     let component=this;
+    component.$class=`${__package}.${__name}`;
+    component.$type="diamond";
+
     component.ctx=ctx;
     component.$shape=new Konva.Group({x: x, y: y, width: w, height: h, draggable: true});
     component.$shape.setAttr("zn-ctx", ctx);
@@ -141,15 +144,44 @@
     zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
   }
 
+  Component.prototype.getRect=function()
+  {
+    let component=this;
+    let size=component.$shape.getSize();
+    let pos=component.$shape.getPosition();
+
+    return {x: pos.x, y: pos.y, width: size.width, height: size.height};
+  }
+
   Component.prototype.setupEventHandlers=function()
   {
     let component=this;
     let group=component.$shape;
 
     group.on("dragend", ()=>base.handleShapeDragEnd(component));
-    group.on("dragmove", ()=>base.handleShapeDragMove(component));
+    group.on("dragmove", (event)=>base.handleShapeDragMove(component, event));
     group.on("mouseenter", ()=>base.handleShapeHover(component));
-    group.on("click", ()=>base.handleShapeClick(component));
+    group.on("mousedown", (event)=>
+    {
+      if(!event.evt.ctrlKey) base.handleShapeMouseDown(component)
+    });
+    group.on("click", (event)=>
+    {
+      if(!event.evt.ctrlKey) base.handleShapeClick(component);
+      else base.handleShapeSelectAdd(component);
+    });
+  }
+
+  Component.prototype.destroy=function()
+  {
+    let component=this;
+    component.$shape.destroy();
+  }
+
+  Component.prototype.connectorLines=function()
+  {
+    let component=this;
+    return base.getConnetorLines(component);
   }
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;

@@ -10,7 +10,9 @@
   let Component=function(x, y, ctx)
   {
     let component=this;
-    this.ctx=ctx;
+    component.$class=`${__package}.${__name}`;
+    component.$type="point";
+    component.ctx=ctx;
 
     let size=props["connector.size"];
     component.$shape=new Konva.Circle({
@@ -55,6 +57,12 @@
     
   }
 
+  Component.prototype.destroy=function()
+  {
+    let component=this;
+    component.$shape.destroy();
+  }
+  
   Component.generateForRectangularShape=function(shape)
   {
     return {
@@ -85,6 +93,7 @@
     let h=rectangularComponent.$shape.height();
     let cps=rectangularComponent.connectorPoints;
     
+    if(!cps) return;
     if(cps.top) cps.top.$shape.position({x: w/2, y: -1});
     if(cps.right) cps.right.$shape.position({x: w+1, y: h/2});
     if(cps.bottom) cps.bottom.$shape.position({x: w/2, y: h+1});
