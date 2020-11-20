@@ -1,15 +1,15 @@
 declare interface znUiComponents
 {
-  table :znTableFactory;
-  textfield :znTextFieldFactory;
-  textarea :znTextAreaFactory;
-  checkboxfield :znCheckboxFieldFactory;
-  dropdownfield :znDropdownFieldFactory;
-  calendar :znCalendarFactory;
-  datefield :znDateFieldFactory;
-  radiogroup :znRadioGroupFactory;
-  button :znButtonFactory;
-  list :znListFactory;
-  popup :znPopupFactory;
-  dialog :znDialogFactory;
+  Table :znTable;
+  TextField :znTextField;
+  TextArea :znTextArea;
+  CheckboxField :znCheckboxField;
+  DropdownField :znDropdownField;
+  Calendar :znCalendar;
+  DateField :znDateField;
+  RadioGroup :znRadioGroup;
+  Button :znButton;
+  List :znList;
+  Popup :znPopup;
+  Dialog :znDialog;
 }

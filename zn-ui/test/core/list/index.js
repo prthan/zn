@@ -3871,7 +3871,7 @@ $(()=>
     "035.png"    
   ]
 
-  let list=zn.ui.components.list.create({
+  let list=new zn.ui.components.List({
       name: "sample-list",
       target: ".list",
       multiSelect: true,

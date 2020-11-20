@@ -1,11 +1,10 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "radiogroup",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "radiogroup";
 
+  let directive={};
+  
   directive.html=function()
   {
     return "<div></div>";
@@ -25,11 +24,11 @@
         value: scope.value,
         items: nv,
         layout: scope.layout,
-        error: scope.error,
+        error: scope.error ? scope.error : "",
         message: scope.message        
       }
   
-      let radiogroup=zn.ui.components.radiogroup.create(options);
+      let radiogroup=new zn.ui.components.RadioGroup(options);
   
       radiogroup.on("init", ()=>
       {
@@ -40,7 +39,7 @@
         })
 
         scope.$watch("value", (nv, ov)=>radiogroup.setValue(nv));
-        scope.$watch("error", (nv, ov)=>radiogroup.message(nv, "error"));
+        scope.$watch("error", (nv, ov)=>radiogroup.message(nv ? nv : "", "error"));
         scope.$watch("message", (nv, ov)=>radiogroup.message(nv, "message"));
     
       })
@@ -72,6 +71,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

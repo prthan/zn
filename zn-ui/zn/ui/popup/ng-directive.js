@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "popup",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "popup";
+
+  let directive={};
 
   directive.html=function()
   {
@@ -22,7 +21,7 @@
       showAt: scope.showat
     }
 
-    let popup=zn.ui.components.popup.create(options);
+    let popup=new zn.ui.components.Popup(options);
     popup.init();
   }
 
@@ -46,6 +45,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

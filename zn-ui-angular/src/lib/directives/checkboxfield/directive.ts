@@ -46,7 +46,7 @@ export class znCheckboxFieldDirective implements OnInit, OnChanges
     };
     if(this.onValue || this.offValue) options.values={on: this.onValue, off: this.offValue};
 
-    this.checkboxfield=zn.ui.components.checkboxfield.create(options);
+    this.checkboxfield=new (zn.findClass('zn.ui.components.CheckboxField'))(options);
 
     this.checkboxfield.on("change", (evt :any)=>
     {

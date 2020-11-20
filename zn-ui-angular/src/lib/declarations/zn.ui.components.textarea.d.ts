@@ -1,9 +1,3 @@
-declare class znTextAreaFactory
-{
-  create(options :znTextAreaOptions) :znTextArea;
-  get(name :string) :znTextArea;
-}
-
 declare class znTextArea
 {
   constructor(options :znTextAreaOptions);
@@ -13,6 +7,7 @@ declare class znTextArea
   setValue(value :string) :void;
   getValue() :string;
   message(text :string, type :string) :void;
+  get(name :string) :znTextArea;
 }
 
 declare interface znTextAreaOptions

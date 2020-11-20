@@ -1,9 +1,3 @@
-declare class znDropdownFieldFactory
-{
-  create(options :znDropdownFieldOptions) :znDropdownField;
-  get(name :string) :znDropdownField;
-}
-
 declare class znDropdownField
 {
   constructor(options :znDropdownFieldOptions);
@@ -13,6 +7,7 @@ declare class znDropdownField
   setValue(value :string|boolean) :void;
   getValue() :string|boolean;  
   message(text :string, type :string) :void;
+  get(name :string) :znDropdownField;
 }
 
 declare interface znDropdownFieldOptions

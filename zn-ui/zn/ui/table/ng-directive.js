@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "table",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "table";
+
+  let directive={};
 
   directive.html=function()
   {
@@ -34,7 +33,7 @@
         options.paging=true;
         options.pageSize=parseInt(scope.pagesize);
       }
-      let table=zn.ui.components.table.create(options);
+      let table=new zn.ui.components.Table(options);
 
       table.on("row-select", (evt)=>{scope.onrowselect({$event: evt})});
       table.on("row-action", (evt)=>{scope.onrowaction({$event: evt})});
@@ -90,7 +89,7 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 
 

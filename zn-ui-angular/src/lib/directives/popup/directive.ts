@@ -37,9 +37,9 @@ export class znPopupDirective implements OnInit, OnChanges
       showAt: this.showAt
     };
 
-    this.popup=zn.ui.components.popup.create(options);
-
-    //this.popup.init();
+    this.popup=new (zn.findClass('zn.ui.components.Popup'))(options);
+    
+    this.popup.init();
   }
 
   ngOnChanges(changes :SimpleChanges)

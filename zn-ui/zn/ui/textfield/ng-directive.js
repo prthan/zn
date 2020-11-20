@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "textfield",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "textfield";
+
+  let directive={};
 
   directive.html=function()
   {
@@ -23,11 +22,11 @@
       icon: scope.icon, 
       password: scope.password === "true",
       readonly: scope.readonly === "true",
-      error: scope.error,
+      error: scope.error ? scope.error : "",
       message: scope.message
     }
 
-    let textfield=zn.ui.components.textfield.create(options);
+    let textfield=new zn.ui.components.TextField(options);
 
     textfield.on("init", ()=>
     {
@@ -39,7 +38,7 @@
       textfield.on("action", (evt)=>scope.onaction({$event: evt}));
       
       scope.$watch("value", (nv, ov)=>textfield.setValue(nv))
-      scope.$watch("error", (nv, ov)=>textfield.message(nv, "error"));
+      scope.$watch("error", (nv, ov)=>textfield.message(nv ? nv : "", "error"));
       scope.$watch("message", (nv, ov)=>textfield.message(nv, "message"));
     })
     textfield.init();
@@ -70,6 +69,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

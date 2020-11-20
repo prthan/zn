@@ -38,7 +38,7 @@ export class znSurfaceDirective implements OnInit, OnChanges
   {
     let options :znSurfaceOptions={target: this.hostElementRef.nativeElement, name: this.name, width: this.width, height: this.height};
 
-    this.surface=zn.designer.surface.create(options);
+    this.surface=new (zn.findClass('zn.designer.Surface'))(options);
     
     if(this.onPosition.observers.length>0) this.surface.on("position", (evt: znSurfaceEvent)=>this.onPosition.emit(evt));
     if(this.onObjSelect.observers.length>0) this.surface.on("obj-select", (evt: znSurfaceEvent)=>this.onObjSelect.emit(evt));

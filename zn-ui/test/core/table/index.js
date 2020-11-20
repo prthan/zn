@@ -3819,7 +3819,7 @@ $(()=>
     {action: "delete-columns", label: "Delete Columns", icon: "fas fa-trash-alt"},
   ]
 
-  let table=zn.ui.components.table.create({
+  let table=new zn.ui.components.Table({
       name: "sample-table",
       target: ".table",
       columns: columns,

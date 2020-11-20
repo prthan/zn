@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "calendar",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "calendar";
+
+  let directive={};
 
   directive.html=function()
   {
@@ -20,7 +19,7 @@
       date: scope.date || new Date()
     }
 
-    let calendar=zn.ui.components.calendar.create(options);
+    let calendar=new zn.ui.components.Calendar(options);
 
     scope.$watch("date", (nv, ov)=>
     {
@@ -59,6 +58,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
 })(window);
 

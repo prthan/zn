@@ -1,10 +1,3 @@
-declare class znPopupFactory
-{
-  create(options :znPopupOptions) :znPopup;
-  get(name :string) :znPopup;
-  hide() :void;
-}
-
 declare class znPopup
 {
   constructor(options :znPopupOptions);
@@ -13,6 +6,7 @@ declare class znPopup
   on(eventName :string, eventHandler :(event :znPopupEvent)=>void) :void;
   show() :void;
   hide() :void;
+  get(name :string) :znPopup;
 }
 
 declare interface znPopupOptions

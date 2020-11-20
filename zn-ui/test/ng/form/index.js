@@ -82,6 +82,7 @@ $(()=>
 
   $scope = angular.element($ctrl).scope();
   $scope.model=model;
+
   $scope.dump=function(m)
   {
     console.log("current form", JSON.parse(JSON.stringify(m)));
@@ -104,12 +105,12 @@ $(()=>
     let pos=$b.position();
     let showAt={x: pos.left, y: pos.top + $b.get()[0].offsetHeight + 3};
 
-    zn.ui.components.popup.get("popup-cal").show();
+    zn.ui.components.Popup.get("popup-cal").show();
   }
 
   $scope.showCalendarDialog=function()
   {
-    zn.ui.components.dialog.get("dialog-cal").show();
+    zn.ui.components.Dialog.get("dialog-cal").show();
   }
 
   $scope.onDateSelect=function($event)
@@ -117,13 +118,13 @@ $(()=>
     if($event.source.name=="calendar-3")
     {
       console.log($event.date);
-      zn.ui.components.popup.get("popup-cal").hide();
+      zn.ui.components.Popup.get("popup-cal").hide();
     }
 
     if($event.source.name=="calendar-4")
     {
       console.log($event.date);
-      zn.ui.components.dialog.get("dialog-cal").hide();
+      zn.ui.components.Dialog.get("dialog-cal").hide();
     }
   }
 
@@ -135,7 +136,7 @@ $(()=>
 
   $scope.showFormDialog=function()
   {
-    zn.ui.components.dialog.get("edit-contact-dialog").show();
+    zn.ui.components.Dialog.get("edit-contact-dialog").show();
   }
 
   $scope.onEditContactDialogAction=function($event)

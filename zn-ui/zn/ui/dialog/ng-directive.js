@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "dialog",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "dialog";
+  
+  let directive={};
 
   directive.html=function()
   {
@@ -32,7 +31,7 @@
       actions: scope.actions
     }
 
-    let dialog=zn.ui.components.dialog.create(options);
+    let dialog=new zn.ui.components.Dialog(options);
     dialog.on("init", (evt)=>
     {
       dialog.on("action", (evt)=>
@@ -71,6 +70,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

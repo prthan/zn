@@ -1,6 +1,6 @@
 $(()=>
 {
-  let custname=zn.ui.components.textfield.create({
+  let custname=new zn.ui.components.TextField({
       name: "name",
       target: ".textfield",
       label: "Customer Name",
@@ -11,7 +11,7 @@ $(()=>
   custname.on("init", evt => console.log("init", evt));
   custname.init();
 
-  let search=zn.ui.components.textfield.create({
+  let search=new zn.ui.components.TextField({
     name: "name",
     target: ".searchfield",
     placeholder: "search here",
@@ -22,7 +22,7 @@ $(()=>
   search.on("init", evt => console.log("init", evt));
   search.init();
 
-  let useridfield=zn.ui.components.textfield.create({
+  let useridfield=new zn.ui.components.TextField({
     name: "name",
     target: ".useridfield",
     placeholder: "User ID",
@@ -33,7 +33,7 @@ $(()=>
   useridfield.on("init", evt => console.log("init", evt));
   useridfield.init();
 
-  let passwordfield=zn.ui.components.textfield.create({
+  let passwordfield=new zn.ui.components.TextField({
     name: "pwd",
     target: ".passwordfield",
     password: true,
@@ -45,7 +45,7 @@ $(()=>
   passwordfield.on("init", evt => console.log("init", evt));
   passwordfield.init();
 
-  let textarea=zn.ui.components.textarea.create({
+  let textarea=new zn.ui.components.TextArea({
     name: "descr",
     target: ".textarea",
     label: "Description",
@@ -55,7 +55,7 @@ $(()=>
   textarea.on("init", evt => console.log("init", evt));
   textarea.init();
 
-  let dropdownfield=zn.ui.components.dropdownfield.create({
+  let dropdownfield=new zn.ui.components.DropdownField({
     name: "choices",
     target: ".dropdownfield",
     label: "Network Type",
@@ -75,7 +75,7 @@ $(()=>
   dropdownfield.on("init", evt => console.log("init", evt));
   dropdownfield.init();
 
-  let checkboxfield=zn.ui.components.checkboxfield.create({
+  let checkboxfield=new zn.ui.components.CheckboxField({
     name: "choices",
     target: ".checkboxfield",
     value: false,
@@ -87,7 +87,7 @@ $(()=>
   checkboxfield.on("init", evt => console.log("init", evt));
   checkboxfield.init();
   
-  let radiogroup=zn.ui.components.radiogroup.create({
+  let radiogroup=new zn.ui.components.RadioGroup({
     name: "choices",
     target: ".radiogroup",
     label: "Network Options",
@@ -109,7 +109,7 @@ $(()=>
 
   for(let i=1;i<=3;i++)
   {
-    let calendar=zn.ui.components.calendar.create({
+    let calendar=new zn.ui.components.Calendar({
       name: "calendar-"+i,
       target: ".calendar-"+i,
       date: new Date()
@@ -118,8 +118,8 @@ $(()=>
     calendar.on("init", evt => console.log("init", evt));
     calendar.init();
   }
-  zn.ui.components.calendar.get("calendar-3").on("date-select", (evt)=>zn.ui.components.popup.hide());
-  let datefield=zn.ui.components.datefield.create({
+  zn.ui.components.Calendar.get("calendar-3").on("date-select", (evt)=>zn.ui.components.Popup.hide());
+  let datefield=new zn.ui.components.DateField({
       name: "name",
       target: ".datefield",
       label: "Start Date",
@@ -131,7 +131,7 @@ $(()=>
   datefield.on("init", evt => console.log("init", evt));
   datefield.init();  
 
-  let button1=zn.ui.components.button.create({
+  let button1=new zn.ui.components.Button({
     name: "b1",
     target: ".button-1",
     text: "Add Calendar",
@@ -142,7 +142,7 @@ $(()=>
   button1.on("init", evt => console.log("init", evt));
   button1.init();
 
-  let button2=zn.ui.components.button.create({
+  let button2=new zn.ui.components.Button({
     name: "b2",
     target: ".button-2",
     text: "Bookmark",
@@ -153,7 +153,7 @@ $(()=>
   button2.on("init", evt => console.log("init", evt));
   button2.init();
 
-  let button3=zn.ui.components.button.create({
+  let button3=new zn.ui.components.Button({
     name: "b3",
     target: ".button-3",
     text: "Delete",
@@ -165,7 +165,7 @@ $(()=>
   button3.on("init", evt => console.log("init", evt));
   button3.init();
 
-  let button4=zn.ui.components.button.create({
+  let button4=new zn.ui.components.Button({
     name: "b4",
     target: ".button-4",
     text: "Reresh",
@@ -177,14 +177,14 @@ $(()=>
   button4.on("init", evt => console.log("init", evt));
   button4.init();
 
-  zn.ui.components.popup.create({
+  new zn.ui.components.Popup({
     name: "popup-cal",
     target: ".popup",
     source: ".button-5",
     showAt: "right"
-  });
+  }).init();
 
-  let button5=zn.ui.components.button.create({
+  let button5=new zn.ui.components.Button({
     name: "b4",
     target: ".button-5",
     text: "Show Calendar",
@@ -192,12 +192,12 @@ $(()=>
   });
   button5.on("action", (evt)=>
   {
-    zn.ui.components.popup.get("popup-cal").show();
+    zn.ui.components.Popup.get("popup-cal").show();
   });
   button5.on("init", evt => console.log("init", evt));
   button5.init();
 
-  let dialog=zn.ui.components.dialog.create({
+  let dialog=new zn.ui.components.Dialog({
     name: "dialog-cal",
     target: ".dialog-cal",
     centered: true,
@@ -208,7 +208,8 @@ $(()=>
       {action: "cancel", label: "Cancel"}, 
       {action: "clear", label: "Clear", slot: "left", icon: "fas fa-bug"}
     ]
-  }).init();
+  });
+  dialog.init();
   dialog.on("action", (evt)=>
   {
     if(evt.action=="ok")
@@ -218,7 +219,7 @@ $(()=>
     }
   });
 
-  let dialogcal=zn.ui.components.calendar.create({
+  let dialogcal=new zn.ui.components.Calendar({
     name: "calendar-"+4,
     target: ".calendar-"+4,
     date: new Date()
@@ -227,7 +228,7 @@ $(()=>
   dialogcal.on("init", evt => console.log("init", evt));
   dialogcal.init();
 
-  let button6=zn.ui.components.button.create({
+  let button6=new zn.ui.components.Button({
     name: "b6",
     target: ".button-6",
     text: "Show Calendar Dialog",
@@ -236,7 +237,7 @@ $(()=>
 
   button6.on("action", (evt)=>
   {
-    zn.ui.components.dialog.get("dialog-cal").show();
+    zn.ui.components.Dialog.get("dialog-cal").show();
   });
   button6.on("init", evt => console.log("init", evt));
   button6.init();

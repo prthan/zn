@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "surface",
-    package: "zn.designer.ng"
-  }
+  let __package = "zn.designer.ng";
+  let __name = "surface";
+
+  let directive = {}
 
   directive.html=function()
   {
@@ -21,7 +20,7 @@
       height: scope.height
     }
 
-    let surface=zn.designer.surface.create(options);
+    let surface=new zn.designer.Surface(options);
 
     surface.on("rel-create", (evt)=>scope.onrelcreate({$event: evt}));
     surface.on("rel-select", (evt)=>scope.onrelselect({$event: evt}));
@@ -57,6 +56,7 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
+  
 })(window);
 

@@ -1,15 +1,10 @@
-declare class znButtonFactory
-{
-  create(options :znButtonOptions) :znButton;
-  get(name :string) :znButton;
-}
-
 declare class znButton
 {
-  constructor();
+  constructor(options :znButtonOptions);
   name :string;
   init() :void;
-  on(eventName :string, eventHandler :(event :znButtonEvent)=>void) :void;  
+  on(eventName :string, eventHandler :(event :znButtonEvent)=>void) :void;
+  get(name :string) :znButton;
 }
 
 declare interface znButtonOptions

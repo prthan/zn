@@ -1,10 +1,3 @@
-declare class znDialogFactory
-{
-  create(options :znDialogOptions) :znDialog;
-  get(name :string) :znDialog;
-  hide() :void;
-}
-
 declare class znDialog
 {
   constructor(options :znDialogOptions);
@@ -13,7 +6,8 @@ declare class znDialog
   on(eventName :string, eventHandler :(event :znDialogEvent)=>void) :void;
   show() :void;
   hide() :void;
-  setActions(actions :Array<any>);
+  setActions(actions :Array<any>) :void;
+  get(name :string) :znDialog;
 }
 
 declare interface znDialogOptions

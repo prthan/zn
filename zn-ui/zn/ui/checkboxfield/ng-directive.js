@@ -1,11 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "checkboxfield",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "checkboxfield";
 
+  let directive={};
   directive.html=function()
   {
     return "<div></div>";
@@ -20,11 +18,11 @@
       text: scope.text, 
       value: scope.value, 
       values: {on: scope.onvalue, off: scope.offvalue},
-      error: scope.error,
+      error: scope.error ? scope.error : "",
       message: scope.message
     }
 
-    let checkboxfield=zn.ui.components.checkboxfield.create(options);
+    let checkboxfield=new zn.ui.components.CheckboxField(options);
 
     checkboxfield.on("init", ()=>
     {
@@ -35,7 +33,7 @@
       })
   
       scope.$watch("value", (nv, ov)=>checkboxfield.setValue(nv));
-      scope.$watch("error", (nv, ov)=>checkboxfield.message(nv, "error"));
+      scope.$watch("error", (nv, ov)=>checkboxfield.message(nv ? nv : "", "error"));
       scope.$watch("message", (nv, ov)=>checkboxfield.message(nv, "message"));
     })
 
@@ -64,6 +62,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
 })(window);
 

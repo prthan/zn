@@ -1,9 +1,3 @@
-declare class znListFactory
-{
-  create(options :znListOptions) :znList;
-  get(name :string) :znList;
-}
-
 declare class znList
 {
   constructor(options :znListOptions);
@@ -13,6 +7,7 @@ declare class znList
   setItems(value :Array<any>) :void;
   addItems(value :Array<any>) :void;
   trackScroll(track :boolean) :void;
+  get(name :string) :znList;
 }
 
 declare interface znListOptions

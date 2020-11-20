@@ -1,4 +1,4 @@
 declare interface znDesigner
 {
-  surface :znSurfaceFactory
+  Surface :znSurface
 }

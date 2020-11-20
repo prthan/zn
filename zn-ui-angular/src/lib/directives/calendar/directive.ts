@@ -32,8 +32,8 @@ export class znCalendarDirective implements OnInit, OnChanges
   {
     let options :znCalendarOptions={target: this.hostElementRef.nativeElement, name: this.name, date: this.date || new Date()};
 
-    this.calendar=zn.ui.components.calendar.create(options);
-
+    this.calendar=new (zn.findClass('zn.ui.components.Calendar'))(options);
+    
     if(this.onDateSelect.observers.length>0) this.calendar.on("date-select",(evt: znCalendarEvent)=>this.onDateSelect.emit(evt));
     this.calendar.on("date-select", (evt :any)=>
     {

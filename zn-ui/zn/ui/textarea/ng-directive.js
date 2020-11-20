@@ -1,11 +1,10 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "textarea",
-    package: "zn.ui.components.ng"
-  }
-
+  let __package = "zn.ui.components.ng";
+  let __name = "textarea";
+  
+  let directive={};
+  
   directive.html=function()
   {
     return "<div></div>";
@@ -21,11 +20,11 @@
       value: scope.value, 
       placeholder: scope.placeholder,
       readonly: scope.readonly === "true",
-      error: scope.error,
+      error: scope.error ? scope.error : "",
       message: scope.message
     }
 
-    let textarea=zn.ui.components.textarea.create(options);
+    let textarea=new zn.ui.components.TextArea(options);
 
     textarea.on("init", ()=>
     {
@@ -36,7 +35,7 @@
       })
   
       scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
-      scope.$watch("error", (nv, ov)=>textarea.message(nv, "error"));
+      scope.$watch("error", (nv, ov)=>textarea.message(nv ? nv : "", "error"));
       scope.$watch("message", (nv, ov)=>textarea.message(nv, "message"));
     })
 
@@ -65,6 +64,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

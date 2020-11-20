@@ -1,7 +1,6 @@
 $(()=>
 {
-  let surfaceFactory=zn.designer.surface;
-  let surface=surfaceFactory.create({
+  let surface=new zn.designer.Surface({
     target: ".surface"
   });
   surface.init();
@@ -71,7 +70,7 @@ $(()=>
     surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
-  let exportBtn=zn.ui.components.button.create({
+  let exportBtn=new zn.ui.components.Button({
     name: "exportBtn",
     target: ".export-btn",
     text: "Export",
@@ -83,7 +82,7 @@ $(()=>
   });
   exportBtn.init();
 
-  let importBtn=zn.ui.components.button.create({
+  let importBtn=new zn.ui.components.Button({
     name: "importBtn",
     target: ".import-btn",
     text: "Import",
@@ -113,7 +112,7 @@ $(()=>
   ]
   btns.forEach((btn)=>
   {
-    let zbbtn=zn.ui.components.button.create(btn);
+    let zbbtn=new zn.ui.components.Button(btn);
     zbbtn.on("action", shapeBtnAction);
     zbbtn.init();
   })

@@ -1,9 +1,3 @@
-declare class znCheckboxFieldFactory
-{
-  create(options :znCheckboxFieldOptions) :znCheckboxField;
-  get(name :string) :znCheckboxField;
-}
-
 declare class znCheckboxField
 {
   constructor(options :znCheckboxFieldOptions);
@@ -13,6 +7,7 @@ declare class znCheckboxField
   setValue(value :string|boolean) :void;
   getValue() :string|boolean;
   message(text :string, type :string) :void;
+  get(name :string) :znCheckboxField;
 }
 
 declare interface znCheckboxFieldOptions

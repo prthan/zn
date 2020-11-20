@@ -53,7 +53,7 @@ export class znDateFieldDirective implements OnInit, OnChanges
       message: this.message      
     };
 
-    this.datefield=zn.ui.components.datefield.create(options);
+    this.datefield=new (zn.findClass('zn.ui.components.DateField'))(options);
 
     if(this.onDateSelect.observers.length>0) this.datefield.on("date-select", (evt: znDateFieldEvent)=>this.onDateSelect.emit(evt));
     if(this.onAction.observers.length>0) this.datefield.on("action", (evt: znDateFieldEvent)=>this.onDateSelect.emit(evt));

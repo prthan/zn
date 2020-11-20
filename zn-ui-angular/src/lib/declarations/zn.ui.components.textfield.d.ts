@@ -1,9 +1,3 @@
-declare class znTextFieldFactory
-{
-  create(options :znTextFieldOptions) :znTextField;
-  get(name :string) :znTextField;
-}
-
 declare class znTextField
 {
   constructor(options :znTextFieldOptions);
@@ -13,6 +7,7 @@ declare class znTextField
   setValue(value :string|number) :void;
   getValue() :string|number;
   message(text :string, type :string) :void;
+  get(name :string) :znTextField;
 }
 
 declare interface znTextFieldOptions

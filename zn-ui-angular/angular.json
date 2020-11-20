@@ -45,6 +45,7 @@
               "../zn-ui/moment.js",
               "../zn-ui/numeral.js",
               "../zn-ui/konva.js",
+              "../zn-ui/zn/index.js",
               "../zn-ui/zn/ui/button/component.js",
               "../zn-ui/zn/ui/calendar/component.js",
               "../zn-ui/zn/ui/checkboxfield/component.js",

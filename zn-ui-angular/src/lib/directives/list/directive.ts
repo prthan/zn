@@ -46,7 +46,7 @@ export class znListDirective implements OnInit, OnChanges
       scrollContainer: this.scrollContainer
     };
 
-    this.list=zn.ui.components.list.create(options);
+    this.list=new (zn.findClass('zn.ui.components.List'))(options);
 
     if(this.onSelect.observers.length>0) this.list.on("select", (evt: znListEvent)=>this.onSelect.emit(evt));
     if(this.onSelectionChange.observers.length>0) this.list.on("selection-change", (evt: znListEvent)=>this.onSelectionChange.emit(evt));

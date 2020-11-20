@@ -1,17 +1,12 @@
-declare class znCalendarFactory
-{
-  create(options :znCalendarOptions) :znCalendar;
-  get(name :string) :znCalendar;
-}
-
 declare class znCalendar
 {
-  constructor();
+  constructor(optons :znCalendarOptions);
   name :string;
   init() :void;
   on(eventName :string, eventHandler :(event :znCalendarEvent)=>void) :void;  
   setValue(value :Date) :void;
   getValue() :Date;
+  get(name :string) :znCalendar;
 }
 
 declare interface znCalendarOptions

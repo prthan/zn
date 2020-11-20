@@ -1,11 +1,10 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "button",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "button";
 
+  let directive={};
+  
   directive.html=function()
   {
     return "<div></div>";
@@ -23,7 +22,7 @@
       type: scope.type
     }
 
-    let button=zn.ui.components.button.create(options);
+    let button=new zn.ui.components.Button(options);
 
     button.on("action", (evt)=>
     {
@@ -53,6 +52,7 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
+
 })(window);
 

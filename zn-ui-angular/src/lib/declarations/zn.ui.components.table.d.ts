@@ -22,14 +22,9 @@ declare class znTable
   init() :void;
   getSelectedRows() :znTableSelection;
   on(eventName :string, eventHandler :(event :znTableEvent)=>void) :void;
+  get(name :string) :znTable;
   //getLovs(ctx :znTableCallbackContext, $$ :(lovs :znTableColumnLovs)=>void) :void;
   //getData(ctx :znTableCallbackContext, $$ :(rows :Array<any>)=>void) :void;
-}
-
-declare class znTableFactory
-{
-  create(options :znTableOptions) :znTable;
-  get(name :string) :znTable;
 }
 
 declare interface znTableColumn
@@ -84,23 +79,3 @@ declare interface znTableSelection
   data :Array<any>;
   indexes :Array<any>;
 }
-
-/*declare interface znTableCallbackContext
-{
-  index? :number;
-  column? :znTableColumn;
-  filters? :Array<znTableDataFilter>;
-  transforms? :Array<znTableDataTransform>;
-}
-
-declare interface znTableDataTransform
-{
-  filters :Array<znTableDataFilter>;
-  sort :znTableDataSort;
-}
-
-declare interface znTableColumnLovs
-{
-  list :Array<any>;
-  hasBlanks :boolean;
-}*/

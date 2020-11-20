@@ -95,14 +95,14 @@ export class ViewFormComponent implements OnInit {
 
   onShowPopupCal($evt: znButtonEvent)
   {
-    let popup=zn.ui.components.popup.get("popup-cal");
+    let popup=zn.ui.components.Popup.get("popup-cal");
     console.log(popup);
     popup.show();
   }
 
   onShowDialogCal($evt: znButtonEvent)
   {
-    let dialog=zn.ui.components.dialog.get("dialog-cal");
+    let dialog=zn.ui.components.Dialog.get("dialog-cal");
     dialog.show();
   }
 

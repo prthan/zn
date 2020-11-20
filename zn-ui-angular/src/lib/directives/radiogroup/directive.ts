@@ -47,7 +47,7 @@ export class znRadioGroupDirective implements OnInit, OnChanges
       message: this.message      
     };
 
-    this.radiogroup=zn.ui.components.radiogroup.create(options);
+    this.radiogroup=new (zn.findClass('zn.ui.components.RadioGroup'))(options);
 
     if(this.onSelect.observers.length>0) this.radiogroup.on("change", (evt: znRadioGroupEvent)=>this.onSelect.emit(evt));
     this.radiogroup.on("change", (evt :any)=>

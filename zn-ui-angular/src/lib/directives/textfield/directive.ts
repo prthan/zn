@@ -51,7 +51,7 @@ export class znTextFieldDirective implements OnInit, OnChanges
       message: this.message
     };
 
-    this.textfield=zn.ui.components.textfield.create(options);
+    this.textfield=new (zn.findClass('zn.ui.components.TextField'))(options);
 
     if(this.onAction.observers.length>0) this.textfield.on("action", (evt: znTextFieldEvent)=>this.onAction.emit(evt));
     this.textfield.on("change", (evt :any)=>

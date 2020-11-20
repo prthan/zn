@@ -1,9 +1,3 @@
-declare class znSurfaceFactory
-{
-  create(options :znSurfaceOptions) :znSurface;
-  get(name :string) :znSurface;
-}
-
 declare class znSurface
 {
   constructor();
@@ -15,6 +9,7 @@ declare class znSurface
   importFromJson(data :string) :void;
   setMode(mode :string) :void;
   downloadAsImage() :void;
+  get(name :string) :znSurface;
 }
 
 declare interface znSurfaceOptions

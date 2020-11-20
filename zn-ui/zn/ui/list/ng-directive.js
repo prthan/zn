@@ -1,11 +1,10 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "list",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "list";
 
+  let directive={};
+  
   directive.html=function()
   {
     return "<div></div>";
@@ -24,7 +23,7 @@
       scrollContainer: scope.scrollcontainer
     }
 
-    let list=zn.ui.components.list.create(options);
+    let list=new zn.ui.components.List(options);
 
     list.on("init", ()=>
     {
@@ -71,6 +70,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 

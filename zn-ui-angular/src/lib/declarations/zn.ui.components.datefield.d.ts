@@ -1,18 +1,13 @@
-declare class znDateFieldFactory
-{
-  create(options :znDateFieldOptions) :znDateField;
-  get(name :string) :znDateField;
-}
-
 declare class znDateField
 {
-  constructor();
+  constructor(options: znDateFieldOptions);
   name :string;
   init() :void;
   on(eventName :string, eventHandler :(event :znDateFieldEvent)=>void) :void;  
   setValue(value :Date) :void;
   getValue() :Date;  
   message(text :string, type :string) :void;
+  get(name :string) :znDateField;
 }
 
 declare interface znDateFieldOptions

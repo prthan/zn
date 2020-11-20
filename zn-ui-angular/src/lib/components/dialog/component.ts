@@ -48,7 +48,7 @@ export class znDialogComponent implements OnInit, OnChanges
       wrap: "N"
     };
 
-    this.dialog=zn.ui.components.dialog.create(options);
+    this.dialog=new (zn.findClass('zn.ui.components.Dialog'))(options);
     if(this.onAction.observers.length>0) this.dialog.on("action",(evt: any)=>this.onAction.emit(evt));
 
     this.dialog.on("init", ()=>

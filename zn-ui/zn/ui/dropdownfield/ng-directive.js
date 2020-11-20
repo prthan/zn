@@ -1,10 +1,9 @@
 (function(window)
 {
-  var directive =
-  {
-    name: "dropdownfield",
-    package: "zn.ui.components.ng"
-  }
+  let __package = "zn.ui.components.ng";
+  let __name = "dropdownfield";
+  
+  let directive={};
 
   directive.html=function()
   {
@@ -24,11 +23,11 @@
         label: scope.label, 
         value: scope.value,
         items: scope.items,
-        error: scope.error,
+        error: scope.error ? scope.error : "",
         message: scope.message
       }
 
-      let dropdownfield=zn.ui.components.dropdownfield.create(options);
+      let dropdownfield=new zn.ui.components.DropdownField(options);
 
       dropdownfield.on("init",()=>
       {
@@ -39,7 +38,7 @@
         })
     
         scope.$watch("value", (nv, ov)=>dropdownfield.setValue(nv));
-        scope.$watch("error", (nv, ov)=>dropdownfield.message(nv, "error"));
+        scope.$watch("error", (nv, ov)=>dropdownfield.message(nv ? nv : "", "error"));
         scope.$watch("message", (nv, ov)=>dropdownfield.message(nv, "message"));
       })
 
@@ -69,6 +68,6 @@
     };
   }
 
-  directive.package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[directive.name]=directive;
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 
