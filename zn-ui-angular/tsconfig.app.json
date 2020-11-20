@@ -10,7 +10,6 @@
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.d.ts",
-    "../zn-ui/zn/**/*.d.ts"
+    "src/**/*.d.ts"
   ]
 }

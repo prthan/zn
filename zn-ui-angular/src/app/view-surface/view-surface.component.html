@@ -10,7 +10,7 @@
     <div zn-button text="Var Contact" action="add-var-contact" class="button-8" (onAction)="addShape($event)"></div>
     <div zn-button text="Export" action="exportToJson" class="button-9" (onAction)="exportToJson($event)"></div>
     <div zn-button text="Import" action="imporFromJson" class="button-10" (onAction)="importFromJson($event)"></div>
-    <div zn-button text="Download" action="download" class="button-11" (onAction)="downloadAsImage($event)"></div>
+    <div zn-button text="Download" action="download" class="button-11" (onAction)="downloadAsImage()"></div>
   </div>
   <div zn-surface name="surface" class="surface" (binding)="surface=$event"
     (onPosition)="onPosition($event)"

@@ -25,4 +25,5 @@ declare interface znButtonOptions
 declare interface znButtonEvent
 {
   source :znButton;
+  action: string;
 }

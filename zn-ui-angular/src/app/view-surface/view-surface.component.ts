@@ -22,55 +22,50 @@ export class ViewSurfaceComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onRowSelect($event :any)
-  {
-    console.log($event);
-  }
-
-  addShape($event :any)
+  addShape($event :znButtonEvent)
   {
     console.log('add-shape', $event)
     this.shapeAction=$event.action;
     this.surface.setMode("position");
   }
 
-  onPosition($event :any)
+  onPosition($event :znSurfaceEvent)
   {
     console.log('position', $event);
     this[this.shapeAction]($event);
   }
   
-  onObjSelect($event :any)
+  onObjSelect($event :znSurfaceEvent)
   {
     console.log('obj-select', $event);
   }
 
-  onRelSelect($event :any)
+  onRelSelect($event :znSurfaceEvent)
   {
     console.log('rel-select',$event);
   }
 
-  onRelCreate($event :any)
+  onRelCreate($event :znSurfaceEvent)
   {
     console.log('rel-create',$event);
   }
 
-  onSelectionChange($event :any)
+  onSelectionChange($event :znSurfaceEvent)
   {
     console.log('selection-change',$event);
   }
 
-  onDelete($event :any)
+  onDelete($event :znSurfaceEvent)
   {
     console.log('delete',$event);
   }
 
-  exportToJson($event :any)
+  exportToJson($event :znSurfaceEvent)
   {
     console.log(this.surface.exportToJson());
   }
 
-  importFromJson($event :any)
+  importFromJson($event :znSurfaceEvent)
   {
     this.surface.importFromJson(this.data);
   }
@@ -80,37 +75,37 @@ export class ViewSurfaceComponent implements OnInit {
     this.surface.downloadAsImage();
   }
 
-  ['add-invoke'](evt :any)
+  ['add-invoke'](evt :znSurfaceEvent)
   {
     let ctx={name: "shape-"+(this.shapeCount++), text: "Invoke"};
     this.surface.addShape("rectangle", {x: evt.x - 50, y: evt.y - 25, width: 100, height: 50}, ctx);
   }
 
-  ["add-receive"](evt :any)
+  ["add-receive"](evt :znSurfaceEvent)
   {
     let ctx={name: "shape-"+(this.shapeCount++), text: "Receive"};
     this.surface.addShape("ellipse", {x: evt.x - 35, y: evt.y - 35, width: 70, height: 70}, ctx);
   }
 
-  ["add-return"](evt :any)
+  ["add-return"](evt :znSurfaceEvent)
   {
     let ctx={name: "shape-"+(this.shapeCount++), text: "Return"};
     this.surface.addShape("ellipse", {x: evt.x - 35, y: evt.y - 35, width: 70, height: 70}, ctx);
   }
 
-  ["add-assign"](evt :any)
+  ["add-assign"](evt :znSurfaceEvent)
   {
     let ctx={name: "shape-"+(this.shapeCount++), text: "Assign"};
     this.surface.addShape("pill", {x: evt.x - 50, y: evt.y - 20, width: 100, height: 40}, ctx);
   }
 
-  ["add-check"](evt :any)
+  ["add-check"](evt :znSurfaceEvent)
   {
     let ctx={name: "shape-"+(this.shapeCount++), text: "Check"};
     this.surface.addShape("diamond", {x: evt.x - 45, y: evt.y - 45, width: 90, height: 90}, ctx);
   }
 
-  ["add-var-person"](evt :any)
+  ["add-var-person"](evt :znSurfaceEvent)
   {
     let list=
     [
@@ -122,14 +117,14 @@ export class ViewSurfaceComponent implements OnInit {
     this.surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
-  ["add-var-address"](evt :any)
+  ["add-var-address"](evt :znSurfaceEvent)
   {
     let list=[{text: "Street"}, {text: "City"}, {text: "State"}, {text: "ZipCode"}];
     let ctx={name: "shape-"+(this.shapeCount++), text: "ADDRESS", list: list};
     this.surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
-  ["add-var-contact"](evt :any)
+  ["add-var-contact"](evt :znSurfaceEvent)
   {
     let list=[{text: "Home Phone"}, {text: "Office"}, {text: "Mobile Phone"}, {text: "EMail ID"}];
     let ctx={name: "shape-"+(this.shapeCount++), text: "CONTACT", list: list};
