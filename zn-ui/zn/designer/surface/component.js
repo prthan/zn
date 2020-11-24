@@ -156,8 +156,8 @@
         surface.currentTransformer = null;
       }
       base.resetConnectorLineSelection(surface.connectorsLayer);
-      surface.data.currentSelection = { obj: evt.source.ctx.name };
-      surface.fireEvent("obj-select", { obj: evt.source.ctx });
+      surface.data.currentSelection = { obj: evt.source.oid };
+      surface.fireEvent("obj-select", { obj: {...evt.source.ctx, oid: evt.source.oid }});
     }
 
     onShapeTransform(evt)
@@ -190,6 +190,7 @@
 
       surface.data.currentSelection = {};
     }
+
     onConnectorSelect(event)
     {
       let surface = this;
@@ -208,8 +209,8 @@
       let from = event.p0.getAttr("zn-ctx");
       let to = event.p1.getAttr("zn-ctx");
 
-      surface.addConnection(from, to);
-      surface.fireEvent("rel-create", { from: from, to: to });
+      let oid=surface.addConnection({...from, oid: event.p0.getAttr("zn-oid")}, {...to, oid: event.p1.getAttr("zn-oid")});
+      surface.fireEvent("rel-create", { from: {...from, oid: event.p0.getAttr("zn-oid")}, to: {...to, oid: event.p1.getAttr("zn-oid")}, oid: oid });
     }
 
     onConnectionSelect(evt)
@@ -222,8 +223,8 @@
       base.resetSelection(surface.shapesLayer);
       if (selectedItems.length > 0)
         surface.fireEvent("selection-set-change", { selection: [] });
-      surface.data.currentSelection = { rel: ctx.name };
-      surface.fireEvent("rel-select", { rel: ctx });
+      surface.data.currentSelection = { rel: source.getAttr("zn-oid") };
+      surface.fireEvent("rel-select", { rel: {...ctx, oid: source.getAttr("zn-oid")} });
     }
 
     onSelectObjects(evt)
@@ -238,7 +239,7 @@
               let shape = shapeComponent.$shape;
               base.showSelection(shape, true);
               shape.addName("selected");
-              selection.push(shapeComponent.ctx);
+              selection.push({...shapeComponent.ctx, oid: shapeComponent.oid});
             });
       surface.data.currentSelection = { set: selection };
 
@@ -252,7 +253,7 @@
 
       surface.shapesLayer.find(".selected").each((shape) =>
       {
-        selection.push(shape.getAttr("zn-ctx"));
+        selection.push({...shape.getAttr("zn-ctx"), oid: shape.getAttr("zn-oid")});
       });
 
       surface.data.currentSelection = { set: selection };
@@ -277,22 +278,24 @@
 
       if (surface.data.currentSelection.obj)
       {
-        objs.push(surface.data.shapeComponents[surface.data.currentSelection.obj].ctx);
+        let objctx=surface.data.shapeComponents[surface.data.currentSelection.obj].ctx;
+        objs.push({...objctx, oid: surface.data.currentSelection.obj});
         rels.push(...surface.getShapeConnections([surface.data.currentSelection.obj]));
         surface.deleteShape(surface.data.currentSelection.obj);
       }
 
       if (surface.data.currentSelection.rel)
       {
-        rels.push(surface.data.lineComponents[surface.data.currentSelection.rel].ctx);
+        let relctx=surface.data.lineComponents[surface.data.currentSelection.rel].ctx;
+        rels.push({...relctx, oid: surface.data.currentSelection.rel});
         surface.deleteConnection(surface.data.currentSelection.rel);
       }
 
       if (surface.data.currentSelection.set)
       {
-        let shapeNames = surface.data.currentSelection.set.map((v) => { return v.name; });
-        rels.push(...surface.getShapeConnections(shapeNames));
-        surface.deleteShapes(shapeNames);
+        let shapeOids = surface.data.currentSelection.set.map((v) => { return v.oid; });
+        rels.push(...surface.getShapeConnections(shapeOids));
+        surface.deleteShapes(shapeOids);
       }
       surface.data.currentSelection = {};
 
@@ -327,10 +330,10 @@
       let surface = this;
       surface.shapesLayer.add(shapeComponent.$shape);
       surface.shapesLayer.batchDraw();
-      surface.data.shapeComponents[shapeComponent.ctx.name] = shapeComponent;
+      surface.data.shapeComponents[shapeComponent.oid] = shapeComponent;
     }
 
-    addShape(type, rect, ctx)
+    addShape(type, rect, ctx, oid)
     {
       let surface = this;
       let clazz = zn.findClass(surface.shapeClasses[type]);
@@ -344,31 +347,32 @@
       let y = rect.y;
       let w = rect.width;
       let h = rect.height;
-
-      let shapeComponent = new clazz(x, y, w, h, ctx);
+      
+      let shapeComponent = new clazz(x, y, w, h, ctx, oid);
       surface.addShapeComponent(shapeComponent);
+      base.snap(shapeComponent.$shape);
+
+      return shapeComponent.oid;
     }
 
-    deleteShape(name, redraw)
+    deleteShape(id, redraw)
     {
       let surface = this;
-      if (!surface.data.shapeComponents[name])
-        return;
-      let shapeComponent = surface.data.shapeComponents[name];
+      if (!surface.data.shapeComponents[id]) return;
+      let shapeComponent = surface.data.shapeComponents[id];
       let shapeConnections = shapeComponent.connectorLines();
 
       shapeComponent.destroy();
-      delete surface.data.shapeComponents[name];
-      if (redraw !== "N")
-        surface.shapesLayer.batchDraw();
+      delete surface.data.shapeComponents[id];
+      if (redraw !== "N") surface.shapesLayer.batchDraw();
 
       surface.deleteConnections(shapeConnections);
     }
     
-    deleteShapes(names)
+    deleteShapes(ids)
     {
       let surface = this;
-      names.forEach((name) => surface.deleteShape(name, "N"));
+      ids.forEach((id) => surface.deleteShape(id, "N"));
       surface.shapesLayer.batchDraw();
     }
 
@@ -377,10 +381,10 @@
       let surface = this;
       surface.connectorsLayer.add(connectorLineComponent.$shape);
       surface.connectorsLayer.batchDraw();
-      surface.data.lineComponents[connectorLineComponent.ctx.name] = connectorLineComponent;
+      surface.data.lineComponents[connectorLineComponent.oid] = connectorLineComponent;
     }
 
-    addConnection(from, to)
+    addConnection(from, to, oid)
     {
       let surface = this;
       let fromCpData = surface.cpData(from);
@@ -392,41 +396,41 @@
         to: toCpData.cp.ctx
       };
 
-      let connectorLine = new zn.designer.shape.ConnectorLine(fromCpData.cp.$shape, toCpData.cp.$shape, ctx);
+      let connectorLine = new zn.designer.shape.ConnectorLine(fromCpData.cp.$shape, toCpData.cp.$shape, ctx, oid);
       surface.addConnectionComponent(connectorLine);
+
+      return connectorLine.oid;
     }
 
-    getShapeConnections(shapeNames)
+    getShapeConnections(shapeOids)
     {
       let surface = this;
       let connections = [];
-      shapeNames.forEach((shapeName) =>
+      shapeOids.forEach((shapeOid) =>
       {
-        let shapeComponent = surface.data.shapeComponents[shapeName];
-        let connectNames = shapeComponent.connectorLines();
-        connectNames.forEach((name) => connections.push(surface.data.lineComponents[name].ctx));
+        let shapeComponent = surface.data.shapeComponents[shapeOid];
+        let connectIds = shapeComponent.connectorLines();
+        connectIds.forEach((coid) =>connections.push({...surface.data.lineComponents[coid].ctx, oid: coid}));
       });
 
       return connections;
     }
 
-    deleteConnection(name, redraw)
+    deleteConnection(id, redraw)
     {
       let surface = this;
-      if (!surface.data.lineComponents[name])
-        return;
+      if (!surface.data.lineComponents[id]) return;
 
-      let lineComponent = surface.data.lineComponents[name];
+      let lineComponent = surface.data.lineComponents[id];
       lineComponent.destroy();
-      delete surface.data.lineComponents[name];
-      if (redraw !== "N")
-        surface.connectorsLayer.batchDraw();
+      delete surface.data.lineComponents[id];
+      if (redraw !== "N") surface.connectorsLayer.batchDraw();
     }
 
-    deleteConnections(names)
+    deleteConnections(ids)
     {
       let surface = this;
-      names.forEach((name) => surface.deleteConnection(name, "N"));
+      ids.forEach((id) => surface.deleteConnection(id, "N"));
       surface.connectorsLayer.batchDraw();
     }
 
@@ -442,7 +446,7 @@
       let parent = ctx.parent;
       let map = surface.data.shapeComponents;
 
-      let obj = map[parent.name];
+      let obj = map[parent.oid];
       if (parent.type == "list-item") obj = map[parent.list].nodes[parent.index];
       if (parent.type == "list-header") obj = map[parent.list].headerNode;
 
@@ -456,10 +460,10 @@
       let jsonData = { shapes: [], lines: [] };
 
       Object.values(component.data.shapeComponents)
-            .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx }));
+            .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx, oid: shapeComponent.oid }));
 
       Object.values(component.data.lineComponents)
-            .forEach((lineComponent) => jsonData.lines.push(lineComponent.ctx));
+            .forEach((lineComponent) => jsonData.lines.push({...lineComponent.ctx, oid: lineComponent.oid }));
 
       return JSON.stringify(jsonData);
     }
@@ -470,8 +474,8 @@
       let surface = this;
       surface.reset();
 
-      jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx));
-      jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to));
+      jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
+      jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
     }
 
     downloadAsImage()

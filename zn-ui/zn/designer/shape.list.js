@@ -9,13 +9,14 @@
 
   class Component
   {
-    constructor(x, y, w, h, ctx)
+    constructor(x, y, w, h, ctx, oid)
     {
       let component = this;
       component.$class = `${__package}.${__name}`;
       component.$type = "list";
 
       component.ctx = ctx;
+      component.oid = oid || zn.shortid();
 
       component.list = utils.flattenList(ctx.list);
       component.ch = 25 + component.list.length * props["node.height"];
@@ -25,6 +26,7 @@
 
       component.$shape = new Konva.Group({ x: x, y: y, width: w, height: component.ch, draggable: true });
       component.$shape.setAttr("zn-ctx", ctx);
+      component.$shape.setAttr("zn-oid", component.oid);
       component.$shape.addName("list");
 
       component.addHitRegion(w, h, ctx);
@@ -121,7 +123,7 @@
       let component = this;
       let group = component.$shape;
 
-      component.headerNode = new zn.designer.shape.HeaderNode(0, 0, w, props["node.height"], { name: `item$`, list: ctx.name, type: "list-header", text: ctx.text });
+      component.headerNode = new zn.designer.shape.HeaderNode(0, 0, w, props["node.height"], { name: `item$`, list: component.oid, type: "list-header", text: ctx.text });
       component.headerNode.rect.cornerRadius([5, 5, 0, 0]);
       group.add(component.headerNode.$shape);
 
@@ -138,7 +140,7 @@
 
       component.list.forEach((e, i) =>
       {
-        let node = new zn.designer.shape.Node(x, y, w, props["node.height"], { name: `item$${i}`, index: i, list: ctx.name, type: "list-item", ...e });
+        let node = new zn.designer.shape.Node(x, y, w, props["node.height"], {name: `item$${i}`, index: i, list: component.oid, type: "list-item", ...e });
         component.nodes.push(node);
         group.add(node.$shape);
         y += dy;
@@ -182,10 +184,10 @@
 
       group.on("dragend", () =>
       {
-        base.snap(group);
+        if(!group.hasName("selected")) base.snap(group);
         base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
         component.nodes.forEach((node) => base.fireConnectorPointUpdateEvent(node.$shape));
-        base.snapOtherSelectedObjects(group.getLayer(), group);
+        //base.snapOtherSelectedObjects(group.getLayer(), group);
       });
       group.on("dragmove", (event) =>
       {
@@ -195,15 +197,12 @@
       });
       group.on("mousedown", (event) =>
       {
-        if (!event.evt.ctrlKey)
-          base.handleShapeMouseDown(component);
+        if (!event.evt.ctrlKey) base.handleShapeMouseDown(component);
       });
       group.on("click", (event) =>
       {
-        if (!event.evt.ctrlKey)
-          base.handleShapeClick(component);
-        else
-          base.handleShapeSelectAdd(component);
+        if (!event.evt.ctrlKey) base.handleShapeClick(component);
+        else base.handleShapeSelectAdd(component);
       });
 
     }

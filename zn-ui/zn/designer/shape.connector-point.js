@@ -9,12 +9,13 @@
 
   class Component
   {
-    constructor(x, y, ctx)
+    constructor(x, y, ctx, oid)
     {
       let component = this;
       component.$class = `${__package}.${__name}`;
       component.$type = "point";
       component.ctx = ctx;
+      component.oid = oid || zn.shortid();
 
       let size = props["connector.size"];
       component.$shape = new Konva.Circle({
@@ -30,6 +31,7 @@
       });
 
       component.$shape.setAttr("zn-ctx", ctx);
+      component.$shape.setAttr("zn-oid", component.oid);
       component.$shape.addName("connector");
 
       component.setupEventHandlers();
@@ -82,10 +84,10 @@
       let h = shape.height();
       let parentCtx = shape.getAttr("zn-ctx");
 
-      if (location == "top") return new Component(w / 2, -1, { name: `top`, text: "Top", parent: parentCtx, direction: "top" });
-      if (location == "right") return new Component(w + 1, h / 2, { name: `right`, text: "Right", parent: parentCtx, direction: "right" });
-      if (location == "bottom") return new Component(w / 2, h + 1, { name: `bottom`, text: "Bottom", parent: parentCtx, direction: "bottom" });
-      if (location == "left") return new Component(-1, h / 2, { name: `left`, text: "Left", parent: parentCtx, direction: "left" });
+      if (location == "top") return new Component(w / 2, -1, { name: `top`, text: "Top", parent: {...parentCtx, oid: shape.getAttr("zn-oid")}, direction: "top" });
+      if (location == "right") return new Component(w + 1, h / 2, { name: `right`, text: "Right", parent: {...parentCtx, oid: shape.getAttr("zn-oid")}, direction: "right" });
+      if (location == "bottom") return new Component(w / 2, h + 1, { name: `bottom`, text: "Bottom", parent: {...parentCtx, oid: shape.getAttr("zn-oid")}, direction: "bottom" });
+      if (location == "left") return new Component(-1, h / 2, { name: `left`, text: "Left", parent: {...parentCtx, oid: shape.getAttr("zn-oid")}, direction: "left" });
 
       return null;
     }

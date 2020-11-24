@@ -9,15 +9,18 @@
 
   class Component
   {
-    constructor(x, y, w, h, ctx)
+    constructor(x, y, w, h, ctx, oid)
     {
       let component = this;
       component.$class = `${__package}.${__name}`;
       component.$type = "rectangle";
 
       component.ctx = ctx;
+      component.oid = oid || zn.shortid();
+
       component.$shape = new Konva.Group({ x: x, y: y, width: w, height: h, draggable: true });
       component.$shape.setAttr("zn-ctx", ctx);
+      component.$shape.setAttr("zn-oid", component.oid);
       component.$shape.addName("rectangle");
 
       component.addHitRegion(w, h, ctx);
@@ -95,8 +98,17 @@
       let component = this;
       let group = component.$shape;
 
-      if (!component.ctx.text)
-        return;
+      if (!component.ctx.text) return;
+
+      let textBackground=new Konva.Rect({
+        x: 0, y: 0,
+        width: w, height: h,
+        cornerRadius: [5, 5, 0, 0],
+        fill: "rgba(255,255,255,0)"
+      })
+      textBackground.addName("text-background");
+      group.add(textBackground);
+      component.textBackground=textBackground;
 
       let text = new Konva.Text({
         x: 0, y: 0,
@@ -116,6 +128,43 @@
       text.addName("text");
       group.add(text);
       component.text = text;
+
+      if(!component.ctx.subtext) return;
+      text.position({x: 10, y: 0});
+      text.size({width: w - 20, height: 25});
+
+      text.align("left");
+      textBackground.height(25);
+      textBackground.fill(props["rect.header.fill"]);
+
+      let subtext = new Konva.Text({
+        x: 10, y: 30,
+        width: w - 20, height: h - 35,
+        stroke: props["subtext.color"],
+        strokeWidth: 1,
+        text: ctx.subtext,
+        align: "left",
+        verticalAlign: "top",
+        fontFamily: props["subtext.family"],
+        fontSize: props["subtext.size"],
+        fontStyle: props["subtext.style"],
+        lineHeight: props["subtext.lineheight"],
+        shadowForStrokeEnabled: false,
+        listening: false
+      });
+      subtext.addName("subtext");
+      group.add(subtext);
+      component.subtext=subtext;
+
+      let headerLine = new Konva.Line({
+        points: [0, 25, w, 25],
+        stroke: props["rect.stroke"],
+        strokeWidth: 1,
+        listening: false
+      });
+      group.add(headerLine);
+      component.headerLine = headerLine;
+
     }
 
     addConnectorPoints()
@@ -142,7 +191,14 @@
       let offset = props["shape.select.offset"];
       component.selection.size({ width: w + offset * 2, height: h + offset * 2 });
 
-      component.text.size(s);
+      if(!component.ctx.subtext) component.text.size(s);
+      else
+      {
+        component.text.size({width: w - 20, height: 25});
+        component.textBackground.size({width: w, height: 25});
+        component.subtext.size({width: w - 20, height: h - 35});
+        component.headerLine.points([0, 25, w, 25]);
+      }
 
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }

@@ -9,7 +9,7 @@
 
   class Component
   {
-    constructor(cp0, cp1, ctx)
+    constructor(cp0, cp1, ctx, oid)
     {
       let component = this;
       component.$class = `${__package}.${__name}`;
@@ -18,6 +18,7 @@
       component.cp0 = cp0;
       component.cp1 = cp1;
       component.ctx = ctx;
+      component.oid = oid || zn.shortid();
 
       let p0 = base.pointOf(cp0);
       let p1 = base.pointOf(cp1);
@@ -35,15 +36,15 @@
         pointerWidth: 4,
         hitStrokeWidth: 20
       });
-
       component.$shape.setAttr("zn-ctx", ctx);
+      component.$shape.setAttr("zn-oid", component.oid);
       component.$shape.addName("connector-line");
 
       component.cp0.$lines = (component.cp0.$lines || []);
-      component.cp0.$lines.push(component.ctx.name);
+      component.cp0.$lines.push(component.oid);
 
       component.cp1.$lines = (component.cp1.$lines || []);
-      component.cp1.$lines.push(component.ctx.name);
+      component.cp1.$lines.push(component.oid);
 
       component.setupEventHandlers();
     }
@@ -102,8 +103,8 @@
     {
       let component = this;
       component.removePointUpdateEventHandlers();
-      component.cp0.$lines = component.cp0.$lines.filter((name) => name != component.ctx.name);
-      component.cp1.$lines = component.cp1.$lines.filter((name) => name != component.ctx.name);
+      component.cp0.$lines = component.cp0.$lines.filter((id) => id != component.oid);
+      component.cp1.$lines = component.cp1.$lines.filter((id) => id != component.oid);
       component.$shape.destroy();
     }
   }

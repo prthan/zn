@@ -11,10 +11,10 @@
   Component.handleShapeDragEnd=(shapeComponent)=>
   {
     let shape=shapeComponent.$shape;
-    Component.snap(shape);
+    if(!shape.hasName("selected")) Component.snap(shape);
     Component.fireConnectorPointUpdateEvent(shape);
 
-    if(shape.hasName("selected")) Component.snapOtherSelectedObjects(shape.getLayer(), shape);
+    //if(shape.hasName("selected")) Component.snapOtherSelectedObjects(shape.getLayer(), shape);
   }
 
   Component.handleShapeDragMove=(shapeComponent, event)=>
@@ -105,13 +105,13 @@
   Component.getConnetorLines=(shapeComponent)=>
   {
     if(!shapeComponent.connectorPoints) return [];
-    let lineNames=Object.values(shapeComponent.connectorPoints).reduce((a,c)=>
+    let lineIds=Object.values(shapeComponent.connectorPoints).reduce((a,c)=>
     {
       if(c.$shape.$lines) a.push(...c.$shape.$lines);
       return a;
     },[]);
 
-    return lineNames;
+    return lineIds;
   }
 
   Component.moveOtherSelectedObjects=(layer, shape, event)=>

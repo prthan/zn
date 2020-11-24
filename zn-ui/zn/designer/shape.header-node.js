@@ -9,15 +9,18 @@
 
   class Component
   {
-    constructor(x, y, w, h, ctx)
+    constructor(x, y, w, h, ctx, oid)
     {
       let component = this;
       component.$class = `${__package}.${__name}`;
       component.$type = "header-node";
 
       component.ctx = ctx;
+      component.oid = oid || zn.shortid();
+
       component.$shape = new Konva.Group({ x: x, y: y, width: w, height: h });
       component.$shape.setAttr("zn-ctx", ctx);
+      component.$shape.setAttr("zn-oid", component.oid);
       component.$shape.addName("rectangle");
 
       component.addHitRegion(w, h, ctx);

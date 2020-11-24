@@ -27,6 +27,7 @@
 
     "rect.fill": "#B3E5FC",
     "rect.stroke": "#039be529",
+    "rect.header.fill": "#7ecff5",
 
     "ellipse.fill": "#C5E1A5",
     "ellipse.stroke": "#8bc34a33",
@@ -42,6 +43,12 @@
     "text.color": "#376d8a",
     "text.style": "normal",
     "text.lineheight": 1.5,
+
+    "subtext.family": "Courier",
+    "subtext.size": 12,
+    "subtext.color": "#376d8a",
+    "subtext.style": "normal",
+    "subtext.lineheight": 1.5,
 
     "node.level.offset": 10,
     "node.height": 25,
