@@ -9,7 +9,7 @@
     {
       this.options = options;
       this.eventHandlers = {};
-      Dialog.instances.push(this);
+      (Dialog.instances=Dialog.instances||[]).push(this);
     }
 
     init()
@@ -135,8 +135,6 @@
       dialog.$target.removeClass("actions-none");
     }
   
-    static instances=[];
-
     static get(name)
     {
       return $(`[zn-dialog='${name}']`).get()[0].znc;
@@ -144,10 +142,10 @@
   
     static hide()
     {
-      Dialog.instances.forEach(dialog=>dialog.hide());
+      Dialog.instances && Dialog.instances.forEach(dialog=>dialog.hide());
     } 
   
-    static html=function(options)
+    static html(options)
     {
       return `
       <div class="zn-dialog-wrapper">
@@ -160,12 +158,12 @@
       </div>`;
     };
   
-    static htmlIcon=(icon)=>
+    static htmlIcon(icon)
     {
       return `<i class="icon ${icon}"></i>`
     }
   
-    static htmlAction=(item)=>
+    static htmlAction(item)
     {
       return `
       <a class="zn-action" data-action="${item.action}" data-index="${item.index}">
@@ -173,12 +171,12 @@
       </a>`;
     }
   
-    static htmlActions=(actions)=>
+    static htmlActions(actions)
     {
       return actions.reduce((a,c) => a + Dialog.htmlAction(c), '');
     }
   
-    static format=(v, t, f)=>
+    static format(v, t, f)
     {
       if(t==null || f == null || f == "") return v;
       if(t=="number") return numeral(v).format(f);
@@ -186,7 +184,7 @@
       return v;
     }
   
-    static pointInContent = function(point,content)
+    static pointInContent(point,content)
     {
       var offset=content.offset();
       return point.x >= offset.left && 
@@ -195,7 +193,7 @@
              point.y <= (offset.top+content.height());
     }
   
-    static extent = (e)=>
+    static extent(e)
     {
       let dim={};
       let $e=$(e);

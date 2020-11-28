@@ -205,7 +205,7 @@
       html += "</div>";
 
       $calendar.find(".dates").html(html);
-      $calendar.find(".header .title a").text(Calendar.months[sd.month] + " " + sd.year);
+      $calendar.find(".header .title a").text(Calendar.months()[sd.month] + " " + sd.year);
       $calendar.find(".weeks").show();
     }
     
@@ -219,16 +219,16 @@
       let sd = calendar.options.selectedDate;
 
       let html = "<div class='row'>";
-      for (let i = 0, l = Calendar.months.length; i < l; i++)
+      for (let i = 0, l = Calendar.months().length; i < l; i++)
       {
         let selected = ((markDate && i == sd.month) ? 'selected' : '');
-        html += `<a class='month ${selected}' data-month='${i}'>${Calendar.months[i]}</a>`;
+        html += `<a class='month ${selected}' data-month='${i}'>${Calendar.months()[i]}</a>`;
         if ((i + 1) % 3 == 0)
           html += "</div><div class='row'>";
       }
       html += "</div>";
       $calendar.find(".months").html(html);
-      $calendar.find(".header .title a").text(Calendar.months[sd.month] + " " + sd.year);
+      $calendar.find(".header .title a").text(Calendar.months()[sd.month] + " " + sd.year);
       $calendar.find(".months").show();
     }
     
@@ -307,11 +307,11 @@
       `
     };
   
-    static monthDays=[31,28,31,30,31,30,31,31,30,31,30,31];
-    static months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    static monthDays(){return [31,28,31,30,31,30,31,31,30,31,30,31]};
+    static months(){ return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]};
     static monthDaysFor(m, y)
     {
-      let rval=Calendar.monthDays[m];
+      let rval=Calendar.monthDays()[m];
       if(m==1)
       {
         if(y%4==0) rval++;

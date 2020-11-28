@@ -166,7 +166,7 @@
       return $(`[zn-list='${name}']`).get()[0].znc;
     }
   
-    static html=()=>
+    static html()
     {
       return `
       <div class="zn-list-items">
@@ -175,7 +175,7 @@
       `;
     };
   
-    static htmlItem=(item, index, actions)=>
+    static htmlItem(item, index, actions)
     {
       return `
       <div class="zn-list-item" data-index="${index}">
@@ -200,24 +200,24 @@
       `
     }
   
-    static htmlIcon=(icon)=>
+    static htmlIcon(icon)
     {
       return `<i class="icon ${icon}"></i>`;
     }
   
-    static htmlImg=(img)=>
+    static htmlImg(img)
     {
       return `<div class="img"><img class="img" src='${img}'/></div>`;
     }
   
-    static htmlActions=(actions)=>
+    static htmlActions(actions)
     {
       return actions.reduce((a, item)=> a + `
         <a href='#action' class="zn-action" data-action='${item.action}' title='${item.label}'><i class="${item.icon}"></i></a>
       `, "");
     }
   
-    static trackScrollToEnd=(eh, $marker, threshold, container)=>
+    static trackScrollToEnd(eh, $marker, threshold, container)
     {
       let $scrollContainer=$(window);
       let containerType="window";
@@ -244,17 +244,6 @@
     }
 
   }
-
-
-
-
-
-  
-
-
-
- 
-
 
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = List;
 

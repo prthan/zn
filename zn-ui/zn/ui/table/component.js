@@ -750,14 +750,14 @@
       `;
     }  
 
-    static htmlCell=(index, value, w)=>
+    static htmlCell(index, value, w)
     {
       let style = '';
       if(w) style=`width: ${w}px; flex-grow: 0; flex-basis: unset;`
       return `<div class="zn-table-cell col-${index}" data-col='${index}' style='${style}' title="${value ? value : ''}">${value ? value : '-'}</div>`
     }
 
-    static htmlHeaderCell=(col)=>
+    static htmlHeaderCell(col)
     {
       let style = '';
       if(col.width) style=`width: ${col.width}px; flex-grow: 0; flex-basis: unset;`;
@@ -777,7 +777,7 @@
       </div>`
     }
   
-    static htmlFixedHeader=(cols)=>
+    static htmlFixedHeader(cols)
     {
       let h=
       `<div class="zn-table-row">
@@ -789,7 +789,7 @@
        return h;
     }
   
-    static htmlScrollableHeader=(cols)=>
+    static htmlScrollableHeader(cols)
     {
       let h=
       `<div class="zn-table-row">
@@ -799,22 +799,22 @@
       return h;
     }
   
-    static htmlActionsMenu=(actions)=>
+    static htmlActionsMenu(actions)
     {
       return actions.reduce((a, item)=> a + `<a class="zn-popup-menu-item" zn-row-action='${item.action}' title='${item.label}'><i class="${item.icon}"></i><span class="zn-popup-menu-item-text">${item.label}</span></a>`, "");
     }
   
-    static htmlRowAction=(a)=>
+    static htmlRowAction(a)
     {
       return `<a href='#action' class="zn-row-action" zn-row-action='${a.action}' title='${a.label}'><i class="${a.icon}"></i></a>`;
     }
   
-    static htmlMultiSelect=()=>
+    static htmlMultiSelect()
     {
       return `<a href='#select' class='checkbox' data-checked='N'><i class="far fa-square unchecked"></i><i class="fas fa-check-square checked"></i></a>`;
     }
   
-    static htmlContentRow=(row, rowIndex, fixedcols, scrollablecols, rowActionsHTML, multiSelectHTML)=>
+    static htmlContentRow(row, rowIndex, fixedcols, scrollablecols, rowActionsHTML, multiSelectHTML)
     {
       let rc=(rowIndex%2==0)?'odd':'even';
   
@@ -834,7 +834,7 @@
       return {fixed: fixedh, scrollable: scrollableh};
     }
   
-    static htmlContent=(rows, fixedcols, scrollablecols, actions, multiselect)=>
+    static htmlContent(rows, fixedcols, scrollablecols, actions, multiselect)
     {
       let rowActionsHTML=null;
       if(actions && actions.length>0)
@@ -859,7 +859,7 @@
       return content;
     }
   
-    static htmlFilterLovItem=(item, checked)=>
+    static htmlFilterLovItem(item, checked)
     {
       return `
       <div class="item">
@@ -868,12 +868,12 @@
       </div>`
     }
   
-    static htmlFilterLovItems=(items, selectedValues)=>
+    static htmlFilterLovItems(items, selectedValues)
     {
       return items.reduce((a,c) => a + Table.htmlFilterLovItem(c, selectedValues ? (selectedValues.includes(c) ? 'Y':'N'):'Y'), '');
     }
   
-    static htmlFilterPopup=(label, items, hasBlanks, filterstate)=>
+    static htmlFilterPopup(label, items, hasBlanks, filterstate)
     {
       return `
       <div class="search-input">
@@ -903,12 +903,12 @@
       </div>`;
     }
   
-    static htmlPage=(pageNumber, selectedPage)=>
+    static htmlPage(pageNumber, selectedPage)
     {
       return `<a class="zn-table-page-number ${pageNumber==selectedPage?'selected':''}" href="#page-${pageNumber}" data-page="${pageNumber}">${pageNumber}</a>`;
     }
   
-    static htmlPages=(pageNumbers, selectedPage)=>
+    static htmlPages(pageNumbers, selectedPage)
     {
       return `
       <a class="zn-table-page-number page-nav" href="#previous-page" data-page="previous"><i class="fas fa-arrow-left"></i></a>
@@ -917,22 +917,22 @@
       `;
     }
   
-    static htmlIcon=(icon)=>
+    static htmlIcon(icon)
     {
       return `<i class="icon ${icon}"></i>`
     }
   
-    static htmlTableAction=(item)=>
+    static htmlTableAction(item)
     {
       return `<a class="zn-table-action" data-action="${item.action}">${item.icon ? Table.htmlIcon(item.icon) : ''}<span class="text">${item.label || ''}</span></a>`;
     }
   
-    static htmlTableActions=(actions)=>
+    static htmlTableActions(actions)
     {
       return actions.reduce((a,c) => a + Table.htmlTableAction(c), '');
     }
   
-    static format=(v, t, f)=>
+    static format(v, t, f)
     {
       if(t==null || f == null || f == "") return v;
       if(t=="number") return numeral(v).format(f);
@@ -941,7 +941,7 @@
   
     }
     
-    static pointInContent = function(point,content)
+    static pointInContent(point,content)
     {
       var offset=content.offset();
       return point.x >= offset.left && 

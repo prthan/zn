@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auth</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo/icon.png" />
+    <link rel="stylesheet" type="text/css" href="../app.css"/>
+    <link rel="stylesheet" type="text/css" href="module/index.css"/>
+    <link rel="stylesheet" type="text/css" href="login/view.css"/>
+    <link rel="stylesheet" type="text/css" href="logout/view.css"/>
+    <link rel="stylesheet" type="text/css" href="welcome/view.css"/>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  </head>
+  <body>
+    <script src="../app.js"></script>
+    <script src="module/index.js"></script>
+    <script src="login/view.js"></script>
+    <script src="logout/view.js"></script>
+    <script src="welcome/view.js"></script>
+
+    <script>zn.env={"ctx":"/","api":"/api","images":"/assets/images"};zn.defn={"routes":{"/login":{"view":"login","default":true},"/login/@user/@id":{"view":"login"},"/logout":{"view":"logout"},"/welcome":{"view":"welcome"},"/welcome/@uid/@name":{"view":"welcome"},"/welcome/*":{"view":"welcome"}},"views":{"login":{"class":"diagrams.auth.view.Login","template":"login/view.html"},"logout":{"class":"diagrams.auth.view.Logout","template":"logout/view.html"},"welcome":{"class":"diagrams.auth.view.Welcome","template":"welcome/view.html"}},"name":"auth","class":"diagrams.auth.Module","title":"Auth","template":"module/layout.html","data":{"LOVS":{"DOCUMENT-TYPES":[{"value":"DESIGN","label":"Design Document"},{"value":"CODE","label":"Coding Standards"},{"value":"CHECKLIST","label":"Checklist"}]},"LOGIN_SUCCESS":"Logged in successfully","LOGIN_FAILURE":"Unable to login with your credentials"}};</script>
+
+    <div class="zn-module"></div>
+  </body>
+</html>

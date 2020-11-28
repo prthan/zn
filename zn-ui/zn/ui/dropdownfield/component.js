@@ -178,18 +178,18 @@
       return `<i class="icon ${icon}"></i>`
     }
   
-    static htmlLabel=(label)=>
+    static htmlLabel(label)
     {
       return `<div class="zn-dropdownfield-label">${label}</div>`
     }
   
-    static htmlDropdownMenu=(items)=>
+    static htmlDropdownMenu(items)
     {
       if(!items) return "";
       return items.reduce((a, item)=> a + `<a class="zn-popup-menu-item" zn-value='${item.value}' title='${item.label}'><span class="zn-popup-menu-item-text">${item.label}</span></a>`, "");
     }
   
-    static pointInContent = function(point,content)
+    static pointInContent(point,content)
     {
       var offset=content.offset();
       return point.x >= offset.left && 
@@ -198,7 +198,7 @@
              point.y <= (offset.top+content.height());
     }
   
-    static itemForValue=(items, value)=>
+    static itemForValue(items, value)
     {
       if(!items) return null;
       

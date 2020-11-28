@@ -9,7 +9,7 @@
     {
       this.options = options;
       this.eventHandlers = {};
-      Popup.instances.push(this);
+      (Popup.instances=Popup.instances||[]).push(this);
     }
 
     init()
@@ -128,24 +128,22 @@
       popup.$target.attr("zn-popup", popup.options.name);
     }
 
-    static instances=[];
-
     static get(name)
     {
       return $(`[zn-popup='${name}']`).get()[0].znc;
     }
 
-    static hide=()=>
+    static hide()
     {
-      Popup.instances.forEach(popup=>popup.hide());
+      Popup.instances && Popup.instances.forEach(popup=>popup.hide());
     } 
 
-    static htmlPopup=function()
+    static htmlPopup()
     {
       return ``;
     };
   
-    static pointInContent = function(point,content)
+    static pointInContent(point,content)
     {
       var offset=content.offset();
       return point.x >= offset.left && 
@@ -154,7 +152,7 @@
              point.y <= (offset.top+content.height());
     }
   
-    static extent = (e)=>
+    static extent(e)
     {
       let dim={};
       let $e=$(e);

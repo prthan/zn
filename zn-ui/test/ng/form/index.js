@@ -1,7 +1,7 @@
 $(()=>
 {
   
-  let $ctrl=$("[ng-controller='ctrl']");
+  let $ctrl=$("[controller='ctrl']");
 
   let module=angular.module("test-form", []);
   module.controller("ctrl", [ "$scope", function($scope){}]);

@@ -29,7 +29,13 @@
     return rval.join("");
   }
 
+  Component.init=()=>
+  {
+    console.log('zn initialized', zn);
+  }
+
   window.zn=Component;
 
+  $(()=>zn.init());
 })(window);
 

@@ -1,0 +1,41 @@
+{
+  "name": "zn-diagrams",
+  "version": "0.1",
+  "title": "Diagrams",
+
+  "scripts":
+  [
+    "app/index.js"
+  ],
+
+  "styles":
+  [
+    "app/font-fa.css",
+    "app/index.css"
+  ],
+
+  "imports":
+  [
+    "../zn/external-lib.json",
+    "../zn/zn-lib.json",
+    "../zn-ui/zn-ui-lib.json"
+  ],
+
+  "modules": ["auth", "home"],
+  
+  "environments":
+  {
+    "dev":
+    {
+      "ctx": "/",
+      "api": "/api",
+      "images": "/assets/images"
+    },
+    "prod":
+    {
+      "ctx": "/diagram",
+      "api": "/diagram/api",
+      "images": "/diagram/assets/images"
+    }
+  }
+}

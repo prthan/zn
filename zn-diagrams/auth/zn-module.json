@@ -1,0 +1,71 @@
+{
+  "name"         : "auth",
+  "version"      : "0.1",
+  "title"        : "Auth",
+  "template"     : "module/layout.html",
+  "class"        : "diagrams.auth.Module",
+  "script"       : "module/index.js",
+  "style"        : "module/index.css",
+  
+  "includes":
+  {
+    "scripts"    : ["../app.js"],
+    "styles"     : ["../app.css"]
+  },
+  
+  "views": 
+  {
+    "login":
+    {
+      "class"    : "diagrams.auth.view.Login",
+      "template" : "login/view.html",
+      "script"   : "login/view.js",
+      "style"    : "login/view.css"
+    },
+    "logout":
+    {
+      "class"    : "diagrams.auth.view.Logout",
+      "template" : "logout/view.html",
+      "script"   : "logout/view.js",
+      "style"    : "logout/view.css"
+    },
+    "welcome":
+    {
+      "class"    : "diagrams.auth.view.Welcome",
+      "template" : "welcome/view.html",
+      "script"   : "welcome/view.js",
+      "style"    : "welcome/view.css"
+    }
+  },
+
+  "routes":
+  {
+    "/login"     : {"view": "login", "default": true},
+    "/login/@user/@id"     : {"view": "login"},
+    "/logout"    : {"view": "logout"},
+    "/welcome"   : {"view": "welcome"},
+    "/welcome/@uid/@name": {"view": "welcome"},
+    "/welcome/*"  : {"view": "welcome"}
+  },
+
+  "fragments":
+  [
+    "login/form.html"
+  ],
+
+  "data":
+  {
+    "LOVS":
+    {
+      "DOCUMENT-TYPES":
+      [
+        {"value": "DESIGN", "label": "Design Document"},
+        {"value": "CODE", "label": "Coding Standards"},
+        {"value": "CHECKLIST", "label": "Checklist"}
+      ]
+    },
+    "LOGIN_SUCCESS": "Logged in successfully",
+    "LOGIN_FAILURE": "Unable to login with your credentials"
+  }
+
+}

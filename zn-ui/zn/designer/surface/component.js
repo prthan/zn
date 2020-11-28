@@ -497,7 +497,7 @@
       return $(`[zn-surface='${name}']`).get()[0].znc;
     }
     
-    static html=function()
+    static html()
     {
       return `<div class="zn-surface-stage" tabindex="1"></div>`;
     }

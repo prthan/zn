@@ -1,0 +1,19 @@
+{
+  "name": "external",
+  "version": "0.1",
+
+  "scripts":
+  [
+    "angular.js",
+    "angular-sanitize.js",
+    "fuse.js",
+    "jquery.js",
+    "konva.js",
+    "moment.js",
+    "numeral.js"
+  ],
+
+  "styles":
+  [
+  ]
+}

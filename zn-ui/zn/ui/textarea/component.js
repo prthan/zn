@@ -116,21 +116,12 @@
       `;
     };
   
-    static htmlLabel=(label)=>
+    static htmlLabel(label)
     {
       return `<div class="zn-textarea-label">${label}</div>`
     }
   
   }
-
-
-
-
-
-
-
-
-
 
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = TextArea;
 

@@ -209,7 +209,7 @@
       return v;
     }
   
-    static pointInContent = function(point,content)
+    static pointInContent(point,content)
     {
       var offset=content.offset();
       return point.x >= offset.left && 

@@ -1,0 +1,17 @@
+{
+  "name": "zn",
+  "version": "0.1",
+
+  "scripts":
+  [
+    "zn/index.js",
+    "zn/utils.js",
+    "zn/routes.js",
+    "zn/module.js"
+  ],
+
+  "styles":
+  [
+    "zn/module.css"
+  ]
+}

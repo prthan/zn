@@ -1,7 +1,22 @@
 <html>
   <body>
     <script>
-      Test
+
+      let test=async()=>
+      {
+        let p=new Promise((res, rej)=>
+        {
+          setTimeout(()=>
+          {
+            res(124);
+          }, 5000);
+        })
+        await p;
+        console.log(p);
+      };
+
+      test();
+
     </script>
   </body>
 </html>
