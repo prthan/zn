@@ -1,0 +1,40 @@
+{
+  "name"         : "diagrams",
+  "version"      : "0.1",
+  "title"        : "Diagrams Editor",
+  "template"     : "module/layout.html",
+  "class"        : "diagrams.Module",
+  "script"       : "module/index.js",
+  "style"        : "module/index.css",
+  
+  "includes":
+  {
+    "scripts"    : ["../app.js"],
+    "styles"     : ["../app.css"]
+  },
+  
+  "views": 
+  {
+    "editor":
+    {
+      "class"    : "diagrams.view.Editor",
+      "template" : "editor/view.html",
+      "script"   : "editor/view.js",
+      "style"    : "editor/view.css"
+    }
+  },
+
+  "routes":
+  {
+    "/editor"                : {"view": "editor", "default": true}
+  },
+
+  "fragments":
+  [
+  ],
+
+  "data":
+  {
+  }
+
+}

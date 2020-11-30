@@ -2169,6 +2169,13 @@
 }
 /*[merge-end] <== zn/ui/textfield/component.css*/
 
+/*[merge-start] ==> zn/ui/draggable/component.css*/
+.zn-draggable.on-drag
+{
+  
+}
+/*[merge-end] <== zn/ui/draggable/component.css*/
+
 /*[merge-start] ==> zn/designer/surface/component.css*/
 .zn-surface
 {

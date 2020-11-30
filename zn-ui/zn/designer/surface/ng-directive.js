@@ -27,6 +27,7 @@
     surface.on("obj-select", (evt)=>scope.onobjselect({$event: evt}));
     surface.on("selection-set-change", (evt)=>scope.onselectionchange({$event: evt}));
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
+    surface.on("draw-object", (evt)=>scope.ondrawobj({$event: evt}));
     surface.on("delete", (evt)=>scope.ondelete({$event: evt}));
 
     surface.init();
@@ -46,8 +47,9 @@
         onrelselect  : "&",
         onobjselect  : "&",
         onselectionchange  : "&",
-        onposition  : "&",
-        ondelete  : "&",
+        onposition   : "&",
+        ondrawobj    : "&",
+        ondelete     : "&",
       },
       restrict: "A",
       template: "",

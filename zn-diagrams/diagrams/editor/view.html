@@ -1,0 +1,21 @@
+<div zn-surface name="surface" class="surface"
+onposition="view.onSurfacePosition($event)"
+onobjselect="view.onObjectSelect($event)"
+onrelselect="view.onRelSelect($event)"
+onrelcreate="view.onRelCreate($event)"
+onselectionchange="view.onSelectionChange($event)"
+ondelete="view.onDelete($event)"
+></div>
+<div class="toolbox">
+  <div class="handle" zn-draggable target=".toolbox"><i class="fas fa-ellipsis-h"></i></div>
+  <div class="tool-actions">
+    <a href="#{{item.descr}}" class="action" ng-repeat="item in view.toolActions" ng-click="view.onToolAction($event, item.action)">
+      <img ng-src="{{env.images}}/icons/v2/{{item.icon}}"><span class="text">{{item.text}}</span>
+    </a>
+  </div>
+  <div class="file-actions">
+    <a href="#export-as-png" class="action"><img ng-src="{{env.images}}/icons/v2/img-export.png"><span class="text">Export PNG</span></a>
+    <a href="#import-drawing" class="action"><img ng-src="{{env.images}}/icons/v2/import.png"><span class="text">Import Drawing</span></a>
+    <a href="#export-drawing" class="action"><img ng-src="{{env.images}}/icons/v2/export.png"><span class="text">Export Drawing</span></a>
+  </div>
+</div>

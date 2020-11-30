@@ -3,12 +3,11 @@
   let __package = "zn";
   let __name = "Routes";
 
-  class Routes
+  class Routes extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
       this.init();
     }
 
@@ -21,20 +20,6 @@
         if(routes.options[routeUrl].default) routes.default=routeUrl;
       })
       routes.setupEventHandlers();
-    }
-
-    on(eventName, eventHandler)
-    {
-      let module = this;
-      (module.eventHandlers[eventName] = module.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let module = this;
-      let evt = event || {};
-      evt.source = module;
-      (module.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
     }
 
     parseRouteUrl(routeUrl)

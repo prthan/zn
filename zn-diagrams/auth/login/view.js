@@ -3,12 +3,11 @@
   let __package = "diagrams.auth.view";
   let __name = "Login";
 
-  class View
+  class View extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
       this.module=options.module;
       this.routeValues=options.routeValues;
 
@@ -24,20 +23,6 @@
       view.setupEventHandlers();
     }
     
-    on(eventName, eventHandler)
-    {
-      let view = this;
-      (view.eventHandlers[eventName] = view.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let view = this;
-      let evt = event || {};
-      evt.source = view;
-      (view.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
-    }
-
     setupUI()
     {
       let view=this;
@@ -53,6 +38,7 @@
       let view=this;
       view.state=(Math.round(Math.random()*10000)%2)==0 ? "Y":"N";
     }
+
   }
 
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = View;

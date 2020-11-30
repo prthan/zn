@@ -1,8 +1,8 @@
 (function(window)
 {
-  let Component={}
+  let zn={}
 
-  Component.findClass=(name)=>
+  zn.findClass=(name)=>
   {
     let obj=window;
     name.split(".").forEach((part)=>
@@ -12,7 +12,7 @@
     return obj;
   }
 
-  Component.shortid=()=>
+  zn.shortid=()=>
   {
     let rval=[];
     let a=Array.from(Math.random().toString(36).substr(2));
@@ -29,7 +29,10 @@
     return rval.join("");
   }
 
-  window.zn=Component;
+  zn.ng={};
+  zn.ng.directives={};
+  
+  window.zn=zn;
   
 })(window);
 

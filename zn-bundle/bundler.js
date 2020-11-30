@@ -234,7 +234,7 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
 
   let appDefnFile=path.dirname(_defnFile)+"/../zn-app.json";
   let appDefn=utils.jsonProps(appDefnFile);
-  ctx.env=JSON.stringify(appDefn.environments[env] || "");
+  ctx.env=JSON.stringify({...appDefn.environments[env]});
   ctx.title=defn.title;
   ctx.assets="../assets";
 

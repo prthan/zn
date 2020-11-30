@@ -27,14 +27,11 @@ body
 .calendars
 {
   padding: 20px 0px 0px 0px;
-  display: flex;
-  align-items: flex-start;
 }
 
 .calendars .calendar
 {
-  flex-grow: 0;
-  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .buttons
@@ -74,3 +71,21 @@ body
 
 .pr-20 {padding-right: 20px}
 .pb-20 {padding-bottom: 20px}
+
+.draggable-calendar 
+{
+  position: absolute;
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+.draggable-calendar .zn-calendar
+{
+  border: none
+}
+
+.draggable-calendar .drag-handle
+{
+  height: 5px;
+  background-color: rgba(0,0,0,.15);
+  cursor: move;
+}

@@ -29,13 +29,8 @@
     {
       "ctx": "/",
       "api": "/api",
+      "assets": "/assets",
       "images": "/assets/images"
-    },
-    "prod":
-    {
-      "ctx": "/diagram",
-      "api": "/diagram/api",
-      "images": "/diagram/assets/images"
     }
   }
 }

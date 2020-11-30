@@ -48,6 +48,7 @@
     <script src="../../../zn/ui/popup/ng-directive.js"></script>
     <script src="../../../zn/ui/dialog/component.js"></script>
     <script src="../../../zn/ui/dialog/ng-directive.js"></script>
+    <script src="../../../zn/ui/draggable/ng-directive.js"></script>
     <script src="index.js"></script>
 
     <div controller="ctrl">
@@ -78,9 +79,15 @@
       </div>
       
       <div class="calendars">
-        <div zn-calendar date="model.form.startDate" class="calendar calendar-1"></div>
-        <div zn-calendar date="model.form.endDate" class="calendar calendar-2"></div>
+        <div zn-calendar date="model.form.endDate" class="calendar calendar-1"></div>
       </div>      
+
+      <div class="draggable-calendar">
+        <div zn-draggable target=".draggable-calendar" class="drag-handle">&nbsp;</div>
+        <div zn-calendar date="model.form.startDate" class="calendar calendar-2"></div>
+      </div>
+
+      <!--div class="draggable"><div zn-draggable class="drag-handle" ondragstart="dragStart($event)" ondragmove="dragMove($event)" ondragend="dragEnd($event)">&nbsp;</div></div-->
 
       <div zn-popup name="popup-cal" source=".button-6" showat="right">
         <div zn-calendar name="calendar-3" class="calendar calendar-3" ondateselect="onDateSelect($event)"></div>

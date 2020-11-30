@@ -3,31 +3,14 @@
   let __package = "zn";
   let __name = "Module";
 
-  class Module
+  class Module extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
       this.views={}
       this.routeView={}
       this.data=zn.defn.data;
-    }
-
-    init() {}
-    
-    on(eventName, eventHandler)
-    {
-      let module = this;
-      (module.eventHandlers[eventName] = module.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let module = this;
-      let evt = event || {};
-      evt.source = module;
-      (module.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
     }
 
     setupUI()
@@ -93,7 +76,7 @@
       ngElement.addClass("ng-cloak");
       ng.module=angular.module(ng.moduleName, []);
       ng.module.controller(ng.ctrlName, ["$scope", function($scope){}]);
-      if(zn.ng && zn.ng.directives) zn.ng.directives.forEach((directive)=>ng.module.directive(directive.tag, directive.factory));
+      if(zn.ng && zn.ng.directives) Object.keys(zn.ng.directives).forEach((name)=>ng.module.directive(name, zn.ng.directives[name]));
       angular.bootstrap(ngElement,[ng.moduleName]);
       ng.$scope = angular.element(ngElement).scope();
 
@@ -175,12 +158,23 @@
       return new Promise(impl);
     }
 
+    unloadCurrentView()
+    {
+      let module=this;
+      if(!module.routeView) return;
+      if(module.routeView.destroy) module.routeView.destroy();
+
+      delete module.routeView;
+    }
+
     loadViewForRoute(route)
     {
       let module=this;
       
       let impl=async($res, $rej)=>
       {
+        module.unloadCurrentView();
+
         let viewName=route.view;
         let $route=$("[zn-route]");
         $route.attr("zn-view", viewName);

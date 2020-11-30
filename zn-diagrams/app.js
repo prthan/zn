@@ -75107,9 +75107,9 @@ return jQuery;
 }));
 /*[merge-end] <== external/numeral.js*//*[merge-start] ==> zn/index.js*/(function(window)
 {
-  let Component={}
+  let zn={}
 
-  Component.findClass=(name)=>
+  zn.findClass=(name)=>
   {
     let obj=window;
     name.split(".").forEach((part)=>
@@ -75119,7 +75119,7 @@ return jQuery;
     return obj;
   }
 
-  Component.shortid=()=>
+  zn.shortid=()=>
   {
     let rval=[];
     let a=Array.from(Math.random().toString(36).substr(2));
@@ -75136,11 +75136,66 @@ return jQuery;
     return rval.join("");
   }
 
-  window.zn=Component;
+  zn.ng={};
+  zn.ng.directives={};
+  
+  window.zn=zn;
   
 })(window);
 
-/*[merge-end] <== zn/index.js*//*[merge-start] ==> zn/utils.js*/(function(window)
+/*[merge-end] <== zn/index.js*//*[merge-start] ==> zn/base.js*/(function(window)
+{
+  let __package = "zn";
+  let __name = "Base";
+
+  class Base
+  {
+    constructor(options)
+    {
+      this.options = options;
+      this.eventHandlers = {};
+    }
+
+    init() {}
+    destroy() {}
+
+    on(eventName, eventHandler)
+    {
+      let module = this;
+      let parts=eventName.split(".");
+      let ename=parts.shift();
+      let handlerId=parts.join(".") || zn.shortid();
+      (module.eventHandlers[ename] = module.eventHandlers[ename] || {})[handlerId]=eventHandler;
+      
+      return handlerId;
+    }
+    
+    off(eventName)
+    {
+      let module=this;
+      let parts=eventName.split(".");
+      let ename=parts.shift();
+      let handlerId=parts.join(".");
+
+      let handlers=module.eventHandlers[ename];
+      if(handlers[handlerId]) delete handlers[handlerId];
+    }
+
+    fireEvent(eventName, event)
+    {
+      let module = this;
+      let evt = event || {};
+      evt.source = module;
+      Object.values((module.eventHandlers[eventName] || {})).forEach((eh) => eh(evt));
+    }
+
+  }
+
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = Base;
+
+})(window);
+
+/*[merge-end] <== zn/base.js*//*[merge-start] ==> zn/utils.js*/(function(window)
 {
   let __package = "zn";
   let __name = "utils";
@@ -75256,12 +75311,11 @@ return jQuery;
   let __package = "zn";
   let __name = "Routes";
 
-  class Routes
+  class Routes extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
       this.init();
     }
 
@@ -75274,20 +75328,6 @@ return jQuery;
         if(routes.options[routeUrl].default) routes.default=routeUrl;
       })
       routes.setupEventHandlers();
-    }
-
-    on(eventName, eventHandler)
-    {
-      let module = this;
-      (module.eventHandlers[eventName] = module.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let module = this;
-      let evt = event || {};
-      evt.source = module;
-      (module.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
     }
 
     parseRouteUrl(routeUrl)
@@ -75380,31 +75420,14 @@ return jQuery;
   let __package = "zn";
   let __name = "Module";
 
-  class Module
+  class Module extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
       this.views={}
       this.routeView={}
       this.data=zn.defn.data;
-    }
-
-    init() {}
-    
-    on(eventName, eventHandler)
-    {
-      let module = this;
-      (module.eventHandlers[eventName] = module.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let module = this;
-      let evt = event || {};
-      evt.source = module;
-      (module.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
     }
 
     setupUI()
@@ -75470,7 +75493,7 @@ return jQuery;
       ngElement.addClass("ng-cloak");
       ng.module=angular.module(ng.moduleName, []);
       ng.module.controller(ng.ctrlName, ["$scope", function($scope){}]);
-      if(zn.ng && zn.ng.directives) zn.ng.directives.forEach((directive)=>ng.module.directive(directive.tag, directive.factory));
+      if(zn.ng && zn.ng.directives) Object.keys(zn.ng.directives).forEach((name)=>ng.module.directive(name, zn.ng.directives[name]));
       angular.bootstrap(ngElement,[ng.moduleName]);
       ng.$scope = angular.element(ngElement).scope();
 
@@ -75552,12 +75575,23 @@ return jQuery;
       return new Promise(impl);
     }
 
+    unloadCurrentView()
+    {
+      let module=this;
+      if(!module.routeView) return;
+      if(module.routeView.destroy) module.routeView.destroy();
+
+      delete module.routeView;
+    }
+
     loadViewForRoute(route)
     {
       let module=this;
       
       let impl=async($res, $rej)=>
       {
+        module.unloadCurrentView();
+
         let viewName=route.view;
         let $route=$("[zn-route]");
         $route.attr("zn-view", viewName);
@@ -79514,7 +79548,113 @@ return jQuery;
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 
-/*[merge-end] <== zn/ui/textfield/ng-directive.js*//*[merge-start] ==> zn/designer/properties.js*/(function(window)
+/*[merge-end] <== zn/ui/textfield/ng-directive.js*//*[merge-start] ==> zn/ui/draggable/ng-directive.js*/(function(window)
+{
+  let __package = "zn.ui.components.ng";
+  let __name = "draggable";
+
+  let directive={};
+  
+  directive.html=function()
+  {
+    return "<div></div>";
+  };
+
+  directive.linkFn=function(scope, element, attrs)
+  {
+    let $target=$(element);
+    let $updateTarget=$target;
+    if(scope.target!=null) $updateTarget=$(scope.target);
+
+    $target.addClass("zn-draggable");
+    $target.on("mousedown", (evt)=>
+    {
+      evt.preventDefault();
+      let dragState=
+      {
+        anchor: {x: evt.pageX, y: evt.pageY},
+        source: $target,
+        position: $updateTarget.position(),
+        $updateTarget: $updateTarget
+      };
+      $target.get()[0].dragState=dragState;
+      $target.addClass("on-drag");
+
+      scope.ondragstart({$event: {name: "dragstart", source: dragState.source, anchor: dragState.anchor}});
+      directive.setupDragTrackingEventHandlers($target, scope);
+    });
+  }
+
+  directive.setupDragTrackingEventHandlers=function($target, scope)
+  {
+    $('body').on("mousemove.dragtracking", function(evt)
+    {
+      evt.preventDefault();
+      let dragState=$target.get()[0].dragState;
+      if(dragState==null) return;
+      
+      var dx=evt.pageX-dragState.anchor.x;
+      var dy=evt.pageY-dragState.anchor.y;
+      dragState.by={x: dx, y: dy};
+      
+      scope.ondragmove({$event: {name: "dragmove", source: dragState.source, from: dragState.anchor, by: dragState.by}});
+      if(scope.tracker!="true") directive.updateTarget($target);
+    });
+    
+    $('body').on("mouseup.dragtracking", function(evt)
+    {
+      evt.preventDefault();
+      let dragState=$target.get()[0].dragState;
+      if(dragState==null) return;
+      
+      var dx=evt.pageX-dragState.anchor.x;
+      var dy=evt.pageY-dragState.anchor.y;
+      dragState.by={x: dx, y: dy};
+
+      scope.ondragend({$event: {name: "dragend", source: dragState.source, from: dragState.anchor, by: dragState.by}});
+      $target.removeClass("on-drag");
+
+      $('body').off("mousemove.dragtracking");
+      $('body').off("mouseup.dragtracking");
+      if(scope.tracker!="true") directive.updateTarget($target);
+    });
+  }
+
+  directive.updateTarget=function($target)
+  {
+    let dragState=$target.get()[0].dragState;
+    let x=dragState.position.left + dragState.by.x;
+    let y=dragState.position.top + dragState.by.y;
+
+    dragState.$updateTarget.css("left", x).css("top", y);
+  }
+
+  directive.tag="znDraggable";
+  
+  directive.factory=function()
+  {
+    return {
+      scope: 
+      {
+        name        : "@",
+        target      : "@",
+        tracker     : "@",
+        ondragstart : "&",
+        ondragend   : "&",
+        ondragmove  : "&"
+      },
+      restrict: "A",
+      template: "",
+      replace : true,
+      link: directive.linkFn
+    };
+  }
+
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
+
+})(window);
+
+/*[merge-end] <== zn/ui/draggable/ng-directive.js*//*[merge-start] ==> zn/designer/properties.js*/(function(window)
 {
   let __package  = "zn.designer";
   let __name     = "Properties";
@@ -82530,6 +82670,7 @@ return jQuery;
     surface.on("obj-select", (evt)=>scope.onobjselect({$event: evt}));
     surface.on("selection-set-change", (evt)=>scope.onselectionchange({$event: evt}));
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
+    surface.on("draw-object", (evt)=>scope.ondrawobj({$event: evt}));
     surface.on("delete", (evt)=>scope.ondelete({$event: evt}));
 
     surface.init();
@@ -82549,8 +82690,9 @@ return jQuery;
         onrelselect  : "&",
         onobjselect  : "&",
         onselectionchange  : "&",
-        onposition  : "&",
-        ondelete  : "&",
+        onposition   : "&",
+        ondrawobj    : "&",
+        ondelete     : "&",
       },
       restrict: "A",
       template: "",
@@ -82563,4 +82705,37 @@ return jQuery;
   
 })(window);
 
-/*[merge-end] <== zn/designer/surface/ng-directive.js*//*[merge-start] ==> app/index.js*/let t={};/*[merge-end] <== app/index.js*/
+/*[merge-end] <== zn/designer/surface/ng-directive.js*//*[merge-start] ==> app/index.js*/(function(window)
+{
+  let __package = "diagrams";
+  let __name = "Application";
+
+  class Application
+  {
+    static addDirectives()
+    {
+      zn.ng.directives[zn.ui.components.ng.textfield.tag]=zn.ui.components.ng.textfield.factory;
+      zn.ng.directives[zn.ui.components.ng.textarea.tag]=zn.ui.components.ng.textarea.factory;
+      zn.ng.directives[zn.ui.components.ng.button.tag]=zn.ui.components.ng.button.factory;
+      zn.ng.directives[zn.ui.components.ng.calendar.tag]=zn.ui.components.ng.calendar.factory;
+      zn.ng.directives[zn.ui.components.ng.checkboxfield.tag]=zn.ui.components.ng.checkboxfield.factory;
+      zn.ng.directives[zn.ui.components.ng.datefield.tag]=zn.ui.components.ng.datefield.factory;
+      zn.ng.directives[zn.ui.components.ng.dropdownfield.tag]=zn.ui.components.ng.dropdownfield.factory;
+      zn.ng.directives[zn.ui.components.ng.radiogroup.tag]=zn.ui.components.ng.radiogroup.factory;
+      zn.ng.directives[zn.ui.components.ng.popup.tag]=zn.ui.components.ng.popup.factory;
+      zn.ng.directives[zn.ui.components.ng.dialog.tag]=zn.ui.components.ng.dialog.factory;
+      zn.ng.directives[zn.ui.components.ng.list.tag]=zn.ui.components.ng.list.factory;
+      zn.ng.directives[zn.ui.components.ng.table.tag]=zn.ui.components.ng.table.factory;
+      zn.ng.directives[zn.ui.components.ng.draggable.tag]=zn.ui.components.ng.draggable.factory;
+      zn.ng.directives[zn.designer.ng.surface.tag]=zn.designer.ng.surface.factory;
+      
+    }
+  }
+
+  Application.addDirectives();
+
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = Application;
+
+})(window);
+
+/*[merge-end] <== app/index.js*/

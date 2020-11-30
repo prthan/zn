@@ -3,30 +3,15 @@
   let __package = "diagrams.auth.view";
   let __name = "Logout";
 
-  class View
+  class View extends zn.Base
   {
     constructor(options)
     {
-      this.options = options;
-      this.eventHandlers = {};
+      super(options);
     }
 
     init() {}
     
-    on(eventName, eventHandler)
-    {
-      let view = this;
-      (view.eventHandlers[eventName] = view.eventHandlers[eventName] || []).push(eventHandler);
-    }
-    
-    fireEvent(eventName, event)
-    {
-      let view = this;
-      let evt = event || {};
-      evt.source = view;
-      (view.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
-    }
-
     setupUI()
     {
       let view=this;

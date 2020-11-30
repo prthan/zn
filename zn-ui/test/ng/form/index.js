@@ -15,6 +15,7 @@ $(()=>
   module.directive(zn.ui.components.ng.radiogroup.tag, zn.ui.components.ng.radiogroup.factory);
   module.directive(zn.ui.components.ng.popup.tag, zn.ui.components.ng.popup.factory);
   module.directive(zn.ui.components.ng.dialog.tag, zn.ui.components.ng.dialog.factory);
+  module.directive(zn.ui.components.ng.draggable.tag, zn.ui.components.ng.draggable.factory);
 
   angular.bootstrap($ctrl,["test-form"]);
 
@@ -143,6 +144,21 @@ $(()=>
   {
     console.log(model.editContact);
     $event.source.hide();
+  }
+
+  $scope.dragStart=function($event)
+  {
+    //console.log('ds', $event);
+  }
+
+  $scope.dragMove=function($event)
+  {
+    //console.log('dm', $event);
+  }
+
+  $scope.dragEnd=function($event)
+  {
+    //console.log('de', $event);
   }
 
   $scope.$apply();

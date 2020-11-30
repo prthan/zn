@@ -1,0 +1,11 @@
+html, body, .zn-module, [zn-route][zn-view]
+{
+  width: 100%;
+  height: 100%;
+}
+
+
+.editor-layout
+{
+  position: relative;
+}

@@ -40,12 +40,12 @@
 
   "routes":
   {
-    "/login"     : {"view": "login", "default": true},
-    "/login/@user/@id"     : {"view": "login"},
-    "/logout"    : {"view": "logout"},
-    "/welcome"   : {"view": "welcome"},
-    "/welcome/@uid/@name": {"view": "welcome"},
-    "/welcome/*"  : {"view": "welcome"}
+    "/login"              : {"view": "login", "default": true},
+    "/login/@user/@id"    : {"view": "login"},
+    "/logout"             : {"view": "logout"},
+    "/welcome"            : {"view": "welcome"},
+    "/welcome/@uid/@name" : {"view": "welcome"},
+    "/welcome/*"          : {"view": "welcome"}
   },
 
   "fragments":
