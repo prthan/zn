@@ -76,7 +76,6 @@
       let text = new Konva.Text({
         x: offset, y: 0,
         width: w - offset - 20, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "left",
         verticalAlign: "middle",
@@ -90,6 +89,8 @@
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -118,12 +119,39 @@
       group.setSize(s);
 
       let hitSize = props["connector.size"] * 2;
-      component.hitRegion.size({ width: w + hitSize * 2, height: h + hitSize * 2 });
+      component.hitRegion.size({ width: w + hitSize * 2, height: h });
       component.rect.size(s);
 
       component.text.size({ width: w - 20, height: h });
 
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setLevel(level)
+    {
+      let component=this;
+      component.ctx.$level=level;
+      let size=component.$shape.getSize();
+      let offset = (level + 1) * props["node.level.offset"];
+      component.text.x(offset);
+      component.text.width(size.width - offset - 20);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setIndex(index)
+    {
+      let component=this;
+      component.ctx.index=index;
+      component.connectorPoints.left.ctx.parent.index=index;
+      component.connectorPoints.right.ctx.parent.index=index;
     }
 
     getRect()

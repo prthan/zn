@@ -42,10 +42,13 @@
 
       if (props["grid.show"])
       {
-        utils.addGridLines(layer, 0, w, h, props["grid.minorTick.size"], props["grid.minorTick.stroke"], 0);
-        utils.addGridLines(layer, 0, h, w, props["grid.minorTick.size"], props["grid.minorTick.stroke"], 1);
-        utils.addGridLines(layer, 0, w, h, props["grid.majorTick.size"], props["grid.majorTick.stroke"], 0);
-        utils.addGridLines(layer, 0, h, w, props["grid.majorTick.size"], props["grid.majorTick.stroke"], 1);
+        let majorTickSize=props["grid.majorTick.size"];
+        let minorTickSize=props["grid.minorTick.size"];
+
+        utils.addGridLines(layer, minorTickSize, w, h, minorTickSize, props["grid.minorTick.stroke"], 0);
+        utils.addGridLines(layer, minorTickSize, h, w, minorTickSize, props["grid.minorTick.stroke"], 1);
+        utils.addGridLines(layer, majorTickSize, w, h, majorTickSize, props["grid.majorTick.stroke"], 0);
+        utils.addGridLines(layer, majorTickSize, h, w, majorTickSize, props["grid.majorTick.stroke"], 1);
       }
       component.background = background;
     }
@@ -56,7 +59,18 @@
       let stage = component.stage;
 
       component.background.on("mouseenter", () => base.resetConnectors(stage.findOne(".shapes-layer")));
-      component.background.on("mousedown", (event) => { stage.fire("grid-select", { mouseEvent: event }); });
+      component.background.on("mousedown", (event) => 
+      {
+        component.mouseDownAt=event;
+        stage.fire("grid-select", { mouseEvent: event });
+      });
+      component.background.on("mouseup", (event) =>
+      {
+        if(component.mouseDownAt && 
+           component.mouseDownAt.evt.layerX==event.evt.layerX && 
+           component.mouseDownAt.evt.layerY==event.evt.layerY) 
+          stage.fire("grid-click", { mouseEvent: event });
+      });
     }
   }
 

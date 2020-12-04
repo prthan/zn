@@ -75303,6 +75303,20 @@ return jQuery;
     return new Promise(impl);
   };
 
+  utils.debounce=(fn, delay)=>
+  {
+    let timerId=-1;
+    let scope=this;
+    let dfn=function()
+    {
+      let args=arguments;
+      if(timerId!=-1) clearTimeout(timerId);
+      timerId=window.setTimeout(()=>fn.apply(scope, args), delay);
+    }
+
+    return dfn;
+  }
+
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = utils;  
 
 })(window);
@@ -75504,7 +75518,7 @@ return jQuery;
         data: zn.defn.data
       };
       ng.$scope.$apply();
-
+      ngElement.css("visibility", "visible");
       viewObj.__ng=ng;
       viewObj.apply=(fn)=>ng.$scope.$apply(fn);
     }
@@ -75564,8 +75578,12 @@ return jQuery;
         {
           if(viewObj.init)
           {
-            await viewObj.init();
-            viewObj.__ng.$scope.$apply();
+            let promise=viewObj.init();
+            if(promise)
+            {
+              await promise;
+              viewObj.__ng.$scope.$apply();
+            }
             console.info("[zn]", `view initialized => ${viewObj.__name}`);
           }
         }
@@ -75600,8 +75618,12 @@ return jQuery;
         let viewObj=await module.loadView($route, {routeValues: route.paramValues});
         if(viewObj!=null && viewObj.init)
         {
-          await viewObj.init();
-          viewObj.__ng.$scope.$apply();
+          let promise=viewObj.init();
+          if(promise)
+          {
+            await promise;
+            viewObj.__ng.$scope.$apply();
+          }
           console.info("[zn]", `view initialized => ${viewObj.__name}`);
           module.fireEvent("route-change", {route: route});
         }
@@ -79626,7 +79648,7 @@ return jQuery;
     let x=dragState.position.left + dragState.by.x;
     let y=dragState.position.top + dragState.by.y;
 
-    dragState.$updateTarget.css("left", x).css("top", y);
+    dragState.$updateTarget.css("left", x).css("top", y).css("bottom", "unset").css("right", "unset");
   }
 
   directive.tag="znDraggable";
@@ -79654,7 +79676,98 @@ return jQuery;
 
 })(window);
 
-/*[merge-end] <== zn/ui/draggable/ng-directive.js*//*[merge-start] ==> zn/designer/properties.js*/(function(window)
+/*[merge-end] <== zn/ui/draggable/ng-directive.js*//*[merge-start] ==> zn/ui/editable/ng-directive.js*/(function(window)
+{
+  let __package = "zn.ui.components.ng";
+  let __name = "editable";
+
+  let directive={};
+  
+  directive.html=function()
+  {
+    return "<div></div>";
+  };
+
+  directive.linkFn=function(scope, element, attrs)
+  {
+    let $target=$(element);
+    let targetElement=$target.get()[0];
+    
+    let ename="click.editable";
+    if(scope.doubleclick=="Y") ename="dblclick.editable";
+    
+    $target.addClass("zn-editable");
+    $target.on(ename, (evt)=>
+    {
+      evt.preventDefault();
+      if($target.hasClass("on-edit")) return;
+      $target.addClass("on-edit");
+      targetElement.currentValue=$target.text();
+      $target.html(directive.html.editor());
+      let $editor=$target.find("input");
+      $editor.val(targetElement.currentValue);
+      let updater=()=>
+      {
+        let newValue=$editor.val();
+        $target.text(newValue);
+        if(newValue!=targetElement.currentValue && scope.onedit)
+        {
+          scope.onedit({$event: {name: "oninlineedit", source: $target, oldValue: targetElement.currentValue, newValue: newValue}});
+        }
+        $target.removeClass("on-edit");
+        if(scope.oneditend) scope.oneditend({$event: {name: "oninlineeditstart", source: $target}});
+      }
+      let resetter=()=>
+      {
+        $target.removeClass("on-edit");
+        $target.text(targetElement.currentValue);
+        if(scope.oneditcancel) scope.oneditcancel({$event: {name: "oninlineeditcancel", source: $target}});
+      }
+
+      $editor.on("blur", (evt)=> updater());
+      $editor.on("keydown", (evt)=>
+      {
+        if(evt.keyCode==13) updater();
+        if(evt.keyCode==27) resetter();
+      });
+      $editor.focus();
+      $editor.select();
+      if(scope.oneditstart) scope.oneditstart({$event: {name: "oninlineeditstart", source: $target}});
+    });
+  }
+
+  directive.html={};
+
+  directive.html.editor=function()
+  {
+    return `<input type="text"/>`;
+  }
+
+  directive.tag="znEditable";
+  
+  directive.factory=function()
+  {
+    return {
+      scope: 
+      {
+        onedit: "&",
+        oneditstart: "&",
+        oneditend: "&",
+        oneditcancel: "&",
+        doubleclick: "@"
+      },
+      restrict: "A",
+      template: "",
+      replace : true,
+      link: directive.linkFn
+    };
+  }
+
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;  
+
+})(window);
+
+/*[merge-end] <== zn/ui/editable/ng-directive.js*//*[merge-start] ==> zn/designer/properties.js*/(function(window)
 {
   let __package  = "zn.designer";
   let __name     = "Properties";
@@ -79699,6 +79812,7 @@ return jQuery;
     "text.color": "#376d8a",
     "text.style": "normal",
     "text.lineheight": 1.5,
+    "text.stroke": "Y",
 
     "subtext.family": "Courier",
     "subtext.size": 12,
@@ -79744,8 +79858,8 @@ return jQuery;
     let shape=shapeComponent.$shape;
     if(!shape.hasName("selected")) Component.snap(shape);
     Component.fireConnectorPointUpdateEvent(shape);
-
-    //if(shape.hasName("selected")) Component.snapOtherSelectedObjects(shape.getLayer(), shape);
+    
+    if(shape.hasName("selected")) shape.getStage().fire("shape-rect-update", {source: shapeComponent});
   }
 
   Component.handleShapeDragMove=(shapeComponent, event)=>
@@ -79754,6 +79868,7 @@ return jQuery;
     Component.fireConnectorPointUpdateEvent(shape);
 
     if(shape.hasName("selected")) Component.moveOtherSelectedObjects(shape.getLayer(), shape, event);
+    shape.getStage().fire("shape-rect-update", {source: shapeComponent});
   }
 
   Component.handleShapeMouseDown=(shapeComponent)=>
@@ -79826,6 +79941,9 @@ return jQuery;
     let shape=shapeComponent.$shape;
     let layer=shape.getLayer();
 
+    let selected=layer.find(".selected").toArray();
+    if(selected.length>0) return;
+    
     Component.showSelection(shape, false);
     Component.showConnectors(shape, false);
     shape.addName("transform");
@@ -80107,10 +80225,13 @@ return jQuery;
 
       if (props["grid.show"])
       {
-        utils.addGridLines(layer, 0, w, h, props["grid.minorTick.size"], props["grid.minorTick.stroke"], 0);
-        utils.addGridLines(layer, 0, h, w, props["grid.minorTick.size"], props["grid.minorTick.stroke"], 1);
-        utils.addGridLines(layer, 0, w, h, props["grid.majorTick.size"], props["grid.majorTick.stroke"], 0);
-        utils.addGridLines(layer, 0, h, w, props["grid.majorTick.size"], props["grid.majorTick.stroke"], 1);
+        let majorTickSize=props["grid.majorTick.size"];
+        let minorTickSize=props["grid.minorTick.size"];
+
+        utils.addGridLines(layer, minorTickSize, w, h, minorTickSize, props["grid.minorTick.stroke"], 0);
+        utils.addGridLines(layer, minorTickSize, h, w, minorTickSize, props["grid.minorTick.stroke"], 1);
+        utils.addGridLines(layer, majorTickSize, w, h, majorTickSize, props["grid.majorTick.stroke"], 0);
+        utils.addGridLines(layer, majorTickSize, h, w, majorTickSize, props["grid.majorTick.stroke"], 1);
       }
       component.background = background;
     }
@@ -80121,7 +80242,18 @@ return jQuery;
       let stage = component.stage;
 
       component.background.on("mouseenter", () => base.resetConnectors(stage.findOne(".shapes-layer")));
-      component.background.on("mousedown", (event) => { stage.fire("grid-select", { mouseEvent: event }); });
+      component.background.on("mousedown", (event) => 
+      {
+        component.mouseDownAt=event;
+        stage.fire("grid-select", { mouseEvent: event });
+      });
+      component.background.on("mouseup", (event) =>
+      {
+        if(component.mouseDownAt && 
+           component.mouseDownAt.evt.layerX==event.evt.layerX && 
+           component.mouseDownAt.evt.layerY==event.evt.layerY) 
+          stage.fire("grid-click", { mouseEvent: event });
+      });
     }
   }
 
@@ -80669,7 +80801,6 @@ return jQuery;
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -80681,6 +80812,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -80722,6 +80855,22 @@ return jQuery;
       let pos = component.$shape.getPosition();
 
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
     }
 
     setupEventHandlers()
@@ -80862,7 +81011,6 @@ return jQuery;
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -80874,6 +81022,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -80920,6 +81070,22 @@ return jQuery;
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
     }
 
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+    
     setupEventHandlers()
     {
       let component = this;
@@ -81044,7 +81210,6 @@ return jQuery;
       let text = new Konva.Text({
         x: offset, y: 0,
         width: w - offset, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "left",
         verticalAlign: "middle",
@@ -81056,6 +81221,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -81156,8 +81323,8 @@ return jQuery;
 
       component.ctx = ctx;
       component.oid = oid || zn.shortid();
+      component.list=ctx.list;
 
-      component.list = utils.flattenList(ctx.list);
       component.ch = 25 + component.list.length * props["node.height"];
       if (h > component.ch) component.ch = h;
 
@@ -81290,20 +81457,22 @@ return jQuery;
     {
       let component = this;
       let group = component.$shape;
-      let s = { width: w, height: component.ch };
+      let ch=25 + component.list.length * props["node.height"];
+      let s = { width: w, height: ch};
 
       group.setSize(s);
 
       let hitSize = props["connector.size"] * 2;
-      component.hitRegion.size({ width: w + hitSize * 2, height: component.ch + hitSize * 2 });
+      component.hitRegion.size({ width: w + hitSize * 2, height: ch + hitSize * 2 });
       component.background.size(s);
       component.foreground.size(s);
 
       let offset = props["shape.select.offset"];
-      component.selection.size({ width: w + offset * 2, height: component.ch + offset * 2 });
+      component.selection.size({ width: w + offset * 2, height: ch + offset * 2 });
 
       component.headerNode.updateShape(w, 25);
-      component.nodes.forEach((node) => node.updateShape(w, 25));
+      component.nodes.forEach((node, i) =>node.updateShape(w, 25));
+
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }
 
@@ -81314,6 +81483,139 @@ return jQuery;
       let pos = component.$shape.getPosition();
 
       return { x: pos.x, y: pos.y, width: size.width, height: component.ch };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.headerNode.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    insertNode(ctx, index)
+    {
+      let component = this;
+      let group = component.$shape;
+      let size=component.$shape.getSize();
+
+      let node = new zn.designer.shape.Node(0, 25 + index * 25, size.width, props["node.height"], {name: `item$${index}`, index: index, list: component.oid, type: "list-item", ...ctx });
+      group.add(node.$shape);
+
+      if(index)
+      {
+        component.nodes.splice(index, 0, node);
+        component.list.splice(index, 0, ctx);
+      }
+      else
+      {
+        component.nodes.push(node);
+        component.list.push(ctx);
+      }
+      
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    deleteNode(index)
+    {
+      let component=this;
+      let size=component.$shape.getSize();
+      let node=component.nodes[index];
+      let connectorLines=node.connectorLines();
+      node.$shape.getStage().fire("delete-connections", {ids: connectorLines});
+      node.destroy();
+      component.nodes.splice(index, 1);
+      component.list.splice(index, 1);
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    moveNodeUp(index)
+    {
+      let component=this;
+      
+      if(index<=0) return;
+      let size=component.$shape.getSize();
+
+      let prevNode=component.nodes[index-1];
+      component.nodes[index-1]=component.nodes[index];
+      component.nodes[index]=prevNode;
+
+      let prevItem=component.list[index-1];
+      component.list[index-1]=component.list[index];
+      component.list[index]=prevItem;
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    moveNodeDown(index)
+    {
+      let component=this;
+
+      if(index>component.nodes.length-1) return;
+      
+      let size=component.$shape.getSize();
+
+      let nextNode=component.nodes[index+1];
+      component.nodes[index+1]=component.nodes[index];
+      component.nodes[index]=nextNode;
+
+      let nextItem=component.list[index+1];
+      component.list[index+1]=component.list[index];
+      component.list[index]=nextItem;
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setNodeLevel(index, level)
+    {
+      let component=this;
+      if(index>component.nodes.length-1) return;
+
+      component.nodes[index].setLevel(level);
+      component.list[index].$level=level;
+    }
+
+    setNodeText(index, text)
+    {
+      let component=this;
+      if(index>component.nodes.length-1) return;
+
+      component.nodes[index].setText(text);
+      component.list[index].text=text;
     }
 
     setupEventHandlers()
@@ -81327,12 +81629,14 @@ return jQuery;
         base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
         component.nodes.forEach((node) => base.fireConnectorPointUpdateEvent(node.$shape));
         //base.snapOtherSelectedObjects(group.getLayer(), group);
+        group.getStage().fire("shape-rect-update", {source: component})
       });
       group.on("dragmove", (event) =>
       {
         base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
         component.nodes.forEach((node) => base.fireConnectorPointUpdateEvent(node.$shape));
         base.moveOtherSelectedObjects(group.getLayer(), group, event);
+        group.getStage().fire("shape-rect-update", {source: component})
       });
       group.on("mousedown", (event) =>
       {
@@ -81445,7 +81749,6 @@ return jQuery;
       let text = new Konva.Text({
         x: offset, y: 0,
         width: w - offset - 20, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "left",
         verticalAlign: "middle",
@@ -81459,6 +81762,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -81487,12 +81792,39 @@ return jQuery;
       group.setSize(s);
 
       let hitSize = props["connector.size"] * 2;
-      component.hitRegion.size({ width: w + hitSize * 2, height: h + hitSize * 2 });
+      component.hitRegion.size({ width: w + hitSize * 2, height: h });
       component.rect.size(s);
 
       component.text.size({ width: w - 20, height: h });
 
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setLevel(level)
+    {
+      let component=this;
+      component.ctx.$level=level;
+      let size=component.$shape.getSize();
+      let offset = (level + 1) * props["node.level.offset"];
+      component.text.x(offset);
+      component.text.width(size.width - offset - 20);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setIndex(index)
+    {
+      let component=this;
+      component.ctx.index=index;
+      component.connectorPoints.left.ctx.parent.index=index;
+      component.connectorPoints.right.ctx.parent.index=index;
     }
 
     getRect()
@@ -81649,7 +81981,6 @@ return jQuery;
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -81661,6 +81992,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -81706,6 +82039,23 @@ return jQuery;
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
     }
 
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+        
     setupEventHandlers()
     {
       let component = this;
@@ -81860,7 +82210,6 @@ return jQuery;
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -81872,10 +82221,13 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
-
+      
+      component.subtext=null;
       if(!component.ctx.subtext) return;
       text.position({x: 10, y: 0});
       text.size({width: w - 20, height: 25});
@@ -81887,7 +82239,6 @@ return jQuery;
       let subtext = new Konva.Text({
         x: 10, y: 30,
         width: w - 20, height: h - 35,
-        stroke: props["subtext.color"],
         strokeWidth: 1,
         text: ctx.subtext,
         align: "left",
@@ -81899,6 +82250,8 @@ return jQuery;
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) subtext.stroke(props["text.color"])
+      else subtext.fill(props["text.color"]);
       subtext.addName("subtext");
       group.add(subtext);
       component.subtext=subtext;
@@ -81958,6 +82311,33 @@ return jQuery;
       let hitSize = props["connector.size"] * 2;
 
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setSubText(text)
+    {
+      let component=this;
+      let rect=component.getRect();
+      component.ctx.subtext=text;
+      if(component.text) component.text.destroy();
+      if(component.subtext) component.subtext.destroy();
+      component.addText(rect.width, rect.height, component.ctx);
+      component.$shape.getLayer().batchDraw();
     }
 
     setupEventHandlers()
@@ -82056,12 +82436,14 @@ return jQuery;
       component.transformer.on("transform", (evt) =>
       {
         component.transformerToTarget(true);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.target.$shape.getLayer().batchDraw();
       });
 
       component.transformer.on("transformend", (evt) =>
       {
         component.transformerToTarget(true);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.$shape.getLayer().batchDraw();
       });
 
@@ -82073,6 +82455,7 @@ return jQuery;
       component.$shape.on("dragmove", (evt) =>
       {
         component.transformerToTarget();
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.target.$shape.getLayer().batchDraw();
       });
 
@@ -82082,6 +82465,7 @@ return jQuery;
         base.snap(component.target.$shape);
         component.targetToTransformer();
         base.fireConnectorPointUpdateEvent(component.target.$shape);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.$shape.getLayer().batchDraw();
         component.target.$shape.getLayer().batchDraw();
       });
@@ -82149,8 +82533,7 @@ return jQuery;
       this.data =
       {
         shapeComponents: {},
-        lineComponents: {},
-        graph: {}
+        lineComponents: {}
       };
 
       this.shapeClasses =
@@ -82263,13 +82646,15 @@ return jQuery;
       surface.stage.on("shape-select", (event) => surface.onShapeSelect(event));
       surface.stage.on("shape-transform", (event) => surface.onShapeTransform(event));
       surface.stage.on("grid-select", (event) => surface.onGridSelect(event));
+      surface.stage.on("grid-click", (evt) => surface.fireEvent("stage-select", {event: evt}));
       surface.stage.on("connector-select", (evt) => surface.onConnectorSelect(evt));
       surface.stage.on("connection-select", (evt) => surface.onConnectionSelect(evt));
       surface.stage.on("points-connected", (evt) => surface.onPointsConnected(evt));
       surface.stage.on("select-objects", (evt) => surface.onSelectObjects(evt));
       surface.stage.on("selection-set-modify", (evt) => surface.onSelectionSetModify(evt));
       surface.stage.on("draw-object", (evt) => surface.onDrawObject(evt));
-
+      surface.stage.on("shape-rect-update", (evt) => surface.fireEvent("obj-rect-update", {obj:{...evt.source.ctx, oid: evt.source.oid}}));
+      surface.stage.on("delete-connections", (evt) => surface.deleteConnections(evt.ids));
       surface.$stage.on("keydown", (evt) => surface.handleKeyEvents(evt));
     }
 
@@ -82453,8 +82838,7 @@ return jQuery;
       surface.data =
       {
         shapeComponents: {},
-        lineComponents: {},
-        graph: {}
+        lineComponents: {}
       };
     }
 
@@ -82573,6 +82957,17 @@ return jQuery;
       surface.mode = mode;
     }
 
+    setSize(w, h)
+    {
+      let surface=this;
+      surface.$stage.css("width", w).css("height", h);
+      surface.stage.width(w);
+      surface.stage.height(h);
+    }
+
+    getShapeComponent(oid) {return this.data.shapeComponents[oid]};
+    getConnectionComponent(oid) {return this.data.lineComponents[oid]};
+
     cpData(ctx)
     {
       let surface = this;
@@ -82590,7 +82985,7 @@ return jQuery;
     exportToJson()
     {
       let component = this;
-      let jsonData = { shapes: [], lines: [] };
+      let jsonData = { shapes: [], lines: [], stage: {}};
 
       Object.values(component.data.shapeComponents)
             .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx, oid: shapeComponent.oid }));
@@ -82598,6 +82993,7 @@ return jQuery;
       Object.values(component.data.lineComponents)
             .forEach((lineComponent) => jsonData.lines.push({...lineComponent.ctx, oid: lineComponent.oid }));
 
+      jsonData.stage={width: component.stage.width(), height: component.stage.height()};
       return JSON.stringify(jsonData);
     }
 
@@ -82607,15 +83003,18 @@ return jQuery;
       let surface = this;
       surface.reset();
 
-      jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
-      jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
+      if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
+      if(jsonData.lines) jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
+      if(jsonData.stage) surface.setSize(jsonData.stage.width, jsonData.stage.height);
     }
 
     downloadAsImage()
     {
       let surface = this;
+      surface.gridLayer.visible(false);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-
+      console.log(dataURL);
+      surface.gridLayer.visible(true);
       var downloadLink = document.createElement('a');
       downloadLink.download = "surface-drawing.png";
       downloadLink.href = dataURL;
@@ -82623,6 +83022,16 @@ return jQuery;
       downloadLink.click();
       document.body.removeChild(downloadLink);
       
+    }
+
+    getImageData()
+    {
+      let surface = this;
+      surface.gridLayer.visible(false);
+      let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
+      surface.gridLayer.visible(true);
+
+      return dataURL;
     }
 
     static get(name)
@@ -82659,8 +83068,8 @@ return jQuery;
     {
       target: element, 
       name: scope.name, 
-      width: scope.width,
-      height: scope.height
+      width: parseInt(scope.width),
+      height: parseInt(scope.height)
     }
 
     let surface=new zn.designer.Surface(options);
@@ -82672,6 +83081,8 @@ return jQuery;
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
     surface.on("draw-object", (evt)=>scope.ondrawobj({$event: evt}));
     surface.on("delete", (evt)=>scope.ondelete({$event: evt}));
+    surface.on("stage-select", (evt)=>scope.onstageselect({$event: evt}));
+    surface.on("obj-rect-update", (evt)=>scope.onobjrectupdate({$event: evt}));
 
     surface.init();
   }
@@ -82693,6 +83104,8 @@ return jQuery;
         onposition   : "&",
         ondrawobj    : "&",
         ondelete     : "&",
+        onstageselect   : "&",
+        onobjrectupdate : "&",
       },
       restrict: "A",
       template: "",
@@ -82727,6 +83140,7 @@ return jQuery;
       zn.ng.directives[zn.ui.components.ng.list.tag]=zn.ui.components.ng.list.factory;
       zn.ng.directives[zn.ui.components.ng.table.tag]=zn.ui.components.ng.table.factory;
       zn.ng.directives[zn.ui.components.ng.draggable.tag]=zn.ui.components.ng.draggable.factory;
+      zn.ng.directives[zn.ui.components.ng.editable.tag]=zn.ui.components.ng.editable.factory;
       zn.ng.directives[zn.designer.ng.surface.tag]=zn.designer.ng.surface.factory;
       
     }

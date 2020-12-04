@@ -20,6 +20,7 @@
       zn.ng.directives[zn.ui.components.ng.list.tag]=zn.ui.components.ng.list.factory;
       zn.ng.directives[zn.ui.components.ng.table.tag]=zn.ui.components.ng.table.factory;
       zn.ng.directives[zn.ui.components.ng.draggable.tag]=zn.ui.components.ng.draggable.factory;
+      zn.ng.directives[zn.ui.components.ng.editable.tag]=zn.ui.components.ng.editable.factory;
       zn.ng.directives[zn.designer.ng.surface.tag]=zn.designer.ng.surface.factory;
       
     }

@@ -16,8 +16,8 @@
     {
       target: element, 
       name: scope.name, 
-      width: scope.width,
-      height: scope.height
+      width: parseInt(scope.width),
+      height: parseInt(scope.height)
     }
 
     let surface=new zn.designer.Surface(options);
@@ -29,6 +29,8 @@
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
     surface.on("draw-object", (evt)=>scope.ondrawobj({$event: evt}));
     surface.on("delete", (evt)=>scope.ondelete({$event: evt}));
+    surface.on("stage-select", (evt)=>scope.onstageselect({$event: evt}));
+    surface.on("obj-rect-update", (evt)=>scope.onobjrectupdate({$event: evt}));
 
     surface.init();
   }
@@ -50,6 +52,8 @@
         onposition   : "&",
         ondrawobj    : "&",
         ondelete     : "&",
+        onstageselect   : "&",
+        onobjrectupdate : "&",
       },
       restrict: "A",
       template: "",

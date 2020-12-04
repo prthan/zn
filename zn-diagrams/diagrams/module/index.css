@@ -9,3 +9,16 @@ html, body, .zn-module, [zn-route][zn-view]
 {
   position: relative;
 }
+
+.fl {display: flex;}
+.fl.fl-column {flex-direction: column;}
+.fl.fl-ac {align-items: center;}
+.fl.fl-at {align-items: flex-start;}
+.fl.fl-ab {align-items: flex-end;}
+.fl.fl-jc {justify-content: center;}
+.fl-g0 {flex-grow: 0}
+.fl-g1 {flex-grow: 1; flex-basis: 0;}
+
+.lean-scroll::-webkit-scrollbar {width: 5px; height: 5px}
+.lean-scroll::-webkit-scrollbar-track {background: #ddd;}
+.lean-scroll::-webkit-scrollbar-thumb {background: #bbb;}

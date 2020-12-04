@@ -16,6 +16,7 @@ $(()=>
   module.directive(zn.ui.components.ng.popup.tag, zn.ui.components.ng.popup.factory);
   module.directive(zn.ui.components.ng.dialog.tag, zn.ui.components.ng.dialog.factory);
   module.directive(zn.ui.components.ng.draggable.tag, zn.ui.components.ng.draggable.factory);
+  module.directive(zn.ui.components.ng.editable.tag, zn.ui.components.ng.editable.factory);
 
   angular.bootstrap($ctrl,["test-form"]);
 
@@ -78,7 +79,9 @@ $(()=>
       {value: "HOME", label: "Home"},
       {value: "WORK", label: "Work"},
       {value: "MOBILE", label: "Mobile"}      
-    ]
+    ],
+
+    message: "Click here to edit"
   }
 
   $scope = angular.element($ctrl).scope();
@@ -161,6 +164,10 @@ $(()=>
     //console.log('de', $event);
   }
 
+  $scope.onInlineEdit=function($event)
+  {
+    console.log($event);
+  }
   $scope.$apply();
   
 })

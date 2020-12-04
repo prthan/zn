@@ -13,8 +13,8 @@
     let shape=shapeComponent.$shape;
     if(!shape.hasName("selected")) Component.snap(shape);
     Component.fireConnectorPointUpdateEvent(shape);
-
-    //if(shape.hasName("selected")) Component.snapOtherSelectedObjects(shape.getLayer(), shape);
+    
+    if(shape.hasName("selected")) shape.getStage().fire("shape-rect-update", {source: shapeComponent});
   }
 
   Component.handleShapeDragMove=(shapeComponent, event)=>
@@ -23,6 +23,7 @@
     Component.fireConnectorPointUpdateEvent(shape);
 
     if(shape.hasName("selected")) Component.moveOtherSelectedObjects(shape.getLayer(), shape, event);
+    shape.getStage().fire("shape-rect-update", {source: shapeComponent});
   }
 
   Component.handleShapeMouseDown=(shapeComponent)=>
@@ -95,6 +96,9 @@
     let shape=shapeComponent.$shape;
     let layer=shape.getLayer();
 
+    let selected=layer.find(".selected").toArray();
+    if(selected.length>0) return;
+    
     Component.showSelection(shape, false);
     Component.showConnectors(shape, false);
     shape.addName("transform");

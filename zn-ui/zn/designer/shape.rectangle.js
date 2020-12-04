@@ -113,7 +113,6 @@
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -125,10 +124,13 @@
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
-
+      
+      component.subtext=null;
       if(!component.ctx.subtext) return;
       text.position({x: 10, y: 0});
       text.size({width: w - 20, height: 25});
@@ -140,7 +142,6 @@
       let subtext = new Konva.Text({
         x: 10, y: 30,
         width: w - 20, height: h - 35,
-        stroke: props["subtext.color"],
         strokeWidth: 1,
         text: ctx.subtext,
         align: "left",
@@ -152,6 +153,8 @@
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) subtext.stroke(props["text.color"])
+      else subtext.fill(props["text.color"]);
       subtext.addName("subtext");
       group.add(subtext);
       component.subtext=subtext;
@@ -211,6 +214,33 @@
       let hitSize = props["connector.size"] * 2;
 
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setSubText(text)
+    {
+      let component=this;
+      let rect=component.getRect();
+      component.ctx.subtext=text;
+      if(component.text) component.text.destroy();
+      if(component.subtext) component.subtext.destroy();
+      component.addText(rect.width, rect.height, component.ctx);
+      component.$shape.getLayer().batchDraw();
     }
 
     setupEventHandlers()

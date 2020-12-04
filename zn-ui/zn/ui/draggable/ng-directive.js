@@ -76,7 +76,7 @@
     let x=dragState.position.left + dragState.by.x;
     let y=dragState.position.top + dragState.by.y;
 
-    dragState.$updateTarget.css("left", x).css("top", y);
+    dragState.$updateTarget.css("left", x).css("top", y).css("bottom", "unset").css("right", "unset");
   }
 
   directive.tag="znDraggable";

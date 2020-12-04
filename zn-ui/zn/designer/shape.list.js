@@ -17,8 +17,8 @@
 
       component.ctx = ctx;
       component.oid = oid || zn.shortid();
+      component.list=ctx.list;
 
-      component.list = utils.flattenList(ctx.list);
       component.ch = 25 + component.list.length * props["node.height"];
       if (h > component.ch) component.ch = h;
 
@@ -151,20 +151,22 @@
     {
       let component = this;
       let group = component.$shape;
-      let s = { width: w, height: component.ch };
+      let ch=25 + component.list.length * props["node.height"];
+      let s = { width: w, height: ch};
 
       group.setSize(s);
 
       let hitSize = props["connector.size"] * 2;
-      component.hitRegion.size({ width: w + hitSize * 2, height: component.ch + hitSize * 2 });
+      component.hitRegion.size({ width: w + hitSize * 2, height: ch + hitSize * 2 });
       component.background.size(s);
       component.foreground.size(s);
 
       let offset = props["shape.select.offset"];
-      component.selection.size({ width: w + offset * 2, height: component.ch + offset * 2 });
+      component.selection.size({ width: w + offset * 2, height: ch + offset * 2 });
 
       component.headerNode.updateShape(w, 25);
-      component.nodes.forEach((node) => node.updateShape(w, 25));
+      component.nodes.forEach((node, i) =>node.updateShape(w, 25));
+
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }
 
@@ -175,6 +177,139 @@
       let pos = component.$shape.getPosition();
 
       return { x: pos.x, y: pos.y, width: size.width, height: component.ch };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.headerNode.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    insertNode(ctx, index)
+    {
+      let component = this;
+      let group = component.$shape;
+      let size=component.$shape.getSize();
+
+      let node = new zn.designer.shape.Node(0, 25 + index * 25, size.width, props["node.height"], {name: `item$${index}`, index: index, list: component.oid, type: "list-item", ...ctx });
+      group.add(node.$shape);
+
+      if(index)
+      {
+        component.nodes.splice(index, 0, node);
+        component.list.splice(index, 0, ctx);
+      }
+      else
+      {
+        component.nodes.push(node);
+        component.list.push(ctx);
+      }
+      
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    deleteNode(index)
+    {
+      let component=this;
+      let size=component.$shape.getSize();
+      let node=component.nodes[index];
+      let connectorLines=node.connectorLines();
+      node.$shape.getStage().fire("delete-connections", {ids: connectorLines});
+      node.destroy();
+      component.nodes.splice(index, 1);
+      component.list.splice(index, 1);
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    moveNodeUp(index)
+    {
+      let component=this;
+      
+      if(index<=0) return;
+      let size=component.$shape.getSize();
+
+      let prevNode=component.nodes[index-1];
+      component.nodes[index-1]=component.nodes[index];
+      component.nodes[index]=prevNode;
+
+      let prevItem=component.list[index-1];
+      component.list[index-1]=component.list[index];
+      component.list[index]=prevItem;
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    moveNodeDown(index)
+    {
+      let component=this;
+
+      if(index>component.nodes.length-1) return;
+      
+      let size=component.$shape.getSize();
+
+      let nextNode=component.nodes[index+1];
+      component.nodes[index+1]=component.nodes[index];
+      component.nodes[index]=nextNode;
+
+      let nextItem=component.list[index+1];
+      component.list[index+1]=component.list[index];
+      component.list[index]=nextItem;
+
+      component.nodes.forEach((node, i)=>
+      {
+        node.setIndex(i);
+        node.$shape.y(25 + i * 25);
+      })
+      component.updateShape(size.width, 50);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setNodeLevel(index, level)
+    {
+      let component=this;
+      if(index>component.nodes.length-1) return;
+
+      component.nodes[index].setLevel(level);
+      component.list[index].$level=level;
+    }
+
+    setNodeText(index, text)
+    {
+      let component=this;
+      if(index>component.nodes.length-1) return;
+
+      component.nodes[index].setText(text);
+      component.list[index].text=text;
     }
 
     setupEventHandlers()
@@ -188,12 +323,14 @@
         base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
         component.nodes.forEach((node) => base.fireConnectorPointUpdateEvent(node.$shape));
         //base.snapOtherSelectedObjects(group.getLayer(), group);
+        group.getStage().fire("shape-rect-update", {source: component})
       });
       group.on("dragmove", (event) =>
       {
         base.fireConnectorPointUpdateEvent(component.headerNode.$shape);
         component.nodes.forEach((node) => base.fireConnectorPointUpdateEvent(node.$shape));
         base.moveOtherSelectedObjects(group.getLayer(), group, event);
+        group.getStage().fire("shape-rect-update", {source: component})
       });
       group.on("mousedown", (event) =>
       {

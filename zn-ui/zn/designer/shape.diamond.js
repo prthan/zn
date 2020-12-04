@@ -103,7 +103,6 @@
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -115,6 +114,8 @@
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;
@@ -156,6 +157,22 @@
       let pos = component.$shape.getPosition();
 
       return { x: pos.x, y: pos.y, width: size.width, height: size.height };
+    }
+
+    setRect(rect)
+    {
+      let component=this;
+      component.$shape.setPosition({x: rect.x, y: rect.y});
+      component.updateShape(rect.width, rect.height);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    setText(text)
+    {
+      let component=this;
+      component.ctx.text=text;
+      component.text.text(text);
+      component.$shape.getLayer().batchDraw();
     }
 
     setupEventHandlers()

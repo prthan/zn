@@ -61,7 +61,7 @@ $(()=>
       {text: "Address", $list: [{text: "Street"}, {text: "City"}, {text: "State"}, {text: "ZipCode"}]},
       {text: "Contact Details", $list: [{text: "Home Phone"}, {text: "Office"}, {text: "Mobile Phone"}, {text: "EMail ID"}]}
     ];
-    let ctx={name: "shape-"+(shapeCount++), text: "PERSON", list: list};
+    let ctx={name: "shape-"+(shapeCount++), text: "PERSON", list: zn.designer.Utils.flattenList(list)};
     surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
@@ -69,7 +69,7 @@ $(()=>
   {
     let surface=zn.designer.Surface.get("surface");
     let list=[{text: "Street"}, {text: "City"}, {text: "State"}, {text: "ZipCode"}];
-    let ctx={name: "shape-"+(shapeCount++), text: "ADDRESS", list: list};
+    let ctx={name: "shape-"+(shapeCount++), text: "ADDRESS", list: zn.designer.Utils.flattenList(list)};
     surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
@@ -77,7 +77,7 @@ $(()=>
   {
     let surface=zn.designer.Surface.get("surface");
     let list=[{text: "Home Phone"}, {text: "Office"}, {text: "Mobile Phone"}, {text: "EMail ID"}];
-    let ctx={name: "shape-"+(shapeCount++), text: "CONTACT", list: list};
+    let ctx={name: "shape-"+(shapeCount++), text: "CONTACT", list: zn.designer.Utils.flattenList(list)};
     surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 

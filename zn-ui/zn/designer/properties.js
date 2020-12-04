@@ -43,6 +43,7 @@
     "text.color": "#376d8a",
     "text.style": "normal",
     "text.lineheight": 1.5,
+    "text.stroke": "Y",
 
     "subtext.family": "Courier",
     "subtext.size": 12,

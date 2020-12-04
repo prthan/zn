@@ -6,6 +6,7 @@
 {
   width: 100%;
   height: 100%;
+  visibility: hidden;
 }
 /*[merge-end] <== zn/module.css*/
 
@@ -2169,12 +2170,35 @@
 }
 /*[merge-end] <== zn/ui/textfield/component.css*/
 
-/*[merge-start] ==> zn/ui/draggable/component.css*/
-.zn-draggable.on-drag
+/*[merge-start] ==> zn/ui/editable/component.css*/
+.zn-editable
 {
   
 }
-/*[merge-end] <== zn/ui/draggable/component.css*/
+
+.zn-editable.on-edit
+{
+  
+}
+
+.zn-editable input
+{
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 0px;
+  margin: 0px;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+}
+
+
+
+
+/*[merge-end] <== zn/ui/editable/component.css*/
 
 /*[merge-start] ==> zn/designer/surface/component.css*/
 .zn-surface

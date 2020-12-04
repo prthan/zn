@@ -106,6 +106,20 @@
     return new Promise(impl);
   };
 
+  utils.debounce=(fn, delay)=>
+  {
+    let timerId=-1;
+    let scope=this;
+    let dfn=function()
+    {
+      let args=arguments;
+      if(timerId!=-1) window.clearTimeout(timerId);
+      timerId=window.setTimeout(()=>fn.apply(scope, args), delay);
+    }
+
+    return dfn;
+  }
+
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = utils;  
 
 })(window);

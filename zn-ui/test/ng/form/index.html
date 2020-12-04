@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/button/component.css"/>
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/popup/component.css"/>
     <link rel="stylesheet" type="text/css" href="../../../zn/ui/dialog/component.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../zn/ui/editable/component.css"/>
     <link rel="stylesheet" type="text/css" href="index.css"/>
     
     <meta charset="utf-8" />
@@ -49,6 +50,7 @@
     <script src="../../../zn/ui/dialog/component.js"></script>
     <script src="../../../zn/ui/dialog/ng-directive.js"></script>
     <script src="../../../zn/ui/draggable/ng-directive.js"></script>
+    <script src="../../../zn/ui/editable/ng-directive.js"></script>
     <script src="index.js"></script>
 
     <div controller="ctrl">
@@ -81,6 +83,10 @@
       <div class="calendars">
         <div zn-calendar date="model.form.endDate" class="calendar calendar-1"></div>
       </div>      
+
+      <div class="inline-editor">
+        <span class="content" zn-editable onedit="onInlineEdit($event)">{{model.message}}</span>
+      </div>
 
       <div class="draggable-calendar">
         <div zn-draggable target=".draggable-calendar" class="drag-handle">&nbsp;</div>

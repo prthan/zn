@@ -16,8 +16,7 @@
       this.data =
       {
         shapeComponents: {},
-        lineComponents: {},
-        graph: {}
+        lineComponents: {}
       };
 
       this.shapeClasses =
@@ -130,13 +129,15 @@
       surface.stage.on("shape-select", (event) => surface.onShapeSelect(event));
       surface.stage.on("shape-transform", (event) => surface.onShapeTransform(event));
       surface.stage.on("grid-select", (event) => surface.onGridSelect(event));
+      surface.stage.on("grid-click", (evt) => surface.fireEvent("stage-select", {event: evt}));
       surface.stage.on("connector-select", (evt) => surface.onConnectorSelect(evt));
       surface.stage.on("connection-select", (evt) => surface.onConnectionSelect(evt));
       surface.stage.on("points-connected", (evt) => surface.onPointsConnected(evt));
       surface.stage.on("select-objects", (evt) => surface.onSelectObjects(evt));
       surface.stage.on("selection-set-modify", (evt) => surface.onSelectionSetModify(evt));
       surface.stage.on("draw-object", (evt) => surface.onDrawObject(evt));
-
+      surface.stage.on("shape-rect-update", (evt) => surface.fireEvent("obj-rect-update", {obj:{...evt.source.ctx, oid: evt.source.oid}}));
+      surface.stage.on("delete-connections", (evt) => surface.deleteConnections(evt.ids));
       surface.$stage.on("keydown", (evt) => surface.handleKeyEvents(evt));
     }
 
@@ -320,8 +321,7 @@
       surface.data =
       {
         shapeComponents: {},
-        lineComponents: {},
-        graph: {}
+        lineComponents: {}
       };
     }
 
@@ -440,6 +440,17 @@
       surface.mode = mode;
     }
 
+    setSize(w, h)
+    {
+      let surface=this;
+      surface.$stage.css("width", w).css("height", h);
+      surface.stage.width(w);
+      surface.stage.height(h);
+    }
+
+    getShapeComponent(oid) {return this.data.shapeComponents[oid]};
+    getConnectionComponent(oid) {return this.data.lineComponents[oid]};
+
     cpData(ctx)
     {
       let surface = this;
@@ -457,7 +468,7 @@
     exportToJson()
     {
       let component = this;
-      let jsonData = { shapes: [], lines: [] };
+      let jsonData = { shapes: [], lines: [], stage: {}};
 
       Object.values(component.data.shapeComponents)
             .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx, oid: shapeComponent.oid }));
@@ -465,6 +476,7 @@
       Object.values(component.data.lineComponents)
             .forEach((lineComponent) => jsonData.lines.push({...lineComponent.ctx, oid: lineComponent.oid }));
 
+      jsonData.stage={width: component.stage.width(), height: component.stage.height()};
       return JSON.stringify(jsonData);
     }
 
@@ -474,15 +486,18 @@
       let surface = this;
       surface.reset();
 
-      jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
-      jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
+      if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
+      if(jsonData.lines) jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
+      if(jsonData.stage) surface.setSize(jsonData.stage.width, jsonData.stage.height);
     }
 
     downloadAsImage()
     {
       let surface = this;
+      surface.gridLayer.visible(false);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-
+      console.log(dataURL);
+      surface.gridLayer.visible(true);
       var downloadLink = document.createElement('a');
       downloadLink.download = "surface-drawing.png";
       downloadLink.href = dataURL;
@@ -490,6 +505,16 @@
       downloadLink.click();
       document.body.removeChild(downloadLink);
       
+    }
+
+    getImageData()
+    {
+      let surface = this;
+      surface.gridLayer.visible(false);
+      let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
+      surface.gridLayer.visible(true);
+
+      return dataURL;
     }
 
     static get(name)

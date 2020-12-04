@@ -87,7 +87,7 @@
         data: zn.defn.data
       };
       ng.$scope.$apply();
-
+      ngElement.css("visibility", "visible");
       viewObj.__ng=ng;
       viewObj.apply=(fn)=>ng.$scope.$apply(fn);
     }
@@ -147,8 +147,12 @@
         {
           if(viewObj.init)
           {
-            await viewObj.init();
-            viewObj.__ng.$scope.$apply();
+            let promise=viewObj.init();
+            if(promise)
+            {
+              await promise;
+              viewObj.__ng.$scope.$apply();
+            }
             console.info("[zn]", `view initialized => ${viewObj.__name}`);
           }
         }
@@ -183,8 +187,12 @@
         let viewObj=await module.loadView($route, {routeValues: route.paramValues});
         if(viewObj!=null && viewObj.init)
         {
-          await viewObj.init();
-          viewObj.__ng.$scope.$apply();
+          let promise=viewObj.init();
+          if(promise)
+          {
+            await promise;
+            viewObj.__ng.$scope.$apply();
+          }
           console.info("[zn]", `view initialized => ${viewObj.__name}`);
           module.fireEvent("route-change", {route: route});
         }

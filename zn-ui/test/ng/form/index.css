@@ -89,3 +89,13 @@ body
   background-color: rgba(0,0,0,.15);
   cursor: move;
 }
+
+.inline-editor
+{
+  padding: 20px;
+}
+
+.inline-editor .content
+{
+  
+}

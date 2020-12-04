@@ -86,7 +86,6 @@
       let text = new Konva.Text({
         x: offset, y: 0,
         width: w - offset, height: h,
-        stroke: props["text.color"],
         text: ctx.text,
         align: "left",
         verticalAlign: "middle",
@@ -98,6 +97,8 @@
         shadowForStrokeEnabled: false,
         listening: false
       });
+      if(props["text.stroke"]) text.stroke(props["text.color"])
+      else text.fill(props["text.color"]);
       text.addName("text");
       group.add(text);
       component.text = text;

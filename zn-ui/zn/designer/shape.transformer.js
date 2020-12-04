@@ -55,12 +55,14 @@
       component.transformer.on("transform", (evt) =>
       {
         component.transformerToTarget(true);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.target.$shape.getLayer().batchDraw();
       });
 
       component.transformer.on("transformend", (evt) =>
       {
         component.transformerToTarget(true);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.$shape.getLayer().batchDraw();
       });
 
@@ -72,6 +74,7 @@
       component.$shape.on("dragmove", (evt) =>
       {
         component.transformerToTarget();
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.target.$shape.getLayer().batchDraw();
       });
 
@@ -81,6 +84,7 @@
         base.snap(component.target.$shape);
         component.targetToTransformer();
         base.fireConnectorPointUpdateEvent(component.target.$shape);
+        component.target.$shape.getStage().fire("shape-rect-update", {source: component.target});
         component.$shape.getLayer().batchDraw();
         component.target.$shape.getLayer().batchDraw();
       });
