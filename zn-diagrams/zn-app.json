@@ -21,8 +21,10 @@
     "../zn-ui/zn-ui-lib.json"
   ],
 
-  "modules": ["auth", "home"],
+  "modules": ["diagrams"],
   
+  "resources": ["assets"],
+
   "environments":
   {
     "dev":
@@ -31,6 +33,14 @@
       "api": "/api",
       "assets": "/assets",
       "images": "/assets/images"
+    },
+    "prod":
+    {
+      "ctx": "/",
+      "api": "/api",
+      "assets": "/assets",
+      "images": "/assets/images"
     }
+
   }
 }

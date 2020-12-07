@@ -17,13 +17,16 @@
       target: element, 
       name: scope.name, 
       width: parseInt(scope.width),
-      height: parseInt(scope.height)
+      height: parseInt(scope.height),
+      lanes: scope.lanes,
+      lanesPosition: scope.lanespos
     }
 
     let surface=new zn.designer.Surface(options);
 
     surface.on("rel-create", (evt)=>scope.onrelcreate({$event: evt}));
     surface.on("rel-select", (evt)=>scope.onrelselect({$event: evt}));
+    surface.on("obj-create", (evt)=>scope.onobjcreate({$event: evt}));
     surface.on("obj-select", (evt)=>scope.onobjselect({$event: evt}));
     surface.on("selection-set-change", (evt)=>scope.onselectionchange({$event: evt}));
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
@@ -45,8 +48,11 @@
         name         : "@",
         width        : "@",
         height       : "@",
+        lanes        : "@",
+        lanespos     : "@",
         onrelcreate  : "&",
         onrelselect  : "&",
+        onobjcreate  : "&",
         onobjselect  : "&",
         onselectionchange  : "&",
         onposition   : "&",

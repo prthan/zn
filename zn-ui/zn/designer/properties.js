@@ -67,6 +67,11 @@
     "grid.majorTick.size": 100,
     "grid.snap.size": 5,
 
+    "lanes.show": true,
+    "lane.header.fill": "#c5e1a5",
+    "lane.header.stroke": "#8bc34a5c",
+    "lane.separator.stroke": "#cccccc",
+    "lane.header.size": 25,
 
   }
 

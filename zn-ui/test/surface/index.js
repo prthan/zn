@@ -1,11 +1,14 @@
 $(()=>
 {
   let surface=new zn.designer.Surface({
-    target: ".surface"
+    target: ".surface",
+    //lanes: "System A|System B|System C|System D",
+    //lanesPosition: "top"
   });
   surface.init();
 
   surface.on("rel-create", (evt)=>console.log("rel-create :", evt.from, "=>", evt.to));
+  surface.on("obj-create", (evt)=>console.log("obj-create :", evt.set));
   surface.on("rel-select", (evt)=>console.log("rel-select :", evt.rel));
   surface.on("obj-select", (evt)=>console.log("obj-select :", evt.obj));
   surface.on("selection-set-change", (evt)=>console.log("selection :", evt.selection));

@@ -75310,7 +75310,7 @@ return jQuery;
     let dfn=function()
     {
       let args=arguments;
-      if(timerId!=-1) clearTimeout(timerId);
+      if(timerId!=-1) window.clearTimeout(timerId);
       timerId=window.setTimeout(()=>fn.apply(scope, args), delay);
     }
 
@@ -79208,8 +79208,7 @@ return jQuery;
     {
       let textarea = this;
       textarea.value = value;
-      if (value)
-        textarea.$textarea.val(value);
+      textarea.$textarea.val(value);
     }
 
     getValue() { return this.value; }
@@ -79836,6 +79835,11 @@ return jQuery;
     "grid.majorTick.size": 100,
     "grid.snap.size": 5,
 
+    "lanes.show": true,
+    "lane.header.fill": "#c5e1a5",
+    "lane.header.stroke": "#8bc34a5c",
+    "lane.separator.stroke": "#cccccc",
+    "lane.header.size": 25,
 
   }
 
@@ -79942,7 +79946,7 @@ return jQuery;
     let layer=shape.getLayer();
 
     let selected=layer.find(".selected").toArray();
-    if(selected.length>0) return;
+    if(selected.length>1) return;
     
     Component.showSelection(shape, false);
     Component.showConnectors(shape, false);
@@ -80192,10 +80196,11 @@ return jQuery;
 
   class Component
   {
-    constructor(stage)
+    constructor(stage, options)
     {
       let component = this;
       component.stage = stage;
+      component.options=options;
 
       component.addLayerDetails();
       component.setupEventHandlers();
@@ -80208,9 +80213,19 @@ return jQuery;
 
       let layer = component.$layer = new Konva.Layer({ name: "grid-layer" });
       stage.add(layer);
+      component.layer=layer;
 
       let w = stage.width();
       let h = stage.height();
+
+      component.updateLayer(w, h);
+    }
+    
+    updateLayer(w, h)
+    {
+      let component = this;
+      let layer = component.layer;
+      layer.destroyChildren();
 
       let background = new Konva.Rect({
         x: 0,
@@ -80222,20 +80237,110 @@ return jQuery;
       background.addName("grid");
 
       layer.add(background);
-
-      if (props["grid.show"])
-      {
-        let majorTickSize=props["grid.majorTick.size"];
-        let minorTickSize=props["grid.minorTick.size"];
-
-        utils.addGridLines(layer, minorTickSize, w, h, minorTickSize, props["grid.minorTick.stroke"], 0);
-        utils.addGridLines(layer, minorTickSize, h, w, minorTickSize, props["grid.minorTick.stroke"], 1);
-        utils.addGridLines(layer, majorTickSize, w, h, majorTickSize, props["grid.majorTick.stroke"], 0);
-        utils.addGridLines(layer, majorTickSize, h, w, majorTickSize, props["grid.majorTick.stroke"], 1);
-      }
       component.background = background;
+
+      if (props["grid.show"]) component.addGridLines(w, h);
+      if (props["lanes.show"]) component.addLanes(w, h);
+      
+      let boundingBox= new Konva.Rect({
+        x: 0,
+        y: 0,
+        width: w,
+        height: h,
+        visible: false,
+        stroke: props["grid.majorTick.stroke"]
+      });
+      layer.add(boundingBox);
+      component.boundingBox=boundingBox;
+      
     }
-    
+
+    addGridLines(w, h)
+    {
+      let component=this;
+      let layer = component.layer;
+      let gridLinesGroup = new Konva.Group({ x: 0, y: 0, width: w, height: h, name: "grid-lines-group"});
+      layer.add(gridLinesGroup);
+      component.gridLinesGroup=gridLinesGroup;
+
+      let majorTickSize=props["grid.majorTick.size"];
+      let minorTickSize=props["grid.minorTick.size"];
+
+      utils.addGridLines(gridLinesGroup, minorTickSize, w, h, minorTickSize, props["grid.minorTick.stroke"], 0);
+      utils.addGridLines(gridLinesGroup, minorTickSize, h, w, minorTickSize, props["grid.minorTick.stroke"], 1);
+      utils.addGridLines(gridLinesGroup, majorTickSize, w, h, majorTickSize, props["grid.majorTick.stroke"], 0);
+      utils.addGridLines(gridLinesGroup, majorTickSize, h, w, majorTickSize, props["grid.majorTick.stroke"], 1);
+    }
+
+    addLanes(w, h)
+    {
+      let component=this;
+      let layer = component.layer;
+
+      if(!component.options.lanes || component.options.lanes=="") return;
+      let lanes=component.options.lanes.split("|");
+
+      let d=component.options.lanesPosition == "left" ? 0 : 1;
+      let numLanes=lanes.length;
+      let laneSize=(w * d + h * (1-d))/numLanes;
+      
+      lanes.forEach((laneText, i)=>
+      {
+        let header = new Konva.Rect({
+          x: i * laneSize * d,
+          y: i * laneSize * (1-d),
+          width: laneSize * d + props["lane.header.size"] * (1-d),
+          height: laneSize * (1-d) + props["lane.header.size"] * d,
+          fill: props["lane.header.fill"],
+          stroke: props["lane.header.stroke"],
+          listening: false
+        });
+        header.addName("lane-header");
+        layer.add(header);
+
+        let text = new Konva.Text({
+          x: i * laneSize * d, 
+          y: (laneSize + i * laneSize) * (1-d),
+          width: laneSize, 
+          height: props["lane.header.size"],
+          text: laneText,
+          align: "center",
+          verticalAlign: "middle",
+          strokeWidth: 1,
+          fontFamily: props["text.family"],
+          fontSize: props["text.size"],
+          fontStyle: props["text.style"],
+          lineHeight: props["text.lineheight"],
+          shadowForStrokeEnabled: false,
+          listening: false,
+          rotation: -90 * (1-d)
+        });
+        if(props["text.stroke"]) text.stroke(props["text.color"])
+        else text.fill(props["text.color"]);
+        text.addName("text");
+        layer.add(text);
+
+        if(i>0)
+        {
+          var laneSeparator=new Konva.Line({
+            points: [i * laneSize * d, i * laneSize * (1-d), i * laneSize * d + w * (1-d), h * d + i * laneSize * (1-d)],
+            strokeWidth: 1,
+            stroke: props["lane.separator.stroke"],
+            listening: false
+          })
+          layer.add(laneSeparator);
+        }
+      })      
+    }
+
+    setSize(w, h)
+    {
+      let component=this;
+      component.updateLayer(w, h);
+      component.layer.batchDraw();
+      component.setupEventHandlers();
+    }
+
     setupEventHandlers()
     {
       let component = this;
@@ -82553,9 +82658,8 @@ return jQuery;
       surface.$target.addClass("zn-surface");
       surface.$target.attr("zn-surface", surface.options.name);
 
-      surface.options.width = surface.options.width || 2000;
-      surface.options.height = surface.options.height || 2000;
-
+      surface.options.width = surface.options.width || 1500;
+      surface.options.height = surface.options.height || 1500;
       surface.setupUI();
       surface.setupEventHandlers();
       surface.$target.get()[0].znc = surface;
@@ -82598,8 +82702,8 @@ return jQuery;
     {
       let surface = this;
 
-      surface.gridLayer = new zn.designer.layer.Grid(surface.stage).$layer;
-      surface.stage.add(surface.gridLayer);
+      surface.gridLayer = new zn.designer.layer.Grid(surface.stage, surface.options);
+      surface.stage.add(surface.gridLayer.$layer);
 
       surface.connectorsLayer = new Konva.Layer({ name: "connectors-layer" });
       surface.stage.add(surface.connectorsLayer);
@@ -82661,8 +82765,10 @@ return jQuery;
     handleKeyEvents(evt)
     {
       let surface = this;
-      if (evt.key == "Delete")
-        surface.onDelete();
+      
+      if (evt.key == "Delete") surface.onDelete();
+      if (evt.key == "c" && evt.ctrlKey) surface.onCopy();
+      if (evt.key == "v" && evt.ctrlKey) surface.onPaste();
     }
 
     onShapeSelect(evt)
@@ -82791,8 +82897,7 @@ return jQuery;
       let objs = [];
       let rels = [];
 
-      if (!surface.data.currentSelection)
-        return;
+      if (!surface.data.currentSelection) return;
 
       if (surface.data.currentSelection.obj)
       {
@@ -82824,6 +82929,47 @@ return jQuery;
       }
 
       surface.fireEvent("delete", { objs: objs, rels: rels });
+    }
+
+    onCopy()
+    {
+      let surface=this;
+      let selectedOids=surface.getSelection();
+      if(selectedOids.length==0) return;
+
+      surface.copyPaste={list:[], count:0};
+
+      selectedOids.forEach((oid)=>
+      {
+        let shapeComponent=surface.data.shapeComponents[oid];
+        surface.copyPaste.list.push(JSON.stringify(surface.shapeComponentData(shapeComponent)));
+      });
+    }
+
+    onPaste()
+    {
+      let surface=this;
+      if(!surface.copyPaste || surface.copyPaste.list.length==0) return;
+
+      zn.designer.shape.Base.resetSelection(surface.shapesLayer);
+      surface.copyPaste.count++;
+      let newSelection=[];
+      surface.copyPaste.list.forEach((item)=>
+      {
+        let shapeData=JSON.parse(item);
+        let d=surface.copyPaste.count * 10;
+        shapeData.rect.x += d;
+        shapeData.rect.y += d;
+        let oid=surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx);
+        let shapeComponent=surface.data.shapeComponents[oid];
+        let $shape=shapeComponent.$shape;
+        $shape.addName("selected");
+        zn.designer.shape.Base.showSelection($shape, true);
+        newSelection.push({...shapeComponent.ctx, oid: oid});
+      });
+      
+      surface.data.currentSelection={set: newSelection};
+      surface.fireEvent("obj-create", {set: newSelection});
     }
 
     reset()
@@ -82963,10 +83109,22 @@ return jQuery;
       surface.$stage.css("width", w).css("height", h);
       surface.stage.width(w);
       surface.stage.height(h);
+      surface.gridLayer.setSize(w, h);
     }
 
     getShapeComponent(oid) {return this.data.shapeComponents[oid]};
     getConnectionComponent(oid) {return this.data.lineComponents[oid]};
+    getSelection()
+    {
+      let surface=this;
+      let oids=[];
+      
+      surface.shapesLayer.find(".selected").each((shape)=>
+      {
+        if(!shape.hasName("transform")) oids.push(shape.getAttr("zn-oid"));
+      });
+      return oids;
+    }
 
     cpData(ctx)
     {
@@ -82982,39 +83140,79 @@ return jQuery;
       return { cp: cp, name: `${parent.list ? '/' + parent.list : ''}/${parent.name}/${ctx.name}` };
     }
 
-    exportToJson()
+    shapeComponentData(shapeComponent)
+    {
+      let data=
+      {
+        type: shapeComponent.$type, 
+        rect: shapeComponent.getRect(), 
+        ctx: shapeComponent.ctx, 
+        oid: shapeComponent.oid 
+      };
+      
+      return data;
+    }
+
+    lineComponentData(lineComponent)
+    {
+      let data=
+      {
+        ...lineComponent.ctx,
+        oid: lineComponent.oid 
+      };
+      
+      return data;
+    }
+
+    exportData()
     {
       let component = this;
       let jsonData = { shapes: [], lines: [], stage: {}};
 
       Object.values(component.data.shapeComponents)
-            .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx, oid: shapeComponent.oid }));
+            .forEach((shapeComponent) => jsonData.shapes.push(component.shapeComponentData(shapeComponent)));
 
       Object.values(component.data.lineComponents)
-            .forEach((lineComponent) => jsonData.lines.push({...lineComponent.ctx, oid: lineComponent.oid }));
+            .forEach((lineComponent) => jsonData.lines.push(component.lineComponentData(lineComponent)));
 
-      jsonData.stage={width: component.stage.width(), height: component.stage.height()};
-      return JSON.stringify(jsonData);
+      jsonData.stage={width: component.stage.width(), height: component.stage.height(), lanes: component.options.lanes, lanesPos: component.options.lanesPosition};
+      
+      return JSON.parse(JSON.stringify(jsonData));
     }
 
-    importFromJson(jsonDataStr)
+    importData(jsonData)
     {
-      let jsonData = JSON.parse(jsonDataStr);
       let surface = this;
       surface.reset();
 
       if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
       if(jsonData.lines) jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
-      if(jsonData.stage) surface.setSize(jsonData.stage.width, jsonData.stage.height);
+      if(jsonData.stage)
+      {
+        surface.options.lanes=jsonData.stage.lanes;
+        surface.options.lanesPosition=jsonData.stage.lanesPos;
+        surface.setSize(jsonData.stage.width, jsonData.stage.height);
+      }
+    }
+
+    exportToJson()
+    {
+      return JSON.stringify(this.exportData());
+    }
+
+    importFromJson(jsonDataStr)
+    {
+      return this.importData(JSON.parse(jsonDataStr));
     }
 
     downloadAsImage()
     {
       let surface = this;
-      surface.gridLayer.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(false);
+      surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-      console.log(dataURL);
-      surface.gridLayer.visible(true);
+      surface.gridLayer.boundingBox.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(true);
       var downloadLink = document.createElement('a');
       downloadLink.download = "surface-drawing.png";
       downloadLink.href = dataURL;
@@ -83027,9 +83225,11 @@ return jQuery;
     getImageData()
     {
       let surface = this;
-      surface.gridLayer.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(false);
+      surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-      surface.gridLayer.visible(true);
+      surface.gridLayer.boundingBox.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(true);
 
       return dataURL;
     }
@@ -83069,13 +83269,16 @@ return jQuery;
       target: element, 
       name: scope.name, 
       width: parseInt(scope.width),
-      height: parseInt(scope.height)
+      height: parseInt(scope.height),
+      lanes: scope.lanes,
+      lanesPosition: scope.lanespos
     }
 
     let surface=new zn.designer.Surface(options);
 
     surface.on("rel-create", (evt)=>scope.onrelcreate({$event: evt}));
     surface.on("rel-select", (evt)=>scope.onrelselect({$event: evt}));
+    surface.on("obj-create", (evt)=>scope.onobjcreate({$event: evt}));
     surface.on("obj-select", (evt)=>scope.onobjselect({$event: evt}));
     surface.on("selection-set-change", (evt)=>scope.onselectionchange({$event: evt}));
     surface.on("position", (evt)=>scope.onposition({$event: evt}));
@@ -83097,8 +83300,11 @@ return jQuery;
         name         : "@",
         width        : "@",
         height       : "@",
+        lanes        : "@",
+        lanespos     : "@",
         onrelcreate  : "&",
         onrelselect  : "&",
+        onobjcreate  : "&",
         onobjselect  : "&",
         onselectionchange  : "&",
         onposition   : "&",

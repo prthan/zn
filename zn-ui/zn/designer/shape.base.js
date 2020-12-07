@@ -97,7 +97,7 @@
     let layer=shape.getLayer();
 
     let selected=layer.find(".selected").toArray();
-    if(selected.length>0) return;
+    if(selected.length>1) return;
     
     Component.showSelection(shape, false);
     Component.showConnectors(shape, false);

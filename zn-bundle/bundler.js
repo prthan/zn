@@ -123,26 +123,96 @@ bundle["list-dir"] = (dir)=>
   })
 }
 
-bundle["gen-app-includes"] = (defnFile, targetDir, minify)=>
+bundle["gen-app"] = (env, appDefnFile, targetDir)=>
 {
-  if(!defnFile) defnFile="./zn-app.json";
+  if(!env)
+  {
+    logger.error("env not specified");
+    return;
+  }
+  if(!appDefnFile) appDefnFile="./zn-app.json";
+  if(!targetDir) targetDir=process.env.DIST;
+
+  let _appDefnFile=utils.abs(appDefnFile);
+  let _appDefnDir=path.dirname(_appDefnFile);
+  let _targetDir=utils.abs(targetDir);
+
+  let appDefn=utils.jsonProps(_appDefnFile);
+
+  let libDefn={name: "app", scripts: [], styles: []};
+  bundle["expand-defn"](_appDefnFile, libDefn);
+
+  bundle["g-lib"](libDefn, _targetDir, "Y");
+
+  appDefn.modules.forEach((moduleName)=>
+  {
+    let moduleDefnFile=`${_appDefnDir}/${moduleName}/zn-module.json`;
+    let moduleTargetDir=`${_targetDir}/${moduleName}`;
+    fs.mkdirSync(moduleTargetDir, {recursive: true});
+    bundle["gen-module-includes"](moduleDefnFile, moduleTargetDir, "Y");
+    bundle["gen-module-html"](moduleDefnFile, moduleTargetDir,"Y", env);
+  });
+
+  bundle["copy-resources"](env, appDefnFile, targetDir);
+}
+
+bundle["copy-resources"]=(env, appDefnFile, targetDir)=>
+{
+  if(!env)
+  {
+    logger.error("env not specified");
+    return;
+  }
+  if(!appDefnFile) appDefnFile="./zn-app.json";
+  if(!targetDir) targetDir=process.env.DIST;
+
+  let _appDefnFile=utils.abs(appDefnFile);
+  let _appDefnDir=path.dirname(_appDefnFile);
+  let _targetDir=utils.abs(targetDir);
+
+  let appDefn=utils.jsonProps(_appDefnFile);
+
+  if(!appDefn.resources) return;
+  appDefn.resources.forEach((resDir)=>
+  {
+    let src=`${_appDefnDir}/${appDefn.resources[0]}`;
+    let tgt=`${_targetDir}/${appDefn.resources[0]}`;
+    logger.info(`copying resorces`);
+    logger.info(`    from : ${src}`);
+    logger.info(`      to : ${tgt}`);
+    let files=utils.listDir(_appDefnDir+"/"+appDefn.resources[0]);
+    files.forEach((f)=>
+    {
+      logger.info(`         + ${f}`);      
+      let srcFile=`${src}/${f}`;
+      let tgtFile=`${tgt}/${f}`;
+      let tgtFileDir=path.dirname(tgtFile);
+      fs.mkdirSync(tgtFileDir, {recursive: true});
+      fs.copyFileSync(srcFile, tgtFile);
+    })
+  })
+}
+
+bundle["gen-app-includes"] = (appDefnFile, targetDir, minify)=>
+{
+  if(!appDefnFile) appDefnFile="./zn-app.json";
   if(!targetDir) targetDir=".";
   if(!minify) minify="N";
 
-  let _defnFile=utils.abs(defnFile);
+  let _appDefnFile=utils.abs(appDefnFile);
   let _targetDir=utils.abs(targetDir);
   
   let libDefn={name: "app", scripts: [], styles: []};
-  bundle["expand-defn"](_defnFile, libDefn);
+  bundle["expand-defn"](_appDefnFile, libDefn);
 
   bundle["g-lib"](libDefn, _targetDir, minify);
-
 }
 
-bundle["gen-module-includes"] = (defnFile, targetDir)=>
+bundle["gen-module-includes"] = (defnFile, targetDir, minify)=>
 {
   if(!defnFile) defnFile="./zn-module.json";
   if(!targetDir) targetDir=".";
+  if(!minify) minify="N";
 
   let _defnFile=utils.abs(defnFile);
   let _targetDir=utils.abs(targetDir);
@@ -157,14 +227,14 @@ bundle["gen-module-includes"] = (defnFile, targetDir)=>
   Object.values(defn.views)
         .reduce((a, c)=>{
           a.scripts.push(...(c.scripts||[]), ...([c.script].filter(x=>x)));
-          a.scripts.push(...(c.styles||[]), ...([c.style].filter(x=>x)));
+          a.styles.push(...(c.styles||[]), ...([c.style].filter(x=>x)));
           return a;
         }, libDefn);
 
   libDefn.scripts=utils.resolve(libDefn.scripts, _defnFile);
   libDefn.styles=utils.resolve(libDefn.styles, _defnFile);
 
-  bundle["g-lib"](libDefn, _targetDir);
+  bundle["g-lib"](libDefn, _targetDir, minify);
 }
 
 bundle["gather-templates"]=(list, relativeTo)=>

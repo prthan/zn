@@ -63,6 +63,14 @@
       <div class="property-name fl-g0">Height</div>
       <div class="property-value fl-g1"><input type="text" value="" size="1"/></div>
     </div>
+    <div class="property-item fl fl-ac" data-property-group="stage" data-property="stage-lanes" ng-show="view.propertySheet.properties.includes('LANES')">
+      <div class="property-name fl-g0">Lanes</div>
+      <div class="property-value fl-g1"><input type="text" value="" size="1"/></div>
+    </div>
+    <div class="property-item fl fl-ac" data-property-group="stage" data-property="stage-lanes-pos" ng-show="view.propertySheet.properties.includes('LANES-POS')">
+      <div class="property-name fl-g0">Lanes Pos</div>
+      <div class="property-value fl-g1"><input type="text" value="" size="1"/></div>
+    </div>
   </div>
 </div>
 <div class="properties-message" ng-show="!view.selected.obj && !view.selected.stage">Select an object or the stage to view its properties</div>

@@ -48,8 +48,7 @@
     {
       let textarea = this;
       textarea.value = value;
-      if (value)
-        textarea.$textarea.val(value);
+      textarea.$textarea.val(value);
     }
 
     getValue() { return this.value; }

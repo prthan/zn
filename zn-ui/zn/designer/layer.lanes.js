@@ -1,7 +1,7 @@
 (function(window)
 {
   let __package  = "zn.designer.layer";
-  let __name     = "Grid";
+  let __name     = "Lanes";
 
   let props=zn.designer.Properties;
   let utils=zn.designer.Utils;
@@ -24,7 +24,7 @@
       let component = this;
       let stage = component.stage;
 
-      let layer = component.$layer = new Konva.Layer({ name: "grid-layer" });
+      let layer = component.$layer = new Konva.Layer({ name: "lanes-layer" });
       stage.add(layer);
       component.layer=layer;
 
@@ -39,65 +39,12 @@
       let component = this;
       let layer = component.layer;
       layer.destroyChildren();
-
-      let background = new Konva.Rect({
-        x: 0,
-        y: 0,
-        width: w,
-        height: h,
-        fill: props["grid.fill"]
-      });
-      background.addName("grid");
-
-      layer.add(background);
-      component.background = background;
-
-      if (props["grid.show"]) component.addGridLines(w, h);
-      if (props["lanes.show"]) component.addLanes(w, h);
       
-      let boundingBox= new Konva.Rect({
-        x: 0,
-        y: 0,
-        width: w,
-        height: h,
-        visible: false,
-        stroke: props["grid.majorTick.stroke"]
-      });
-      layer.add(boundingBox);
-      component.boundingBox=boundingBox;
-      
-    }
-
-    addGridLines(w, h)
-    {
-      let component=this;
-      let layer = component.layer;
-      let gridLinesGroup = new Konva.Group({ x: 0, y: 0, width: w, height: h, name: "grid-lines-group"});
-      layer.add(gridLinesGroup);
-      component.gridLinesGroup=gridLinesGroup;
-
-      let majorTickSize=props["grid.majorTick.size"];
-      let minorTickSize=props["grid.minorTick.size"];
-
-      utils.addGridLines(gridLinesGroup, minorTickSize, w, h, minorTickSize, props["grid.minorTick.stroke"], 0);
-      utils.addGridLines(gridLinesGroup, minorTickSize, h, w, minorTickSize, props["grid.minorTick.stroke"], 1);
-      utils.addGridLines(gridLinesGroup, majorTickSize, w, h, majorTickSize, props["grid.majorTick.stroke"], 0);
-      utils.addGridLines(gridLinesGroup, majorTickSize, h, w, majorTickSize, props["grid.majorTick.stroke"], 1);
-    }
-
-    addLanes(w, h)
-    {
-      let component=this;
-      let layer = component.layer;
-
-      if(!component.options.lanes || component.options.lanes=="") return;
-      let lanes=component.options.lanes.split("|");
-
+      let numLanes=component.options.lanes.length;
+      let laneSize=w/numLanes;
       let d=component.options.lanesPosition == "left" ? 0 : 1;
-      let numLanes=lanes.length;
-      let laneSize=(w * d + h * (1-d))/numLanes;
       
-      lanes.forEach((laneText, i)=>
+      component.options.lanes.forEach((laneText, i)=>
       {
         let header = new Konva.Rect({
           x: i * laneSize * d,
@@ -143,7 +90,8 @@
           })
           layer.add(laneSeparator);
         }
-      })      
+      })
+
     }
 
     setSize(w, h)
@@ -151,27 +99,10 @@
       let component=this;
       component.updateLayer(w, h);
       component.layer.batchDraw();
-      component.setupEventHandlers();
     }
 
     setupEventHandlers()
     {
-      let component = this;
-      let stage = component.stage;
-
-      component.background.on("mouseenter", () => base.resetConnectors(stage.findOne(".shapes-layer")));
-      component.background.on("mousedown", (event) => 
-      {
-        component.mouseDownAt=event;
-        stage.fire("grid-select", { mouseEvent: event });
-      });
-      component.background.on("mouseup", (event) =>
-      {
-        if(component.mouseDownAt && 
-           component.mouseDownAt.evt.layerX==event.evt.layerX && 
-           component.mouseDownAt.evt.layerY==event.evt.layerY) 
-          stage.fire("grid-click", { mouseEvent: event });
-      });
     }
   }
 

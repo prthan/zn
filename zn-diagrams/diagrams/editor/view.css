@@ -82,6 +82,7 @@
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   height: 30px;
+  cursor: pointer;
 }
 
 .toolbox .action img
@@ -178,7 +179,7 @@
 
 .property-sheets .properties-list .property-item .property-name
 {
-  width: 40px;
+  width: 50px;
   text-align: right;
   font-size: 9px;
   font-weight: 500;
@@ -229,7 +230,7 @@
   font-weight: 500;
 }
 
-.download-trigger
+.download, .upload
 {
   display: none;
 }
@@ -301,3 +302,31 @@
 {
   color: #202020;
 }
+
+.diagram-info
+{
+  padding: 1px 4px;
+  cursor: pointer;
+  color: #1c1c1c;
+  font-size: 12px;
+  font-weight: 600;  
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.diagram-info:hover
+{
+  background-color: #E0F7FA;
+  border-top-color: #d3ecef;
+  border-bottom-color: #d3ecef;
+}
+
+.diagram-info.action
+{
+  cursor: pointer;
+}
+
+
+[zn-dialog='edit-diagram-info-dialog'] .zn-dialog-wrapper {width: 400px;}
+
+[zn-textarea='diagram-descr'] {height: 200px;}

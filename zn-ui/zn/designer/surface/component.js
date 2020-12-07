@@ -36,9 +36,8 @@
       surface.$target.addClass("zn-surface");
       surface.$target.attr("zn-surface", surface.options.name);
 
-      surface.options.width = surface.options.width || 2000;
-      surface.options.height = surface.options.height || 2000;
-
+      surface.options.width = surface.options.width || 1500;
+      surface.options.height = surface.options.height || 1500;
       surface.setupUI();
       surface.setupEventHandlers();
       surface.$target.get()[0].znc = surface;
@@ -81,8 +80,8 @@
     {
       let surface = this;
 
-      surface.gridLayer = new zn.designer.layer.Grid(surface.stage).$layer;
-      surface.stage.add(surface.gridLayer);
+      surface.gridLayer = new zn.designer.layer.Grid(surface.stage, surface.options);
+      surface.stage.add(surface.gridLayer.$layer);
 
       surface.connectorsLayer = new Konva.Layer({ name: "connectors-layer" });
       surface.stage.add(surface.connectorsLayer);
@@ -144,8 +143,10 @@
     handleKeyEvents(evt)
     {
       let surface = this;
-      if (evt.key == "Delete")
-        surface.onDelete();
+      
+      if (evt.key == "Delete") surface.onDelete();
+      if (evt.key == "c" && evt.ctrlKey) surface.onCopy();
+      if (evt.key == "v" && evt.ctrlKey) surface.onPaste();
     }
 
     onShapeSelect(evt)
@@ -274,8 +275,7 @@
       let objs = [];
       let rels = [];
 
-      if (!surface.data.currentSelection)
-        return;
+      if (!surface.data.currentSelection) return;
 
       if (surface.data.currentSelection.obj)
       {
@@ -307,6 +307,47 @@
       }
 
       surface.fireEvent("delete", { objs: objs, rels: rels });
+    }
+
+    onCopy()
+    {
+      let surface=this;
+      let selectedOids=surface.getSelection();
+      if(selectedOids.length==0) return;
+
+      surface.copyPaste={list:[], count:0};
+
+      selectedOids.forEach((oid)=>
+      {
+        let shapeComponent=surface.data.shapeComponents[oid];
+        surface.copyPaste.list.push(JSON.stringify(surface.shapeComponentData(shapeComponent)));
+      });
+    }
+
+    onPaste()
+    {
+      let surface=this;
+      if(!surface.copyPaste || surface.copyPaste.list.length==0) return;
+
+      zn.designer.shape.Base.resetSelection(surface.shapesLayer);
+      surface.copyPaste.count++;
+      let newSelection=[];
+      surface.copyPaste.list.forEach((item)=>
+      {
+        let shapeData=JSON.parse(item);
+        let d=surface.copyPaste.count * 10;
+        shapeData.rect.x += d;
+        shapeData.rect.y += d;
+        let oid=surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx);
+        let shapeComponent=surface.data.shapeComponents[oid];
+        let $shape=shapeComponent.$shape;
+        $shape.addName("selected");
+        zn.designer.shape.Base.showSelection($shape, true);
+        newSelection.push({...shapeComponent.ctx, oid: oid});
+      });
+      
+      surface.data.currentSelection={set: newSelection};
+      surface.fireEvent("obj-create", {set: newSelection});
     }
 
     reset()
@@ -446,10 +487,22 @@
       surface.$stage.css("width", w).css("height", h);
       surface.stage.width(w);
       surface.stage.height(h);
+      surface.gridLayer.setSize(w, h);
     }
 
     getShapeComponent(oid) {return this.data.shapeComponents[oid]};
     getConnectionComponent(oid) {return this.data.lineComponents[oid]};
+    getSelection()
+    {
+      let surface=this;
+      let oids=[];
+      
+      surface.shapesLayer.find(".selected").each((shape)=>
+      {
+        if(!shape.hasName("transform")) oids.push(shape.getAttr("zn-oid"));
+      });
+      return oids;
+    }
 
     cpData(ctx)
     {
@@ -465,39 +518,79 @@
       return { cp: cp, name: `${parent.list ? '/' + parent.list : ''}/${parent.name}/${ctx.name}` };
     }
 
-    exportToJson()
+    shapeComponentData(shapeComponent)
+    {
+      let data=
+      {
+        type: shapeComponent.$type, 
+        rect: shapeComponent.getRect(), 
+        ctx: shapeComponent.ctx, 
+        oid: shapeComponent.oid 
+      };
+      
+      return data;
+    }
+
+    lineComponentData(lineComponent)
+    {
+      let data=
+      {
+        ...lineComponent.ctx,
+        oid: lineComponent.oid 
+      };
+      
+      return data;
+    }
+
+    exportData()
     {
       let component = this;
       let jsonData = { shapes: [], lines: [], stage: {}};
 
       Object.values(component.data.shapeComponents)
-            .forEach((shapeComponent) => jsonData.shapes.push({ type: shapeComponent.$type, rect: shapeComponent.getRect(), ctx: shapeComponent.ctx, oid: shapeComponent.oid }));
+            .forEach((shapeComponent) => jsonData.shapes.push(component.shapeComponentData(shapeComponent)));
 
       Object.values(component.data.lineComponents)
-            .forEach((lineComponent) => jsonData.lines.push({...lineComponent.ctx, oid: lineComponent.oid }));
+            .forEach((lineComponent) => jsonData.lines.push(component.lineComponentData(lineComponent)));
 
-      jsonData.stage={width: component.stage.width(), height: component.stage.height()};
-      return JSON.stringify(jsonData);
+      jsonData.stage={width: component.stage.width(), height: component.stage.height(), lanes: component.options.lanes, lanesPos: component.options.lanesPosition};
+      
+      return JSON.parse(JSON.stringify(jsonData));
     }
 
-    importFromJson(jsonDataStr)
+    importData(jsonData)
     {
-      let jsonData = JSON.parse(jsonDataStr);
       let surface = this;
       surface.reset();
 
       if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
       if(jsonData.lines) jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
-      if(jsonData.stage) surface.setSize(jsonData.stage.width, jsonData.stage.height);
+      if(jsonData.stage)
+      {
+        surface.options.lanes=jsonData.stage.lanes;
+        surface.options.lanesPosition=jsonData.stage.lanesPos;
+        surface.setSize(jsonData.stage.width, jsonData.stage.height);
+      }
+    }
+
+    exportToJson()
+    {
+      return JSON.stringify(this.exportData());
+    }
+
+    importFromJson(jsonDataStr)
+    {
+      return this.importData(JSON.parse(jsonDataStr));
     }
 
     downloadAsImage()
     {
       let surface = this;
-      surface.gridLayer.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(false);
+      surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-      console.log(dataURL);
-      surface.gridLayer.visible(true);
+      surface.gridLayer.boundingBox.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(true);
       var downloadLink = document.createElement('a');
       downloadLink.download = "surface-drawing.png";
       downloadLink.href = dataURL;
@@ -510,9 +603,11 @@
     getImageData()
     {
       let surface = this;
-      surface.gridLayer.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(false);
+      surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
-      surface.gridLayer.visible(true);
+      surface.gridLayer.boundingBox.visible(false);
+      surface.gridLayer.gridLinesGroup.visible(true);
 
       return dataURL;
     }
