@@ -23,23 +23,25 @@
 
   "modules": ["diagrams"],
   
-  "resources": ["assets"],
+  "resources": ["res"],
 
+  "bundled": "Y",
+  
   "environments":
   {
     "dev":
     {
       "ctx": "/",
       "api": "/api",
-      "assets": "/assets",
-      "images": "/assets/images"
+      "res": "/res",
+      "images": "/res/images"
     },
     "prod":
     {
       "ctx": "/",
       "api": "/api",
-      "assets": "/assets",
-      "images": "/assets/images"
+      "res": "res",
+      "images": "res/images"
     }
 
   }

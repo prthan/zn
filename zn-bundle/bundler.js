@@ -148,9 +148,11 @@ bundle["gen-app"] = (env, appDefnFile, targetDir)=>
   {
     let moduleDefnFile=`${_appDefnDir}/${moduleName}/zn-module.json`;
     let moduleTargetDir=`${_targetDir}/${moduleName}`;
+    if(appDefn.bundled=="Y") moduleTargetDir=`${_targetDir}`;
+    
     fs.mkdirSync(moduleTargetDir, {recursive: true});
-    bundle["gen-module-includes"](moduleDefnFile, moduleTargetDir, "Y");
-    bundle["gen-module-html"](moduleDefnFile, moduleTargetDir,"Y", env);
+    bundle["gen-module-includes"](moduleDefnFile, moduleTargetDir, "Y", appDefn.bundled);
+    bundle["gen-module-html"](moduleDefnFile, moduleTargetDir, appDefn.bundled, env);
   });
 
   bundle["copy-resources"](env, appDefnFile, targetDir);
@@ -208,11 +210,12 @@ bundle["gen-app-includes"] = (appDefnFile, targetDir, minify)=>
   bundle["g-lib"](libDefn, _targetDir, minify);
 }
 
-bundle["gen-module-includes"] = (defnFile, targetDir, minify)=>
+bundle["gen-module-includes"] = (defnFile, targetDir, minify, bundled)=>
 {
   if(!defnFile) defnFile="./zn-module.json";
   if(!targetDir) targetDir=".";
   if(!minify) minify="N";
+  if(!bundled) bundled="N";
 
   let _defnFile=utils.abs(defnFile);
   let _targetDir=utils.abs(targetDir);
@@ -222,6 +225,7 @@ bundle["gen-module-includes"] = (defnFile, targetDir, minify)=>
   let defn=utils.jsonProps(_defnFile);
 
   let libDefn= {name: "module", scripts: [], styles: []};
+
   bundle["expand-defn"](_defnFile, libDefn);
 
   Object.values(defn.views)
@@ -268,14 +272,14 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
     scripts: [], styles: [],
   }
   
-  if(defn.includes)
-  {
-    ctx.scripts.push(...(defn.includes.scripts || []));
-    ctx.styles.push(...(defn.includes.styles || []));
-  }
-
   if(bundled=="N")
   {
+    if(defn.includes)
+    {
+      ctx.scripts.push(...(defn.includes.scripts || []));
+      ctx.styles.push(...(defn.includes.styles || []));
+    }
+  
     let libDefn= {scripts:[], styles: []};
     bundle["expand-defn"](_defnFile, libDefn);
     ctx.scripts.push(...libDefn.scripts.map(x=>x.entry));
@@ -293,8 +297,8 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
   }
   else
   {
-    ctx.scripts.push("module.js");
-    ctx.styles.push("module.css");
+    ctx.scripts.push("app.js", "module.js");
+    ctx.styles.push("app.css", "module.css");
     logger.info(`adding templates`);
     let templates=Object.values(defn.views).map((view)=>view.template);
     if(defn.template) templates.push(defn.template);
@@ -306,7 +310,7 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
   let appDefn=utils.jsonProps(appDefnFile);
   ctx.env=JSON.stringify({...appDefn.environments[env]});
   ctx.title=defn.title;
-  ctx.assets="../assets";
+  ctx.images=appDefn.environments[env].images;
 
   let views=Object.keys(defn.views).reduce((a, c)=>
   {
@@ -338,7 +342,7 @@ bundle["gen-module"] = (defnFile, targetDir, env)=>
   let _defnFile=utils.abs(defnFile);
   let _targetDir=utils.abs(targetDir);
   
-  bundle["gen-module-includes"](_defnFile, _targetDir);
+  bundle["gen-module-includes"](_defnFile, _targetDir, "Y", "Y");
   bundle["gen-module-html"](_defnFile, _targetDir, "Y", env);
 }
 
@@ -349,7 +353,7 @@ bundle.html.index=(ctx)=>
 <html>
   <head>
     <title>${ctx.title}</title>
-    <link rel="icon" type="image/png" href="${ctx.assets}/images/logo/icon.png" />
+    <link rel="icon" type="image/png" href="${ctx.images}/logo/icon.png" />
 ${bundle.html.styles(ctx.styles)}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

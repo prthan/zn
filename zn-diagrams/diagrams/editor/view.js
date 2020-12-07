@@ -394,7 +394,7 @@
       
       var dataURL=view.surface.getImageData();
       $(".download").attr("href", dataURL);
-      $(".download").attr("download", view.diagram.name.toLowerCase().replaceAll(/ +/g,"-"));
+      $(".download").attr("download", view.diagram.name.toLowerCase().replace(/ +/g,"-"));
       window.setTimeout(()=>$(".download").get()[0].click(),10);
     }
 
@@ -421,7 +421,7 @@
       
       view.diagram.data=view.surface.exportData();
       $(".download").attr("href", `data:application/json;base64,${btoa(JSON.stringify(view.diagram))}`);
-      $(".download").attr("download", view.diagram.name.toLowerCase().replaceAll(/ +/g,"-"));
+      $(".download").attr("download", view.diagram.name.toLowerCase().replace(/ +/g,"-"));
       window.setTimeout(()=>$(".download").get()[0].click(),10);
     }
 
