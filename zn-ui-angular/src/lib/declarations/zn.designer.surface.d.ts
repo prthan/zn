@@ -5,11 +5,17 @@ declare class znSurface
   init() :void;
   on(eventName :string, eventHandler :(event :znSurfaceEvent)=>void) :void;
   addShape(type :string, rect :znRect, ctx :any) :void;
+  exportData() :any;
   exportToJson() :string;
   importFromJson(data :string) :void;
+  importData(data :any) :void;
   setMode(mode :string) :void;
   downloadAsImage() :void;
+  getImageData() :string;
   get(name :string) :znSurface;
+  reset() :void;
+  setSize(width :number, height :number) :void;
+
 }
 
 declare interface znSurfaceOptions

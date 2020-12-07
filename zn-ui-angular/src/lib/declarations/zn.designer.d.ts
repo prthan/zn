@@ -1,4 +1,5 @@
 declare interface znDesigner
 {
-  Surface :znSurface
+  Surface :znSurface;
+  Utils :znDesignerUtils;
 }
