@@ -117,6 +117,13 @@
       else dialog.$target.addClass("actions-none");
     }
 
+    setTitle(title)
+    {
+      let dialog=this;
+      dialog.options.title=title;
+      dialog.$header.text(dialog.options.title);      
+    }
+    
     wrap()
     {
       let dialog = this;

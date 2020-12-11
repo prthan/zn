@@ -23,6 +23,7 @@
         label: scope.label, 
         value: scope.value,
         items: scope.items,
+        placeholder: scope.placeholder,
         error: scope.error ? scope.error : "",
         message: scope.message
       }
@@ -56,6 +57,7 @@
       {
         name         : "@",
         label        : "@",
+        placeholder  : "@",
         value        : "=",
         items        : "=",
         error        : "=",

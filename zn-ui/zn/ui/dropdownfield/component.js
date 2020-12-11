@@ -48,8 +48,8 @@
       let dropdownfield = this;
       dropdownfield.value = value;
       let item = DropdownField.itemForValue(dropdownfield.options.items, dropdownfield.value);
-      if (item)
-        dropdownfield.$value.text(item.label);
+      if (item) dropdownfield.$value.text(item.label).removeClass("placeholder");
+      else dropdownfield.$value.text(dropdownfield.options.placeholder || "").addClass("placeholder");
     }
     getValue()
     {
@@ -61,12 +61,9 @@
       if (msg != "")
       {
         dropdownfield.$msg.text(msg);
-        if (type == "error")
-          dropdownfield.$target.addClass("error");
-        else
-          dropdownfield.$target.addClass("message");
+        if (type == "error") dropdownfield.$target.addClass("error");
+        else dropdownfield.$target.addClass("message");
       }
-
       else
       {
         dropdownfield.$msg.text("");
@@ -167,7 +164,7 @@
     {
       return `
       ${options.label ? DropdownField.htmlLabel(options.label) : ''}
-      <div class="zn-dropdownfield-input" tabindex="0"><span class="value"></span><span class="action"><i class="fas fa-caret-down"></i></span></div>
+      <div class="zn-dropdownfield-input" tabindex="0"><span class="value placeholder">${options.placeholder}</span><span class="action"><i class="fas fa-caret-down"></i></span></div>
       <div class="zn-dropdownfield-msg">${options.error || options.message || ''}</div>
       <div class="zn-dropdownfield-items zn-popup-menu-items"></div>
       `;

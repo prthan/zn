@@ -13,7 +13,6 @@
 
     init()
     {
-      console.log(this.options);
       let list = this;
       list.$target = $(list.options.target);
 

@@ -22,6 +22,7 @@
     $target.on(ename, (evt)=>
     {
       evt.preventDefault();
+      evt.stopPropagation();
       if($target.hasClass("on-edit")) return;
       $target.addClass("on-edit");
       targetElement.currentValue=$target.text();

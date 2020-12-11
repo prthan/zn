@@ -120,6 +120,29 @@
     return dfn;
   }
 
+  utils.slug=(x)=>
+  {
+    return x.replace(/[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/g,'').replace(/_+/g,'-').replace(/\s+/g,'-').replace(/-+/g,"-").toLocaleLowerCase();
+  };
+
+  utils.copyObj=(obj)=>
+  {
+    let str=JSON.stringify(obj);
+    let newObj=JSON.parse(str);
+    utils.sanitize(newObj);
+    return newObj;
+  }
+
+  utils.sanitize=(obj)=>
+  {
+    if(obj instanceof Array) obj.forEach(o=>utils.sanitize(o));
+    else if(typeof(obj)=='object')
+    {
+      if(obj["$$hashKey"]) delete obj["$$hashKey"];
+      Object.keys(obj).forEach(k=>(obj[k] instanceof Array || typeof(obj)=='object') && utils.sanitize(obj[k]));
+    }
+  }
+
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = utils;  
 
 })(window);
