@@ -134,8 +134,11 @@
         let newValue = $menuItem.attr("zn-value");
         let oldValue = dropdownfield.getValue();
         hide();
-        dropdownfield.setValue(newValue);
-        dropdownfield.fireEvent("change", { newValue: newValue, oldValue: oldValue });
+        if(newValue!=oldValue)
+        {
+          dropdownfield.setValue(newValue);
+          dropdownfield.fireEvent("change", { newValue: newValue, oldValue: oldValue });
+        }
       });
 
       let p = dropdownfield.$input.position();

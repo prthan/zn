@@ -36,6 +36,8 @@
         {
           scope.value=evt.newValue;
           scope.$apply();
+
+          if(scope.onchange) scope.onchange({$event: evt});
         })
     
         scope.$watch("value", (nv, ov)=>dropdownfield.setValue(nv));
@@ -61,7 +63,8 @@
         value        : "=",
         items        : "=",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&",
       },
       restrict: "A",
       template: "",

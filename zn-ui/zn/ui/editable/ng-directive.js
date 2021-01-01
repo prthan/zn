@@ -19,7 +19,7 @@
     if(scope.doubleclick=="Y") ename="dblclick.editable";
     
     $target.addClass("zn-editable");
-    $target.on(ename, (evt)=>
+    let eh=(evt)=>
     {
       evt.preventDefault();
       evt.stopPropagation();
@@ -56,7 +56,10 @@
       $editor.focus();
       $editor.select();
       if(scope.oneditstart) scope.oneditstart({$event: {name: "oninlineeditstart", source: $target}});
-    });
+    }
+
+    $target.on("focus", eh)
+    $target.on(ename, eh);
   }
 
   directive.html={};
