@@ -193,6 +193,16 @@ bundle["copy-resources"]=(env, appDefnFile, targetDir)=>
       fs.copyFileSync(srcFile, tgtFile);
     })
   })
+  if(appDefn.pwa=="Y")
+  {
+    logger.info(`copying pwa resources`);
+    logger.info(`    from : ${_appDefnDir}`);
+    logger.info(`      to : ${_targetDir}`);
+    logger.info(`         + manifest.json`);
+    fs.copyFileSync(`${_appDefnDir}/manifest.json`, `${_targetDir}/manifest.json`);
+    logger.info(`         + sw.js`);
+    fs.copyFileSync(`${_appDefnDir}/sw.js`, `${_targetDir}/sw.js`);
+  }
 }
 
 bundle["gen-app-includes"] = (appDefnFile, targetDir, minify)=>
@@ -263,13 +273,16 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
   let _defnFile=utils.abs(defnFile);
   let _targetDir=utils.abs(targetDir);
 
+  let appDefnFile=path.dirname(_defnFile)+"/../zn-app.json";
+  let appDefn=utils.jsonProps(appDefnFile);
+
   logger.info(`generating module index from ${defnFile}`);
 
   let defn=utils.jsonProps(_defnFile);
   
   let ctx=
   {
-    scripts: [], styles: [],
+    scripts: [], styles: []
   }
   
   if(bundled=="N")
@@ -293,7 +306,7 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
       a.styles.push([c.style].filter(x=>x));
       return a;
     }, ctx);
-
+    if(appDefn.pwa) ctx.manifest="../manifest.json";
   }
   else
   {
@@ -304,10 +317,9 @@ bundle["gen-module-html"] = (defnFile, targetDir, bundled, env)=>
     if(defn.template) templates.push(defn.template);
     if(defn.fragments) templates.push(...defn.fragments);
     ctx.templates=bundle["gather-templates"](templates, _defnFile);
+    if(appDefn.pwa) ctx.manifest="manifest.json";
   }
 
-  let appDefnFile=path.dirname(_defnFile)+"/../zn-app.json";
-  let appDefn=utils.jsonProps(appDefnFile);
   ctx.env=JSON.stringify({...appDefn.environments[env]});
   ctx.title=defn.title;
   ctx.images=appDefn.environments[env].images;
@@ -358,6 +370,7 @@ ${bundle.html.styles(ctx.styles)}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    ${ctx.manifest ? `<link rel="manifest" href="${ctx.manifest}"/>` : ''}
   </head>
   <body>
 ${bundle.html.scripts(ctx.scripts)}
