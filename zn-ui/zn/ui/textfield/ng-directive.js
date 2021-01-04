@@ -34,6 +34,8 @@
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
       textfield.on("action", (evt)=>scope.onaction({$event: evt}));
       
@@ -60,7 +62,8 @@
         readonly     : "@",
         onaction     : "&",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",

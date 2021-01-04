@@ -30,6 +30,8 @@
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
   
       scope.$watch("value", (nv, ov)=>checkboxfield.setValue(nv));
@@ -53,7 +55,8 @@
         onvalue      : "@",
         offvalue     : "@",
         error        : "=",
-        message      : "="
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",

@@ -242,6 +242,22 @@ $(()=>
   button6.on("init", evt => console.log("init", evt));
   button6.init();
 
+  let draggablecal=new zn.ui.components.Calendar({
+    name: "calendar-5",
+    target: ".calendar-5",
+    date: new Date()
+  });
+  draggablecal.on("date-select", evt => console.log("date-select", evt));
+  draggablecal.on("init", evt => console.log("init", evt));
+  draggablecal.init();
 
+  let draggable=new zn.ui.components.Draggable({
+    target: ".drag-handle",
+    updateTarget: ".draggable-calendar",
+  });
+  draggable.on("dragstart", evt => console.log("dragstart", evt));
+  draggable.on("dragmove", evt => console.log("dragmove", evt));
+  draggable.on("dragend", evt => console.log("dragend", evt));
+  draggable.init();
 })
 

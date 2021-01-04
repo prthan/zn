@@ -36,6 +36,8 @@
         {
           scope.value=evt.newValue;
           scope.$apply();
+
+          if(scope.onchange) scope.onchange({$event: evt});
         })
 
         scope.$watch("value", (nv, ov)=>radiogroup.setValue(nv));
@@ -62,7 +64,8 @@
         items        : "=",
         layout       : "@",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",

@@ -28,6 +28,7 @@
     "zn/ui/textarea/ng-directive.js",
     "zn/ui/textfield/component.js",
     "zn/ui/textfield/ng-directive.js",
+    "zn/ui/draggable/component.js",
     "zn/ui/draggable/ng-directive.js",
     "zn/ui/editable/ng-directive.js",
     "zn/designer/properties.js",

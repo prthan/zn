@@ -32,6 +32,8 @@
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
   
       scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
@@ -55,7 +57,8 @@
         placeholder  : "@",
         readonly     : "@",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",

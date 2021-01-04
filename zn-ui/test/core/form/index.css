@@ -56,3 +56,25 @@ body
 /*.dialog-cal .zn-dialog-wrapper {width: 230px;}*/
 
 .buttons-2 {margin-top: 20px;}
+
+.draggable-calendar 
+{
+  position: absolute;
+  border: 1px solid rgba(0,0,0,.15);
+  display: inline-block;
+  margin-top: 20px;
+  left: 300px;
+  top: 50px;
+}
+
+.draggable-calendar .zn-calendar
+{
+  border: none
+}
+
+.draggable-calendar .drag-handle
+{
+  height: 5px;
+  background-color: rgba(0,0,0,.15);
+  cursor: move;
+}
