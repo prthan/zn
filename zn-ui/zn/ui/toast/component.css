@@ -1,0 +1,52 @@
+.zn-toasts
+{
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  z-index: 1110111;
+  margin: 2px;
+}
+
+.zn-toast
+{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.zn-toast 
+{
+  transition: opacity 3s ease 1s;
+}
+
+.zn-toast .zn-toast-content
+{
+  display: flex;
+  align-items: center;
+  background-color: #607d8b8c;
+  color: #ffffff;
+  padding: 8px 13px;
+  border-radius: 2px;
+  margin: 4px;
+  border: 1px solid #607d8b12;
+  font-size: 13px;
+}
+
+.zn-toast.hide
+{
+  opacity: 0;
+}
+
+
+
+.zn-toast .zn-toast-icon {flex-grow: 0; padding-right: 10px;}
+.zn-toast .zn-toast-text {flex-grow: 1; flex-basis: 0; white-space: nowrap;}
+
+.zn-toast.error
+{
+
+}
+
+.zn-toast.warn
+{
+  
+}

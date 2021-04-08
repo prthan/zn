@@ -131,7 +131,8 @@ bundle["gen-app"] = (env, appDefnFile, targetDir)=>
     return;
   }
   if(!appDefnFile) appDefnFile="./zn-app.json";
-  if(!targetDir) targetDir=process.env.DIST;
+  if(!targetDir) targetDir=process.env.DIST + "/html/" + env;
+  fs.mkdirSync(targetDir, {recursive: true});
 
   let _appDefnFile=utils.abs(appDefnFile);
   let _appDefnDir=path.dirname(_appDefnFile);
@@ -374,7 +375,8 @@ ${bundle.html.styles(ctx.styles)}
   </head>
   <body>
 ${bundle.html.scripts(ctx.scripts)}
-    <script>zn.env=${ctx.env};zn.defn=${ctx.defn};</script>
+    <template id="zn-env">${ctx.env}</template>
+    <template id="zn-defn">${ctx.defn}</template>
 ${ctx.templates || ''}
     <div class="zn-module"></div>
   </body>

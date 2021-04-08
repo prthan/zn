@@ -49,8 +49,8 @@
     {
       let datefield = this;
       datefield.value = value;
-      if (value)
-        datefield.$input.val(DateField.format(value, "date", datefield.options.format));
+      if (value) datefield.$input.val(DateField.format(value, "date", datefield.options.format));
+      else datefield.$input.val("");
     }
 
     getValue() { return this.value; }

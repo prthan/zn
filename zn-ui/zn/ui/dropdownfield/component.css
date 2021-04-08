@@ -86,7 +86,7 @@
   color: #d4746d;
 }
 
-.zn-popup-menu-items
+.zn-dropdownfield-items
 {
   position:absolute;
   z-index:1111901;
@@ -103,14 +103,19 @@
 	min-width: 100px;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item
+.zn-dropdownfield-items::-webkit-scrollbar {width: 5px; height: 5px}
+.zn-dropdownfield-items::-webkit-scrollbar-track {background: #ddd;}
+.zn-dropdownfield-items::-webkit-scrollbar-thumb {background: #bbb;}
+
+
+.zn-dropdownfield-items .zn-dropdownfield-item
 {
   display:block;
   padding: 0px;
   cursor: default;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item
+.zn-dropdownfield-items .zn-dropdownfield-item
 {
   font-size:12px;
   color: #645d5d;
@@ -122,35 +127,35 @@
   position: relative;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item:hover
+.zn-dropdownfield-items .zn-dropdownfield-item:hover
 {
   background-color: #dcfaff;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item:last-child:hover
+.zn-dropdownfield-items .zn-dropdownfield-item:last-child:hover
 {
   border-bottom: 1px solid transparent;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item:first-of-type:hover
+.zn-dropdownfield-items .zn-dropdownfield-item:first-of-type:hover
 {
 	border-top: 1px solid transparent;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item .zn-popup-menu-item-text
+.zn-dropdownfield-items .zn-dropdownfield-item .zn-dropdownfield-item-text
 {
   font-weight: 500;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item .zn-popup-menu-item-sub-text
+.zn-dropdownfield-items .zn-dropdownfield-item .zn-dropdownfield-item-sub-text
 {
   color: #8e8e8e;
   font-size: 11px;
 }
 
-.zn-popup-menu-items .zn-popup-menu-item-divider
+.zn-dropdownfield-items .zn-dropdownfield-item-divider
 {
   height: 2px;
   overflow: hidden;
@@ -158,8 +163,8 @@
   border-bottom: 1px solid #e2e2e2;
 }
 
-.zn-popup-menu-item[zn-value=''] {height: 20px}
-.zn-popup-menu-items .zn-popup-menu-item i
+.zn-dropdownfield-item[zn-value=''] {height: 20px}
+.zn-dropdownfield-items .zn-dropdownfield-item i
 {
   padding-right: 10px;
 }

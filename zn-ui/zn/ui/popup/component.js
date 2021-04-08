@@ -146,8 +146,9 @@
     static pointInContent(point,content)
     {
       var offset=content.offset();
+      let w=content.get()[0].offsetWidth;
       return point.x >= offset.left && 
-             point.x <= (offset.left+content.width()) && 
+             point.x <= (offset.left+w) && 
              point.y >= offset.top &&
              point.y <= (offset.top+content.height());
     }

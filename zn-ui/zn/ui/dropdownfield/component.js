@@ -93,14 +93,14 @@
       {
         dropdownfield.$target.addClass("focused");
       })
-        .on("blur", (evt) =>
-        {
-          dropdownfield.$target.removeClass("focused");
-        })
-        .on("click", (evt) =>
-        {
-          dropdownfield.showDropdownMenuItems();
-        });
+      .on("blur", (evt) =>
+      {
+        dropdownfield.$target.removeClass("focused");
+      })
+      .on("click", (evt) =>
+      {
+        dropdownfield.showDropdownMenuItems();
+      });
 
     }
     showDropdownMenuItems()
@@ -119,16 +119,14 @@
       };
       $body.on("mousedown.zn.ui.components.dropdownfield.itemspopup", (evt) =>
       {
-        if (!DropdownField.pointInContent({ x: evt.pageX, y: evt.pageY }, dropdownfield.$items))
-          hide();
+        if (!DropdownField.pointInContent({ x: evt.pageX, y: evt.pageY }, dropdownfield.$items)) hide();
       });
       $body.on("keydown.zn.ui.components.dropdownfield.itemspopup", (evt) =>
       {
-        if (evt.keyCode == 27)
-          hide();
+        if (evt.keyCode == 27) hide();
       });
 
-      dropdownfield.$items.find(".zn-popup-menu-item").click((evt) =>
+      dropdownfield.$items.find(".zn-dropdownfield-item").click((evt) =>
       {
         let $menuItem = $(evt.currentTarget);
         let newValue = $menuItem.attr("zn-value");
@@ -169,7 +167,7 @@
       ${options.label ? DropdownField.htmlLabel(options.label) : ''}
       <div class="zn-dropdownfield-input" tabindex="0"><span class="value placeholder">${options.placeholder}</span><span class="action"><i class="fas fa-caret-down"></i></span></div>
       <div class="zn-dropdownfield-msg">${options.error || options.message || ''}</div>
-      <div class="zn-dropdownfield-items zn-popup-menu-items"></div>
+      <div class="zn-dropdownfield-items"></div>
       `;
     };
   
@@ -186,14 +184,15 @@
     static htmlDropdownMenu(items)
     {
       if(!items) return "";
-      return items.reduce((a, item)=> a + `<a class="zn-popup-menu-item" zn-value='${item.value}' title='${item.label}'><span class="zn-popup-menu-item-text">${item.label}</span></a>`, "");
+      return items.reduce((a, item)=> a + `<a class="zn-dropdownfield-item" zn-value='${item.value}' title='${item.label}'><span class="zn-dropdownfield-item-text">${item.label}</span></a>`, "");
     }
   
     static pointInContent(point,content)
     {
-      var offset=content.offset();
+      let offset=content.offset();
+      let w=content.get()[0].offsetWidth;
       return point.x >= offset.left && 
-             point.x <= (offset.left+content.width()) && 
+             point.x <= (offset.left+w) && 
              point.y >= offset.top &&
              point.y <= (offset.top+content.height());
     }

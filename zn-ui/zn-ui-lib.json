@@ -30,6 +30,7 @@
     "zn/ui/textfield/ng-directive.js",
     "zn/ui/draggable/component.js",
     "zn/ui/draggable/ng-directive.js",
+    "zn/ui/toast/component.js",
     "zn/ui/editable/ng-directive.js",
     "zn/designer/properties.js",
     "zn/designer/shape.base.js",
@@ -67,6 +68,7 @@
     "zn/ui/textarea/component.css",
     "zn/ui/textfield/component.css",
     "zn/ui/editable/component.css",
+    "zn/ui/toast/component.css",
     "zn/designer/surface/component.css"
   ]
 }

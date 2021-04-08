@@ -259,5 +259,9 @@ $(()=>
   draggable.on("dragmove", evt => console.log("dragmove", evt));
   draggable.on("dragend", evt => console.log("dragend", evt));
   draggable.init();
+
+  zn.ui.Toast("Added row successfully", "fas fa-broadcast-tower");
+  window.setTimeout(()=>zn.ui.Toast("This is a test This is a test This is a test ", "fas fa-broadcast-tower"), 1000);
+  window.setTimeout(()=>zn.ui.Toast("test This is a test ", "fas fa-broadcast-tower"), 2000);
 })
 

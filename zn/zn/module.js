@@ -230,6 +230,10 @@
     static instance() {return zn.Module.$instance}
     static init() 
     {
+      console.info("[zn]","loading environment values");
+      zn.env=JSON.parse($("#zn-env").html());
+      zn.defn=JSON.parse($("#zn-defn").html());
+
       console.info("[zn]","loading module");
       let instance=new zn.Module({
         defn: zn.defn,
