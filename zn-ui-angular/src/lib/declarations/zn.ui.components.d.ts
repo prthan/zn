@@ -12,4 +12,6 @@ declare interface znUiComponents
   List :znList;
   Popup :znPopup;
   Dialog :znDialog;
+  Annotator :znAnnotator;
+  Draggable :znDraggable;
 }

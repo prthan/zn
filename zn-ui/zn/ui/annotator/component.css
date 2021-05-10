@@ -1,0 +1,96 @@
+.zn-annotator
+{
+  
+}
+
+.zn-annotator .zn-phrase
+{
+  font-size: 40px;
+  line-height: 54px;
+  font-weight: 200;
+  color: #676a6c;
+  text-shadow: 1px 2px 3px #cecece;
+  font-family: monospace;
+  padding: 20px;
+}
+
+.zn-annotator .zn-phrase::selection
+{
+  text-shadow: none;
+  background-color: #b7ebf1;
+}
+
+.zn-annotator .zn-phrase .zn-word 
+{
+  display: inline-block;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.zn-annotator .zn-phrase .zn-letter 
+{
+  display: inline-block; 
+  padding: 5px;
+  cursor: default;
+  border: 1px solid  transparent;
+}
+
+.zn-annotator .zn-phrase .zn-letter:hover
+{
+  background-color: #b3e5fc !important;
+}
+
+.zn-annotator .zn-phrase .zn-letter.anchor
+{
+  background-color: #b3e5fc;
+}
+
+.zn-annotator .zn-phrase .zn-word:last-of-type .zn-letter:last-of-type.space {display: none}
+
+.zn-annotator .zn-phrase .zn-letter.selected
+{
+  background-color: #e0f7fa;
+  border-top: 1px solid  #c3ebf1;
+  border-bottom: 1px solid #c3ebf1;
+}
+
+.zn-annotator .zn-phrase .zn-letter.selected.selected-start
+{
+  border-left: 1px solid #c3ebf1;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.zn-annotator .zn-phrase .zn-letter.selected.selected-end
+{
+  border-right: 1px solid #c3ebf1;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.zn-annotator .zn-phrase .zn-letter.annotated
+{
+  background-color: #F3E5F5;
+  border-top: 1px solid  #f1d2f7;
+  border-bottom: 1px solid #f1d2f7;
+}
+
+.zn-annotator .zn-phrase .zn-letter.annotated.annotated-start
+{
+  border-left: 1px solid #f1d2f7;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.zn-annotator .zn-phrase .zn-letter.annotated.annotated-end
+{
+  border-right: 1px solid #f1d2f7;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.zn-annotator .zn-word .zn-annotation
+{
+  display: none;
+  position: absolute;
+  font-size: 11px;
+  padding-left: 5px;
+  top: 0px;
+  line-height: 15px;
+}

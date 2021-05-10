@@ -75317,6 +75317,29 @@ return jQuery;
     return dfn;
   }
 
+  utils.slug=(x)=>
+  {
+    return x.replace(/[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/g,'').replace(/_+/g,'-').replace(/\s+/g,'-').replace(/-+/g,"-").toLocaleLowerCase();
+  };
+
+  utils.copyObj=(obj)=>
+  {
+    let str=JSON.stringify(obj);
+    let newObj=JSON.parse(str);
+    utils.sanitize(newObj);
+    return newObj;
+  }
+
+  utils.sanitize=(obj)=>
+  {
+    if(obj instanceof Array) obj.forEach(o=>utils.sanitize(o));
+    else if(typeof(obj)=='object')
+    {
+      if(obj["$$hashKey"]) delete obj["$$hashKey"];
+      Object.keys(obj).forEach(k=>(obj[k] instanceof Array || typeof(obj)=='object') && utils.sanitize(obj[k]));
+    }
+  }
+
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = utils;  
 
 })(window);
@@ -76394,6 +76417,8 @@ return jQuery;
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
   
       scope.$watch("value", (nv, ov)=>checkboxfield.setValue(nv));
@@ -76417,7 +76442,8 @@ return jQuery;
         onvalue      : "@",
         offvalue     : "@",
         error        : "=",
-        message      : "="
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",
@@ -76685,6 +76711,8 @@ return jQuery;
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
       datefield.on("action", (evt)=>scope.onaction({$event: evt}));
   
@@ -76711,7 +76739,8 @@ return jQuery;
         readonly     : "@",
         onaction     : "&",
         error        : "=",
-        message      : "="        
+        message      : "=" ,
+        onchange     : "&"
       },
       restrict: "A",
       template: "",
@@ -76842,6 +76871,13 @@ return jQuery;
       else dialog.$target.addClass("actions-none");
     }
 
+    setTitle(title)
+    {
+      let dialog=this;
+      dialog.options.title=title;
+      dialog.$header.text(dialog.options.title);      
+    }
+    
     wrap()
     {
       let dialog = this;
@@ -77063,8 +77099,8 @@ return jQuery;
       let dropdownfield = this;
       dropdownfield.value = value;
       let item = DropdownField.itemForValue(dropdownfield.options.items, dropdownfield.value);
-      if (item)
-        dropdownfield.$value.text(item.label);
+      if (item) dropdownfield.$value.text(item.label).removeClass("placeholder");
+      else dropdownfield.$value.text(dropdownfield.options.placeholder || "").addClass("placeholder");
     }
     getValue()
     {
@@ -77076,12 +77112,9 @@ return jQuery;
       if (msg != "")
       {
         dropdownfield.$msg.text(msg);
-        if (type == "error")
-          dropdownfield.$target.addClass("error");
-        else
-          dropdownfield.$target.addClass("message");
+        if (type == "error") dropdownfield.$target.addClass("error");
+        else dropdownfield.$target.addClass("message");
       }
-
       else
       {
         dropdownfield.$msg.text("");
@@ -77152,8 +77185,11 @@ return jQuery;
         let newValue = $menuItem.attr("zn-value");
         let oldValue = dropdownfield.getValue();
         hide();
-        dropdownfield.setValue(newValue);
-        dropdownfield.fireEvent("change", { newValue: newValue, oldValue: oldValue });
+        if(newValue!=oldValue)
+        {
+          dropdownfield.setValue(newValue);
+          dropdownfield.fireEvent("change", { newValue: newValue, oldValue: oldValue });
+        }
       });
 
       let p = dropdownfield.$input.position();
@@ -77182,7 +77218,7 @@ return jQuery;
     {
       return `
       ${options.label ? DropdownField.htmlLabel(options.label) : ''}
-      <div class="zn-dropdownfield-input" tabindex="0"><span class="value"></span><span class="action"><i class="fas fa-caret-down"></i></span></div>
+      <div class="zn-dropdownfield-input" tabindex="0"><span class="value placeholder">${options.placeholder}</span><span class="action"><i class="fas fa-caret-down"></i></span></div>
       <div class="zn-dropdownfield-msg">${options.error || options.message || ''}</div>
       <div class="zn-dropdownfield-items zn-popup-menu-items"></div>
       `;
@@ -77252,6 +77288,7 @@ return jQuery;
         label: scope.label, 
         value: scope.value,
         items: scope.items,
+        placeholder: scope.placeholder,
         error: scope.error ? scope.error : "",
         message: scope.message
       }
@@ -77264,6 +77301,8 @@ return jQuery;
         {
           scope.value=evt.newValue;
           scope.$apply();
+
+          if(scope.onchange) scope.onchange({$event: evt});
         })
     
         scope.$watch("value", (nv, ov)=>dropdownfield.setValue(nv));
@@ -77285,10 +77324,12 @@ return jQuery;
       {
         name         : "@",
         label        : "@",
+        placeholder  : "@",
         value        : "=",
         items        : "=",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&",
       },
       restrict: "A",
       template: "",
@@ -77315,7 +77356,6 @@ return jQuery;
 
     init()
     {
-      console.log(this.options);
       let list = this;
       list.$target = $(list.options.target);
 
@@ -78065,6 +78105,8 @@ return jQuery;
         {
           scope.value=evt.newValue;
           scope.$apply();
+
+          if(scope.onchange) scope.onchange({$event: evt});
         })
 
         scope.$watch("value", (nv, ov)=>radiogroup.setValue(nv));
@@ -78091,7 +78133,8 @@ return jQuery;
         items        : "=",
         layout       : "@",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",
@@ -79320,6 +79363,8 @@ return jQuery;
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
   
       scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
@@ -79343,7 +79388,8 @@ return jQuery;
         placeholder  : "@",
         readonly     : "@",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",
@@ -79531,6 +79577,8 @@ return jQuery;
       {
         scope.value=evt.newValue;
         scope.$apply();
+
+        if(scope.onchange) scope.onchange({$event: evt});
       })
       textfield.on("action", (evt)=>scope.onaction({$event: evt}));
       
@@ -79557,7 +79605,8 @@ return jQuery;
         readonly     : "@",
         onaction     : "&",
         error        : "=",
-        message      : "="        
+        message      : "=",
+        onchange     : "&"
       },
       restrict: "A",
       template: "",
@@ -79569,7 +79618,135 @@ return jQuery;
   __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = directive;
 })(window);
 
-/*[merge-end] <== zn/ui/textfield/ng-directive.js*//*[merge-start] ==> zn/ui/draggable/ng-directive.js*/(function(window)
+/*[merge-end] <== zn/ui/textfield/ng-directive.js*//*[merge-start] ==> zn/ui/draggable/component.js*/(function (window)
+{
+  let __package = "zn.ui.components";
+  let __name = "Draggable";
+
+  class Draggable
+  {
+    constructor(options)
+    {
+      this.options = options;
+      this.eventHandlers = {};
+    }
+    
+    init()
+    {
+      let draggable = this;
+
+      draggable.$target = $(draggable.options.target);
+      draggable.$updateTarget=draggable.$target;
+      if(draggable.options.updateTarget) draggable.$updateTarget=$(draggable.options.updateTarget);
+
+      draggable.$target.addClass("zn-draggable");
+
+      draggable.setupUI();
+      draggable.setupEventHandlers();
+
+      draggable.$target.get()[0].znc = draggable;
+      draggable.fireEvent("init");
+    }
+    
+    on(eventName, eventHandler)
+    {
+      let draggable = this;
+      (draggable.eventHandlers[eventName] = draggable.eventHandlers[eventName] || []).push(eventHandler);
+    }
+    
+    fireEvent(eventName, event)
+    {
+      let draggable = this;
+      let evt = event || {};
+      evt.source = draggable;
+      evt.name = eventName;
+      (draggable.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
+    }
+    
+    setupUI()
+    {
+      let draggable = this;
+    }
+
+    setupEventHandlers()
+    {
+      let draggable = this;
+      draggable.$target.on("mousedown", (evt)=>
+      {
+        evt.preventDefault();
+        let dragState=
+        {
+          anchor: {x: evt.pageX, y: evt.pageY},
+          source: draggable.$target,
+          position: draggable.$updateTarget.position(),
+          $updateTarget: draggable.$updateTarget
+        };
+        draggable.dragState=dragState;
+        draggable.$target.addClass("on-drag");
+
+        draggable.fireEvent("dragstart", {source: dragState.source, anchor: dragState.anchor})
+        draggable.setupDragTrackingEventHandlers();
+      });
+    }
+    
+    setupDragTrackingEventHandlers()
+    {
+      let draggable=this;
+      $('body').on("mousemove.dragtracking", function(evt)
+      {
+        evt.preventDefault();
+        let dragState=draggable.dragState;
+        if(dragState==null) return;
+        
+        var dx=evt.pageX-dragState.anchor.x;
+        var dy=evt.pageY-dragState.anchor.y;
+        dragState.by={x: dx, y: dy};
+        
+        draggable.fireEvent("dragmove", {source: dragState.source, from: dragState.anchor, by: dragState.by})
+        if(draggable.options.tracer!="true") draggable.updateTarget();
+      });
+      
+      $('body').on("mouseup.dragtracking", function(evt)
+      {
+        evt.preventDefault();
+        let dragState=draggable.dragState;
+        if(dragState==null) return;
+        
+        var dx=evt.pageX-dragState.anchor.x;
+        var dy=evt.pageY-dragState.anchor.y;
+        dragState.by={x: dx, y: dy};
+  
+        draggable.fireEvent("dragend", {source: dragState.source, from: dragState.anchor, by: dragState.by})
+        draggable.$target.removeClass("on-drag");
+  
+        $('body').off("mousemove.dragtracking");
+        $('body').off("mouseup.dragtracking");
+        if(draggable.options.tracer!="true") draggable.updateTarget();
+      });
+    }
+
+    updateTarget()
+    {
+      let draggable=this;
+      let dragState=draggable.dragState;
+      let x=dragState.position.left + dragState.by.x;
+      let y=dragState.position.top + dragState.by.y;
+  
+      dragState.$updateTarget.css("left", x).css("top", y).css("bottom", "unset").css("right", "unset");
+    }
+    
+    static get(name)
+    {
+      return $(`[zn-draggable='${name}']`).get()[0].znc;
+    }
+
+  }
+
+  __package.split(".").reduce((a, e) => a[e] = a[e] || {}, window)[__name] = Draggable;
+
+})(window);
+
+/*[merge-end] <== zn/ui/draggable/component.js*//*[merge-start] ==> zn/ui/draggable/ng-directive.js*/(function(window)
 {
   let __package = "zn.ui.components.ng";
   let __name = "draggable";
@@ -79583,71 +79760,21 @@ return jQuery;
 
   directive.linkFn=function(scope, element, attrs)
   {
-    let $target=$(element);
-    let $updateTarget=$target;
-    if(scope.target!=null) $updateTarget=$(scope.target);
-
-    $target.addClass("zn-draggable");
-    $target.on("mousedown", (evt)=>
+    let options=
     {
-      evt.preventDefault();
-      let dragState=
-      {
-        anchor: {x: evt.pageX, y: evt.pageY},
-        source: $target,
-        position: $updateTarget.position(),
-        $updateTarget: $updateTarget
-      };
-      $target.get()[0].dragState=dragState;
-      $target.addClass("on-drag");
+      target: element,
+      updateTarget: scope.target,
+      tracker: scope.tracker
+    };
 
-      scope.ondragstart({$event: {name: "dragstart", source: dragState.source, anchor: dragState.anchor}});
-      directive.setupDragTrackingEventHandlers($target, scope);
-    });
-  }
-
-  directive.setupDragTrackingEventHandlers=function($target, scope)
-  {
-    $('body').on("mousemove.dragtracking", function(evt)
+    let draggable=new zn.ui.components.Draggable(options);
+    draggable.on("init", ()=>
     {
-      evt.preventDefault();
-      let dragState=$target.get()[0].dragState;
-      if(dragState==null) return;
-      
-      var dx=evt.pageX-dragState.anchor.x;
-      var dy=evt.pageY-dragState.anchor.y;
-      dragState.by={x: dx, y: dy};
-      
-      scope.ondragmove({$event: {name: "dragmove", source: dragState.source, from: dragState.anchor, by: dragState.by}});
-      if(scope.tracker!="true") directive.updateTarget($target);
-    });
-    
-    $('body').on("mouseup.dragtracking", function(evt)
-    {
-      evt.preventDefault();
-      let dragState=$target.get()[0].dragState;
-      if(dragState==null) return;
-      
-      var dx=evt.pageX-dragState.anchor.x;
-      var dy=evt.pageY-dragState.anchor.y;
-      dragState.by={x: dx, y: dy};
-
-      scope.ondragend({$event: {name: "dragend", source: dragState.source, from: dragState.anchor, by: dragState.by}});
-      $target.removeClass("on-drag");
-
-      $('body').off("mousemove.dragtracking");
-      $('body').off("mouseup.dragtracking");
-      if(scope.tracker!="true") directive.updateTarget($target);
-    });
-  }
-
-  directive.updateTarget=function($target)
-  {
-    let dragState=$target.get()[0].dragState;
-    let x=dragState.position.left + dragState.by.x;
-    let y=dragState.position.top + dragState.by.y;
-
-    dragState.$updateTarget.css("left", x).css("top", y).css("bottom", "unset").css("right", "unset");
+      if(scope.ondragstart) draggable.on("dragstart", evt => scope.ondragstart({$event: evt}));
+      if(scope.ondragmove) draggable.on("dragmove", evt => scope.ondragmove({$event: evt}));
+      if(scope.ondragend) draggable.on("dragend", evt => scope.ondragend({$event: evt}));
+    })
+    draggable.init();
   }
 
   directive.tag="znDraggable";
@@ -79696,9 +79823,10 @@ return jQuery;
     if(scope.doubleclick=="Y") ename="dblclick.editable";
     
     $target.addClass("zn-editable");
-    $target.on(ename, (evt)=>
+    let eh=(evt)=>
     {
       evt.preventDefault();
+      evt.stopPropagation();
       if($target.hasClass("on-edit")) return;
       $target.addClass("on-edit");
       targetElement.currentValue=$target.text();
@@ -79732,7 +79860,10 @@ return jQuery;
       $editor.focus();
       $editor.select();
       if(scope.oneditstart) scope.oneditstart({$event: {name: "oninlineeditstart", source: $target}});
-    });
+    }
+
+    $target.on("focus", eh)
+    $target.on(ename, eh);
   }
 
   directive.html={};
@@ -79828,9 +79959,12 @@ return jQuery;
     "hitregion.fill": "rgba(255,0,0,0)",
 
     "grid.show": true,
-    "grid.fill": "#f9f9f9",
-    "grid.minorTick.stroke": "#efefef",
-    "grid.majorTick.stroke": "#dfdfdf",
+    //"grid.fill": "#f9f9f9",
+    //"grid.minorTick.stroke": "#efefef",
+    //"grid.majorTick.stroke": "#dfdfdf",
+    "grid.fill": "#ffffff",
+    "grid.minorTick.stroke": "#f3f3f3",
+    "grid.majorTick.stroke": "#e9e9e9",
     "grid.minorTick.size": 10,
     "grid.majorTick.size": 100,
     "grid.snap.size": 5,

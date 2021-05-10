@@ -16,6 +16,7 @@ import { znDateFieldDirective } from '../lib/directives/datefield/directive';
 import { znRadioGroupDirective } from '../lib/directives/radiogroup/directive';
 import { znListDirective } from '../lib/directives/list/directive';
 import { znPopupDirective } from '../lib/directives/popup/directive';
+import { znAnnotatorDirective } from '../lib/directives/annotator/directive';
 import { znDialogComponent } from '../lib/components/dialog/component';
 import { znSurfaceDirective } from '../lib/directives/surface/directive';
 
@@ -23,6 +24,7 @@ import { ViewTableComponent } from './view-table/view-table.component';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { ViewListComponent } from './view-list/view-list.component';
 import { ViewSurfaceComponent } from './view-surface/view-surface.component';
+import { znDraggableDirective } from 'src/lib/directives/draggable/directive';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { ViewSurfaceComponent } from './view-surface/view-surface.component';
     znRadioGroupDirective,
     znListDirective,
     znPopupDirective,
+    znAnnotatorDirective,
+    znDraggableDirective,
     znDialogComponent,
     znSurfaceDirective,
     

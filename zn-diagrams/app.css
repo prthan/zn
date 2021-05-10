@@ -715,6 +715,11 @@
   font-size: 13px;
 }
 
+.zn-dropdownfield .zn-dropdownfield-input .value.placeholder
+{
+  color: #bcbcbc;
+}
+
 .zn-dropdownfield.error .zn-dropdownfield-input .value
 {
   color: #d4746d;
@@ -832,6 +837,7 @@
   border-bottom: 1px solid #e2e2e2;
 }
 
+.zn-popup-menu-item[zn-value=''] {height: 20px}
 .zn-popup-menu-items .zn-popup-menu-item i
 {
   padding-right: 10px;
@@ -2193,6 +2199,7 @@
   font-family: inherit;
   font-weight: inherit;
   font-style: inherit;
+  color: inherit;
 }
 
 

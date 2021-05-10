@@ -20,6 +20,7 @@ export class znSurfaceDirective implements OnInit, OnChanges
 
   @Output() onPosition :EventEmitter<any> = new EventEmitter<any>();
   @Output() onObjSelect :EventEmitter<any> = new EventEmitter<any>();
+  @Output() onObjCreate :EventEmitter<any> = new EventEmitter<any>();
   @Output() onRelSelect :EventEmitter<any> = new EventEmitter<any>();
   @Output() onRelCreate :EventEmitter<any> = new EventEmitter<any>();
   @Output() onSelectionChange :EventEmitter<any> = new EventEmitter<any>();
@@ -45,6 +46,7 @@ export class znSurfaceDirective implements OnInit, OnChanges
     
     if(this.onPosition.observers.length>0) this.surface.on("position", (evt: znSurfaceEvent)=>this.onPosition.emit(evt));
     if(this.onObjSelect.observers.length>0) this.surface.on("obj-select", (evt: znSurfaceEvent)=>this.onObjSelect.emit(evt));
+    if(this.onObjCreate.observers.length>0) this.surface.on("obj-create", (evt: znSurfaceEvent)=>this.onObjCreate.emit(evt));
     if(this.onRelSelect.observers.length>0) this.surface.on("rel-select", (evt: znSurfaceEvent)=>this.onRelSelect.emit(evt));
     if(this.onRelCreate.observers.length>0) this.surface.on("rel-create", (evt: znSurfaceEvent)=>this.onRelCreate.emit(evt));
     if(this.onSelectionChange.observers.length>0) this.surface.on("selection-set-change", (evt: znSurfaceEvent)=>this.onSelectionChange.emit(evt));

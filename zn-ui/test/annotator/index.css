@@ -1,0 +1,17 @@
+body
+{
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+
+.annotation-area
+{
+  width: 900px;
+  border: 1px solid #bcbcbc;
+}
+
+.actions
+{
+  padding: 20px;
+}

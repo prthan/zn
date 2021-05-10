@@ -1,0 +1,271 @@
+.zn-toasts
+{
+  position: fixed;
+  left: 15px;
+  bottom: 25px;
+  z-index: 1110111;
+  margin: 2px;
+}
+
+.zn-toast
+{
+  background-color: #ffffff;
+  margin-bottom: 5px;
+  border: 1px solid rgba(0,0,0,.1);
+  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);
+  border-radius: 5px;  
+  width: 175px;
+}
+
+.zn-toast 
+{
+  transition: opacity 3s ease 1s;
+}
+
+.zn-toast .zn-toast-header
+{
+  display: flex;
+  align-items: center;
+  color: #6c757d;
+  font-weight: 500;
+  border-bottom: 1px solid #efefef;
+  padding: 6px 10px;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.zn-toast .zn-toast-header .zn-toast-icon {flex-grow: 0}
+.zn-toast .zn-toast-header .zn-toast-header-text {flex-grow: 1}
+.zn-toast .zn-toast-content
+{
+  background-color: #fbfbfb;
+  color: rgb(103, 106, 108);
+  padding: 6px 10px;
+  border-radius: 2px;
+  font-size: 13px;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.zn-toast.hide
+{
+  opacity: 0;
+}
+
+
+
+.zn-toast .zn-toast-icon {flex-grow: 0; padding-right: 6px;}
+.zn-toast .zn-toast-text {flex-grow: 1; flex-basis: 0}
+
+.zn-toast.warn .zn-toast-header
+{
+  color: #fda000;
+}
+
+.zn-toast.error .zn-toast-header
+{
+  color: #c74542;
+}
+
+
+
+.zn-alert
+{
+  position:fixed;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index:1111800;
+  display: none;
+  padding: 0px;
+  margin:0px;
+  background-color: rgba(0,0,0,0.5);
+  overflow: auto;
+}
+
+.zn-alert::-webkit-scrollbar {width: 5px; height: 5px}
+.zn-alert::-webkit-scrollbar-track {background: #ddd;}
+.zn-alert::-webkit-scrollbar-thumb {background: #bbb;}
+
+
+.zn-alert.centered
+{
+  align-items: center;
+  justify-content: center;
+}
+
+.zn-alert-wrapper
+{
+  z-index:1111850;
+	border-radius: 5px;
+  background-color: #ffffff;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.133) 0px 3.2px 7.2px 0px, rgba(0, 0, 0, 0.11) 0px 0.6px 1.8px 0px;
+  border: 1px solid rgba(0,0,0,.15);
+  width: 430px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.zn-alert.centered .zn-alert-wrapper
+{
+  margin: 0px;
+}
+
+.zn-alert .zn-alert-header
+{
+  flex-grow: 0;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 1px solid #dee2e6;
+  color: #676a6c;
+  border-radius: 5px 5px 0px 0px;
+  word-break: break-all;
+}
+
+.zn-alert.title-none .zn-alert-header
+{
+  display: none;
+}
+
+.zn-alert .zn-alert-content
+{
+  flex-grow: 1;
+  flex-basis: 0;
+  background: #f8fafb;
+  padding: 20px;
+  text-align: center;
+}
+
+.zn-alert.title-none .zn-alert-content
+{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.zn-alert.actions-none .zn-alert-content
+{
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.zn-alert .zn-alert-footer
+{
+  flex-grow: 0;
+  padding: 10px;
+  border-top: 1px solid #dee2e6;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.zn-alert.actions-none .zn-alert-footer
+{
+  display: none;
+}
+
+.zn-alert .zn-alert-footer
+{
+  display: flex;
+  align-items: center;
+}
+
+.zn-alert .zn-alert-footer .left-actions
+{
+  flex-grow: 0;
+}
+
+.zn-alert .zn-alert-footer .right-actions
+{
+  flex-grow: 1;
+  flex-basis: 0;
+  justify-content: flex-end;
+}
+
+.zn-alert .zn-alert-footer .zn-actions
+{
+	display: flex;
+	align-items: center;
+}
+
+.zn-alert .zn-alert-footer .zn-actions .zn-action
+{
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  padding: 5px 7px;
+  text-decoration: none;
+  border-radius: 2px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  background-color: #18a689;
+	border: 1px solid #18a689;
+}
+
+.zn-alert .zn-alert-footer .zn-actions.left-actions .zn-action
+{
+  margin-right: 10px;
+}
+
+.zn-alert .zn-alert-footer .zn-actions.right-actions .zn-action
+{
+  margin-left: 10px;
+}
+
+.zn-alert .zn-alert-footer .zn-actions .zn-action:hover
+{
+  background-color: #1ab394;
+}
+
+.zn-alert .zn-alert-footer .zn-actions .zn-action .icon
+{
+  flex-grow: 0;
+  color: #ffffff;
+  font-size: 13px;
+  padding-left: 2px;
+}
+
+.zn-alert .zn-alert-footer .zn-actions .zn-action .text
+{
+  flex-grow: 0;
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.zn-alert .zn-alert-icon {padding: 0px;}
+
+.zn-alert .zn-alert-icon-img
+{
+  width: 70px;
+  height: 70px;
+  display: inline-block;
+}
+
+.zn-alert .zn-alert-icon-img svg
+{
+  width: 100%;
+  height: 100%;
+}
+
+.zn-alert .zn-alert-wrapper.error .zn-alert-icon-img {color: #EF9A9A}
+
+.zn-alert .zn-alert-msg 
+{
+  padding: 20px 0px 0px 0px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #4e5050;
+}
+
+.zn-alert .zn-alert-wrapper.warn .zn-alert-icon-img
+{
+  color: #e8bf79;
+}
+
+.zn-alert .zn-alert-wrapper.success .zn-alert-icon-img
+{
+  color: #7cb97e;
+}

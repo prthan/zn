@@ -53,3 +53,46 @@
   border: none;
   background-color: transparent;
 }
+
+.annotator
+{
+  width: 900px;
+  border: 1px solid #bcbcbc;
+}
+
+.annotator-toolbar
+{
+  display: flex;
+}
+
+.annotator-toolbar .zn-textfield
+{
+  flex-grow: 0;
+  width: 200px;
+}
+
+.annotator-toolbar .zn-button
+{
+  height: 20px;
+  margin-top: 18px;
+  margin-left: 10px;  
+}
+
+
+.draggable-calendar 
+{
+  position: absolute;
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+.draggable-calendar .zn-calendar
+{
+  border: none
+}
+
+.draggable-calendar .drag-handle
+{
+  height: 5px;
+  background-color: rgba(0,0,0,.15);
+  cursor: move;
+}

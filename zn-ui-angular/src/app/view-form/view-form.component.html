@@ -27,6 +27,20 @@
     <div zn-calendar name="start-date" [(date)]="form.startDateCal" (onDateSelect)="onStartDateSelect($event)"></div>
     <div zn-calendar name="end-date"  [(date)]="form.endDateCal" (onDateSelect)="onEndDateSelect($event)"></div>
   </div>
+
+  <div zn-annotator name="annotator" class="annotator" [phrase]="ano.phrase"></div>
+  <div class="annotator-toolbar">
+    <div zn-textfield name="annotation" label="Annotation" [(value)]="ano.annotationText"></div>
+    <div class="button-set">
+      <div zn-button name="add-annotation" class="add-annotation" text="Add Annotation" action="addAnnotation" (onAction)="onAddAnnotation($event)"></div>
+    </div>
+  </div>
+
+  <div class="draggable-calendar">
+    <div zn-draggable target=".draggable-calendar" class="drag-handle">&nbsp;</div>
+    <div zn-calendar name="drag-date"></div>
+  </div>
+
   <div zn-popup class="popup" name="popup-cal" source=".show-popup-cal" showAt="right">
     <div zn-calendar name="popup-date" (onDateSelect)="onStartDateSelect($event)"></div>
   </div>
@@ -35,5 +49,6 @@
     <div zn-calendar name="dialog-date" (onDateSelect)="onStartDateSelect($event)"></div>
   </zn-dialog>
 
+  
 </div>
 

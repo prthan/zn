@@ -37,6 +37,7 @@
               "../zn-ui/zn/ui/list/component.css",
               "../zn-ui/zn/ui/popup/component.css",
               "../zn-ui/zn/ui/dialog/component.css",
+              "../zn-ui/zn/ui/annotator/component.css",
               "../zn-ui/zn/designer/surface/component.css"
             ],
             "scripts": [
@@ -58,6 +59,8 @@
               "../zn-ui/zn/ui/list/component.js",
               "../zn-ui/zn/ui/popup/component.js",
               "../zn-ui/zn/ui/dialog/component.js",
+              "../zn-ui/zn/ui/annotator/component.js",
+              "../zn-ui/zn/ui/draggable/component.js",
               "../zn-ui/zn/designer/properties.js",
               "../zn-ui/zn/designer/utils.js",
               "../zn-ui/zn/designer/shape.base.js",
@@ -151,6 +154,7 @@
               "../zn-ui/zn/ui/list/component.css",
               "../zn-ui/zn/ui/popup/component.css",
               "../zn-ui/zn/ui/dialog/component.css",
+              "../zn-ui/zn/ui/annotator/component.css",
               "../zn-ui/zn/designer/surface/component.css"
             ],
             "scripts": [
@@ -171,6 +175,8 @@
               "../zn-ui/zn/ui/list/component.js",
               "../zn-ui/zn/ui/popup/component.js",
               "../zn-ui/zn/ui/dialog/component.js",
+              "../zn-ui/zn/ui/annotator/component.js",
+              "../zn-ui/zn/ui/draggable/component.js",
               "../zn-ui/zn/designer/properties.js",
               "../zn-ui/zn/designer/utils.js",
               "../zn-ui/zn/designer/shape.base.js",

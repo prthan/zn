@@ -56,6 +56,44 @@
     return points;
   }
 
+  Component.blinePoints1=(x1, y1, x2, y2, startDir, endDir)=>
+  {
+    let dx=x2-x1;
+    let dy=y2-y1;
+    let points=[x1, y1];
+    let d=10;
+
+    if(startDir=="top") 
+    {
+      if(endDir=="left") points.push(x1, y2, x1, y2, x2, y2);
+      if(endDir=="right") points.push(x1, y2, x1, y2, x2, y2);
+      else points.push(x1, y1+dy/2, x2, y1+dy/2, x2, y2);
+    }
+    else if(startDir=="right")
+    {
+      if(endDir=="bottom" || endDir=="top") points.push(x2, y1, x2, y1, x2, y2);
+      else points.push(x1+dx/2, y1, x1+dx/2, y2, x2, y2);
+    }
+    else if(startDir=="bottom") 
+    {
+      if(endDir=="left" || endDir=="right") points.push(x1, y2, x1, y2, x2, y2);
+      else points.push(x1, y1+dy/2, x2, y1+dy/2, x2, y2);
+    }
+    else if(startDir=="left") 
+    {
+      if(endDir=="bottom" || endDir=="top") points.push(x2, y1, x2, y1, x2, y2);
+      else points.push(x1+dx/2, y1, x1+dx/2, y2, x2, y2);
+    }
+    else
+    {
+      if(Math.abs(dx) < Math.abs(dy)) points.push(x1+dx/4, y1, x1+dx/4, y2, x2, y2);
+      else points.push(x1, y1+dy/4, x2, y1+dy/4, x2, y2);
+    }
+
+    return points;
+  }
+
+  
   Component.getRect=(p0, p1)=>
   {
     let rect={x: p0.x, y:p0.y};

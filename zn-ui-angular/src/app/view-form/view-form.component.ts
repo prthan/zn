@@ -56,6 +56,12 @@ export class ViewFormComponent implements OnInit {
     {action: "clear", label: "Clear", slot: "left"}
   ]  
 
+  ano :any=
+  {
+    phrase: "The quick brown fox jumps over the lazy dog",
+    annotationText: "",
+  }
+
   constructor() { }
 
   ngOnInit(): void 
@@ -110,5 +116,12 @@ export class ViewFormComponent implements OnInit {
   {
     console.log($evt);
     $evt.source.hide();
+  }
+
+  onAddAnnotation($evt :any)
+  {
+    let annotator=zn.ui.components.Annotator.get("annotator");
+    let selection=annotator.getSelection();
+    if(selection!=null) annotator.addAnnotation(selection[0], selection[1], this.ano.annotationText);
   }
 }

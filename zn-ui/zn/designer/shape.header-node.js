@@ -84,7 +84,7 @@
       let offset = props["node.level.offset"];
 
       let text = new Konva.Text({
-        x: offset, y: 0,
+        x: offset, y: 2,
         width: w - offset, height: h,
         text: ctx.text,
         align: "left",
