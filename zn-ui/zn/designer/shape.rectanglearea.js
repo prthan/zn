@@ -18,6 +18,9 @@
       component.ctx = ctx;
       component.oid = oid || zn.shortid();
 
+      if(h==-1) h=this.computeHeight(ctx.subtext, w) + 35;
+      if(h<50) h=50;
+      
       component.$shape = new Konva.Group({ x: x, y: y, width: w, height: h, draggable: true });
       component.$shape.setAttr("zn-ctx", ctx);
       component.$shape.setAttr("zn-oid", component.oid);
@@ -226,6 +229,28 @@
       component.ctx.subtext=text;
       component.subtext.text(text);
       component.$shape.getLayer().batchDraw();
+    }
+
+    computeHeight(text, w)
+    {
+      let subtext = new Konva.Text({
+        x: 0, y: 0,
+        width: w - 20,
+        strokeWidth: 1,
+        text: text,
+        align: "left",
+        verticalAlign: "top",
+        fontFamily: props["subtext.family"],
+        fontSize: props["subtext.size"],
+        fontStyle: props["subtext.style"],
+        lineHeight: props["subtext.lineheight"],
+        shadowForStrokeEnabled: false,
+        listening: false
+      });      
+      let h=subtext.height();
+      subtext.destroy();
+
+      return h;
     }
 
     setupEventHandlers()

@@ -73,6 +73,12 @@ $(()=>
     surface.addShape("list", {x: evt.x, y: evt.y, width: 150, height: 40}, ctx);
   }
 
+  surface.shapeActions["add-rect-area"]=(evt)=>
+  {
+    let ctx={name: "shape-"+(surface.shapeCount++), text: "Response", subtext: "This is a long response to chech how long this box can take"};
+    surface.addShape("rectangle-area", {x: evt.x - 50, y: evt.y - 25, width: 200, height: -1}, ctx);
+  }
+
   let exportBtn=new zn.ui.components.Button({
     name: "exportBtn",
     target: ".export-btn",
@@ -111,7 +117,8 @@ $(()=>
     {name: "diamond", target: ".shape-btn-5", text: "Check", action: "add-diamond"},
     {name: "varperson", target: ".shape-btn-6", text: "Var Person", action: "add-var-person"},
     {name: "varaddress", target: ".shape-btn-7", text: "Var Address", action: "add-var-address"},
-    {name: "varcontact", target: ".shape-btn-8", text: "Var Contact", action: "add-var-contact"}
+    {name: "varcontact", target: ".shape-btn-8", text: "Var Contact", action: "add-var-contact"},
+    {name: "Rect Area", target: ".shape-btn-9", text: "Rect Area", action: "add-rect-area"}
   ]
   btns.forEach((btn)=>
   {

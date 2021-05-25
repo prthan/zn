@@ -22,6 +22,7 @@
       this.shapeClasses =
       {
         "rectangle": "zn.designer.shape.Rectangle",
+        "rectangle-area": "zn.designer.shape.RectangleArea",
         "diamond": "zn.designer.shape.Diamond",
         "ellipse": "zn.designer.shape.Ellipse",
         "pill": "zn.designer.shape.Pill",
