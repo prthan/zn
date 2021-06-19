@@ -1,0 +1,9 @@
+{
+  "name": "zn-msg",
+  "version": "0.1",
+
+  "scripts":
+  [
+    "zn/msg/client.js"
+  ]
+}

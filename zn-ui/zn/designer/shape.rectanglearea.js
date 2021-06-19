@@ -231,6 +231,15 @@
       component.$shape.getLayer().batchDraw();
     }
 
+    move(dx, dy)
+    {
+      let component = this;
+      let $shape=component.$shape;
+      $shape.x($shape.x()+dx);
+      $shape.y($shape.y()+dy);
+      base.handleShapeDragEnd(component)
+    }
+
     computeHeight(text, w)
     {
       let subtext = new Konva.Text({

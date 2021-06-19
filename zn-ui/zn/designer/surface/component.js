@@ -28,6 +28,8 @@
         "pill": "zn.designer.shape.Pill",
         "list": "zn.designer.shape.List"
       };
+
+      this.seq=0;
     }
 
     init()
@@ -116,7 +118,7 @@
           surface.operation.update(event.evt.layerX, event.evt.layerY);
       });
 
-      surface.stage.on("mouseup", (event) =>
+      surface.stage.on("mouseup mouseleave", (event) =>
       {
         if (surface.operation)
         {
@@ -144,10 +146,18 @@
     handleKeyEvents(evt)
     {
       let surface = this;
-      
-      if (evt.key == "Delete") surface.onDelete();
+      if (evt.key == "Delete" || evt.key == "Backspace") surface.onDelete();
       if (evt.key == "c" && evt.ctrlKey) surface.onCopy();
       if (evt.key == "v" && evt.ctrlKey) surface.onPaste();
+      if (evt.key == "ArrowLeft") surface.move(evt.ctrlKey ? -1 : -10, 0);
+      if (evt.key == "ArrowRight") surface.move(evt.ctrlKey ? 1 : 10, 0);
+      if (evt.key == "ArrowUp") surface.move(0, evt.ctrlKey ? -1 : -10, );
+      if (evt.key == "ArrowDown") surface.move(0, evt.ctrlKey ? 1 : 10);
+      if(["Delete", "Backspace", "c", "v", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(evt.key))
+      {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
     }
 
     onShapeSelect(evt)
@@ -186,7 +196,9 @@
       if (selectedItems.length > 0) surface.fireEvent("selection-set-change", { selection: [] });
       base.resetConnectorLineSelection(surface.connectorsLayer);
 
-      if (surface.mode == "position") surface.operation = new zn.designer.op.DrawObject(surface);
+      //if (surface.mode == "position") surface.operation = new zn.designer.op.DrawObject(surface);
+      surface.data.currentSelection = {};
+      if (surface.mode == "position") return;
       if (surface.mode == "draw") surface.operation = new zn.designer.op.DrawObject(surface);
       else surface.operation = new zn.designer.op.SelectObjects(surface);
       surface.operation.start(event.mouseEvent.evt.layerX, event.mouseEvent.evt.layerY);
@@ -351,6 +363,19 @@
       surface.fireEvent("obj-create", {set: newSelection});
     }
 
+    move(dx, dy)
+    {
+      let surface=this;
+      let selectedOids=surface.getSelection();
+      selectedOids.forEach((oid)=>
+      {
+        let shapeComponent=surface.data.shapeComponents[oid];
+        if(shapeComponent.move) shapeComponent.move(dx, dy);
+      })
+      surface.shapesLayer.batchDraw();
+      surface.connectorsLayer.batchDraw();
+    }
+
     reset()
     {
       let surface = this;
@@ -375,7 +400,7 @@
       surface.data.shapeComponents[shapeComponent.oid] = shapeComponent;
     }
 
-    addShape(type, rect, ctx, oid)
+    addShape(type, rect, ctx, oid, seq)
     {
       let surface = this;
       let clazz = zn.findClass(surface.shapeClasses[type]);
@@ -391,8 +416,10 @@
       let h = rect.height;
       
       let shapeComponent = new clazz(x, y, w, h, ctx, oid);
+      //base.snap(shapeComponent.$shape);
+      shapeComponent.seq=seq || ++surface.seq;
+      if(!oid) surface.fireEvent("obj-create", {obj: {...shapeComponent.ctx, oid: shapeComponent.oid}});
       surface.addShapeComponent(shapeComponent);
-      base.snap(shapeComponent.$shape);
 
       return shapeComponent.oid;
     }
@@ -426,7 +453,7 @@
       surface.data.lineComponents[connectorLineComponent.oid] = connectorLineComponent;
     }
 
-    addConnection(from, to, oid)
+    addConnection(from, to, oid, cctx, seq)
     {
       let surface = this;
       let fromCpData = surface.cpData(from);
@@ -435,10 +462,12 @@
       let ctx = {
         name: `${fromCpData.name}-${toCpData.name}`,
         from: fromCpData.cp.ctx,
-        to: toCpData.cp.ctx
+        to: toCpData.cp.ctx,
+        ctx: cctx || {}
       };
 
       let connectorLine = new zn.designer.shape.ConnectorLine(fromCpData.cp.$shape, toCpData.cp.$shape, ctx, oid);
+      connectorLine.seq=seq || ++surface.seq;
       surface.addConnectionComponent(connectorLine);
 
       return connectorLine.oid;
@@ -526,7 +555,8 @@
         type: shapeComponent.$type, 
         rect: shapeComponent.getRect(), 
         ctx: shapeComponent.ctx, 
-        oid: shapeComponent.oid 
+        oid: shapeComponent.oid,
+        seq: shapeComponent.seq,
       };
       
       return data;
@@ -537,16 +567,17 @@
       let data=
       {
         ...lineComponent.ctx,
-        oid: lineComponent.oid 
+        oid: lineComponent.oid,
+        seq: lineComponent.seq,
       };
-      
+
       return data;
     }
 
     exportData()
     {
       let component = this;
-      let jsonData = { shapes: [], lines: [], stage: {}};
+      let jsonData = { shapes: [], lines: [], stage: {}, seq: component.seq};
 
       Object.values(component.data.shapeComponents)
             .forEach((shapeComponent) => jsonData.shapes.push(component.shapeComponentData(shapeComponent)));
@@ -564,14 +595,21 @@
       let surface = this;
       surface.reset();
 
-      if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid));
-      if(jsonData.lines) jsonData.lines.forEach((lineData) => surface.addConnection(lineData.from, lineData.to, lineData.oid));
+      if(jsonData.shapes) jsonData.shapes.forEach((shapeData) => 
+      {
+        surface.addShape(shapeData.type, shapeData.rect, shapeData.ctx, shapeData.oid, shapeData.seq)
+      });
+      if(jsonData.lines) jsonData.lines.forEach((lineData) => 
+      {
+        surface.addConnection(lineData.from, lineData.to, lineData.oid, lineData.ctx, lineData.seq)
+      });
       if(jsonData.stage)
       {
         surface.options.lanes=jsonData.stage.lanes;
         surface.options.lanesPosition=jsonData.stage.lanesPos;
         surface.setSize(jsonData.stage.width, jsonData.stage.height);
       }
+      surface.seq=jsonData.seq || 0;
     }
 
     exportToJson()
@@ -611,6 +649,12 @@
       surface.gridLayer.gridLinesGroup.visible(true);
 
       return dataURL;
+    }
+
+    getConnectedShapeIds(fromShapeOid)
+    {
+      let surface=this;
+      return Object.values(surface.data.lineComponents).filter((line)=>line.ctx.from.parent.oid==fromShapeOid).map((line)=>line.ctx.to.parent.oid);
     }
 
     static get(name)

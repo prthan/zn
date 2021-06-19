@@ -100,6 +100,16 @@
 
       if (!component.ctx.text) return;
 
+      let textBackground=new Konva.Rect({
+        x: 0, y: 0,
+        width: w, height: h,
+        cornerRadius: [5, 5, 0, 0],
+        fill: "rgba(255,255,255,0)"
+      })
+      textBackground.addName("text-background");
+      group.add(textBackground);
+      component.textBackground=textBackground;
+
       let text = new Konva.Text({
         x: 0, y: 0,
         width: w, height: h,
@@ -120,6 +130,44 @@
       group.add(text);
       component.text = text;
       
+      component.subtext=null;
+      if(!component.ctx.subtext) return;
+      text.position({x: 10, y: 2});
+      text.size({width: w - 20, height: 25});
+
+      text.align("left");
+      textBackground.height(25);
+      textBackground.fill(props["rect.header.fill"]);
+
+      let subtext = new Konva.Text({
+        x: 10, y: 30,
+        width: w - 20, height: h - 35,
+        strokeWidth: 1,
+        text: ctx.subtext,
+        align: "left",
+        verticalAlign: "top",
+        fontFamily: props["subtext.family"],
+        fontSize: props["subtext.size"],
+        fontStyle: props["subtext.style"],
+        lineHeight: props["subtext.lineheight"],
+        shadowForStrokeEnabled: false,
+        listening: false
+      });
+      if(props["text.stroke"]) subtext.stroke(props["text.color"])
+      else subtext.fill(props["text.color"]);
+      subtext.addName("subtext");
+      group.add(subtext);
+      component.subtext=subtext;
+
+      let headerLine = new Konva.Line({
+        points: [0, 25, w, 25],
+        stroke: props["rect.stroke"],
+        strokeWidth: 1,
+        listening: false
+      });
+      group.add(headerLine);
+      component.headerLine = headerLine;
+
     }
 
     addConnectorPoints()
@@ -146,7 +194,15 @@
       let offset = props["shape.select.offset"];
       component.selection.size({ width: w + offset * 2, height: h + offset * 2 });
 
-      component.text.size(s);
+      if(!component.ctx.subtext) component.text.size(s);
+      else
+      {
+        component.text.size({width: w - 20, height: 25});
+        component.textBackground.size({width: w, height: 25});
+        component.subtext.size({width: w - 20, height: h - 35});
+        component.headerLine.points([0, 25, w, 25]);
+      }
+
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }
 
@@ -173,6 +229,26 @@
       let component=this;
       component.ctx.text=text;
       component.text.text(text);
+      component.$shape.getLayer().batchDraw();
+    }
+
+    move(dx, dy)
+    {
+      let component = this;
+      let $shape=component.$shape;
+      $shape.x($shape.x()+dx);
+      $shape.y($shape.y()+dy);
+      base.handleShapeDragEnd(component)
+    }
+
+    setSubText(text)
+    {
+      let component=this;
+      let rect=component.getRect();
+      component.ctx.subtext=text;
+      if(component.text) component.text.destroy();
+      if(component.subtext) component.subtext.destroy();
+      component.addText(rect.width, rect.height, component.ctx);
       component.$shape.getLayer().batchDraw();
     }
 

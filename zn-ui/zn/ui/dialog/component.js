@@ -36,12 +36,10 @@
       (dialog.eventHandlers[eventName] || []).forEach((eh) => eh(evt));
     }
 
-    show(showAtLoc)
+    show($res)
     {
       let dialog = this;
-
-      let top = 0;
-      let left = 0;
+      dialog.$res=$res;
 
       if (dialog.options.centered) dialog.$target.css("display", "flex");
       else dialog.$target.show();
@@ -74,6 +72,7 @@
         let action = $action.attr("data-action");
         let index = parseInt($action.attr("data-index"));
         dialog.fireEvent("action", { action: action });
+        if (dialog.$res) dialog.$res({source: dialog, action: action});
         if (dialog.options.actions[index].autohide !== false) dialog.hide();
       });
     }
@@ -84,7 +83,11 @@
       var $body = $("body");
       $body.on(`keydown.zn.ui.components.dialog.${dialog.options.name}`, (evt) =>
       {
-        if (evt.keyCode == 27) dialog.hide();
+        if (evt.keyCode == 27)
+        {
+          if (dialog.$res) dialog.$res({source: dialog, action: "zn-cancel"});
+          dialog.hide();
+        }
       });
     }
 

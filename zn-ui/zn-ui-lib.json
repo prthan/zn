@@ -48,6 +48,7 @@
     "zn/designer/shape.node.js",
     "zn/designer/shape.pill.js",
     "zn/designer/shape.rectangle.js",
+    "zn/designer/shape.rectanglearea.js",
     "zn/designer/shape.transformer.js",
     "zn/designer/surface/component.js",
     "zn/designer/surface/ng-directive.js"    
