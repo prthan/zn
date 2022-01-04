@@ -23,10 +23,13 @@
       {
         "rectangle": "zn.designer.shape.Rectangle",
         "rectangle-area": "zn.designer.shape.RectangleArea",
+        "callout": "zn.designer.shape.Callout",
+        "wedge-rectangle": "zn.designer.shape.WedgeRectangle",
         "diamond": "zn.designer.shape.Diamond",
         "ellipse": "zn.designer.shape.Ellipse",
         "pill": "zn.designer.shape.Pill",
-        "list": "zn.designer.shape.List"
+        "list": "zn.designer.shape.List",
+        "text": "zn.designer.shape.Text"
       };
 
       this.seq=0;
@@ -622,10 +625,12 @@
       return this.importData(JSON.parse(jsonDataStr));
     }
 
-    downloadAsImage()
+    downloadAsImage(sg)
     {
       let surface = this;
-      surface.gridLayer.gridLinesGroup.visible(false);
+      let showGrid = sg=="Y" || sg=="y" || sg===true;
+      
+      surface.gridLayer.gridLinesGroup.visible(showGrid);
       surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
       surface.gridLayer.boundingBox.visible(false);
@@ -639,10 +644,12 @@
       
     }
 
-    getImageData()
+    getImageData(sg)
     {
       let surface = this;
-      surface.gridLayer.gridLinesGroup.visible(false);
+      let showGrid = sg=="Y" || sg=="y" || sg===true;
+
+      surface.gridLayer.gridLinesGroup.visible(showGrid);
       surface.gridLayer.boundingBox.visible(true);
       let dataURL = surface.stage.toDataURL({ pixelRatio: 1 });
       surface.gridLayer.boundingBox.visible(false);
@@ -664,7 +671,17 @@
     
     static html()
     {
-      return `<div class="zn-surface-stage" tabindex="1"></div>`;
+      return `
+      <div class="zn-surface-container">
+        <div class="zn-surface-container-row row-1">&nbsp;</div>
+        <div class="zn-surface-container-row row-2">
+          <div class="zn-surface-container-col col-1">&nbsp;</div>
+          <div class="zn-surface-container-col col-2"><div class="zn-surface-stage" tabindex="1"></div></div>
+          <div class="zn-surface-container-col col-3">&nbsp;</div>
+        </div>
+        <div class="zn-surface-container-row row-3">&nbsp;</div>
+      </div>`
+      //return `<div class="zn-surface-stage" tabindex="1"></div>`;
     }
     
   }

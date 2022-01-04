@@ -1,0 +1,143 @@
+.zn-chipsfield
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-chipsfield .zn-chipsfield-input
+{
+  flex-grow: 0;
+	border: 1px solid #e2e2e2;
+	border-radius: 4px;
+	padding: 2px 4px 2px 4px;;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.zn-chipsfield.focused .zn-chipsfield-input
+{
+  border-color: #7f8d98;
+  /*background-color: #f9fffe;*/
+}
+
+.zn-chipsfield.error .zn-chipsfield-input
+{
+  border-color: #ffc0bb;
+  background-color: #fffafa;
+}
+
+
+.zn-chipsfield .zn-chipsfield-input .chip
+{
+  flex-grow: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-right: 4px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  background-color: #03a9f4;
+  border: 1px solid #039BE5;  
+  /* white-space: nowrap; */
+  position: relative;
+  word-break: break-word;
+}
+
+.zn-chipsfield .zn-chipsfield-input input
+{
+	flex-grow: 0;
+	background-color: transparent;
+  border: none;
+  /* border: 1px solid #bcbcbc; */
+  font-size: 13px;
+  color: #3e4448;
+  width: 1ch;
+}
+
+.zn-chipsfield .zn-chipsfield-input input::placeholder {color: #bcbcbc;}
+
+.zn-chipsfield .zn-chipsfield-input input[readonly]
+{
+  color: #bcbcbc;
+}
+
+.zn-chipsfield.error .zn-chipsfield-input input
+{
+  color: #d4746d;
+}
+
+.zn-chipsfield .zn-chipsfield-input .icon
+{
+  flex-grow: 0;
+  padding-right: 5px;
+  color: #999;
+  font-size: 15px;
+  padding-left: 2px;
+}
+
+.zn-chipsfield .zn-chipsfield-label
+{
+  flex-grow: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+
+.zn-chipsfield.error .zn-chipsfield-label
+{
+  color: #d4746d;
+}
+
+.zn-chipsfield .zn-chipsfield-msg
+{
+  flex-grow: 0;
+  min-height: 20px;
+  font-size: 11px;
+}
+
+.zn-chipsfield.error .zn-chipsfield-msg
+{
+  color: #d4746d;
+}
+
+.zn-chipsfield .zn-chipsfield-buffer
+{
+  display: none;
+}
+
+.zn-chipsfield .buffer
+{
+  flex: 0;
+  width: 1px;
+  height: 26px;  
+}
+
+.zn-chipsfield .delete-icon
+{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #0c6c98ba;
+  left: -1px;
+  top: -1px;
+  right: -1px;
+  bottom: -1px;
+  display: none;
+  border-radius: 2px;
+  display: none;
+}
+
+.zn-chipsfield .chip:hover .delete-icon
+{
+  display: flex;
+}

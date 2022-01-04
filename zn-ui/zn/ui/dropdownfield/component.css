@@ -101,6 +101,7 @@
   display: none;
 	border-radius: 2px;
 	min-width: 100px;
+  box-sizing: border-box;
 }
 
 .zn-dropdownfield-items::-webkit-scrollbar {width: 5px; height: 5px}

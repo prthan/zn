@@ -231,6 +231,32 @@
       component.$shape.getLayer().batchDraw();
     }
 
+    setColor(type, colorVal)
+    {
+      let component=this;
+      if(type=="stroke-color") component.rect.stroke(colorVal);
+      if(type=="fill-color") component.rect.fill(colorVal);
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) component.text.stroke(colorVal)
+        else component.text.fill(colorVal);
+      }
+      component.$shape.getLayer().batchDraw();
+    }
+
+    getColor(type)
+    {
+      let component=this;
+      if(type=="stroke-color") return component.rect.stroke();
+      if(type=="fill-color") return component.rect.fill();
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) return component.text.stroke()
+        else return component.text.fill();
+      }
+      return "";
+    }
+        
     move(dx, dy)
     {
       let component = this;

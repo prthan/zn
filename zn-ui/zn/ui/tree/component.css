@@ -1,0 +1,90 @@
+.zn-tree
+{
+
+}
+
+.zn-tree .node
+{
+  
+}
+
+.zn-tree .node .node-content
+{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  color: #676a6c;
+  font-weight: 500;
+}
+
+.zn-tree .node .node-content:hover
+{
+  background-color: #dcfaff;
+  border-top-color: #e1e1e1;
+  border-bottom-color: #e1e1e1;
+}
+
+.zn-tree .node .node-content .node-toggle
+{
+  flex-grow: 0;
+  width: 20px;
+  text-align: center;
+  color: #adadad;
+  padding-top: 1px;
+  font-size: 11px;
+}
+
+.zn-tree .node .node-content .icon
+{
+  flex-grow: 0;
+}
+
+.zn-tree .node .node-content .text
+{
+  flex-grow: 1;
+}
+
+.zn-tree .leaf-node 
+{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  color: #676a6c;
+  font-weight: 500;  
+}
+
+.zn-tree .leaf-node:hover
+{
+  background-color: #dcfaff;
+  border-top-color: #e1e1e1;
+  border-bottom-color: #e1e1e1;
+}
+
+.zn-tree .leaf-node  .icon
+{
+  flex-grow: 0;
+}
+
+.zn-tree .leaf-node  .text
+{
+  flex-grow: 1;
+}
+
+.zn-tree .leaf-node .node-toggle
+{
+  width: 20px;
+  overflow: hidden;
+}
+
+.zn-tree .node-toggle i 
+{
+  display: none;
+}
+
+.zn-tree .indent {overflow: hidden}

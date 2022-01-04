@@ -97,12 +97,13 @@
     {
       let component = this;
       let group = component.$shape;
+      let dp=props["text.padding"];
 
       if (!component.ctx.text) return;
 
       let text = new Konva.Text({
-        x: 0, y: 0,
-        width: w, height: h,
+        x: dp, y: 3+dp,
+        width: w-2*dp, height: h-2*dp,
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -135,6 +136,7 @@
       let component = this;
       let group = component.$shape;
       let s = { width: w, height: h };
+      let dp=props["text.padding"];
 
       group.setSize(s);
 
@@ -145,7 +147,7 @@
       let offset = props["shape.select.offset"];
       component.selection.points([w / 2, -offset - 2, w + offset + 2, h / 2, w / 2, h + offset + 2, -offset - 2, h / 2]);
 
-      component.text.size(s);
+      component.text.size({width: w-2*dp, height: h-2*dp});
 
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }
@@ -173,6 +175,32 @@
       component.ctx.text=text;
       component.text.text(text);
       component.$shape.getLayer().batchDraw();
+    }
+
+    setColor(type, colorVal)
+    {
+      let component=this;
+      if(type=="stroke-color") component.diamond.stroke(colorVal);
+      if(type=="fill-color") component.diamond.fill(colorVal);
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) component.text.stroke(colorVal)
+        else component.text.fill(colorVal);
+      }
+      component.$shape.getLayer().batchDraw();
+    }
+
+    getColor(type)
+    {
+      let component=this;
+      if(type=="stroke-color") return component.diamond.stroke();
+      if(type=="fill-color") return component.diamond.fill();
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) return component.text.stroke()
+        else return component.text.fill();
+      }
+      return "";
     }
 
     move(dx, dy)

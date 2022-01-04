@@ -115,7 +115,7 @@
           x: i * laneSize * d, 
           y: (laneSize + i * laneSize) * (1-d),
           width: laneSize, 
-          height: props["lane.header.size"],
+          height: props["lane.header.size"]+3,
           text: laneText,
           align: "center",
           verticalAlign: "middle",

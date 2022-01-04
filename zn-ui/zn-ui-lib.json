@@ -32,6 +32,8 @@
     "zn/ui/draggable/ng-directive.js",
     "zn/ui/toast/component.js",
     "zn/ui/editable/ng-directive.js",
+    "zn/ui/colorpicker/component.js",
+    "zn/ui/colorpicker/ng-directive.js",
     "zn/designer/properties.js",
     "zn/designer/shape.base.js",
     "zn/designer/utils.js",
@@ -49,6 +51,9 @@
     "zn/designer/shape.pill.js",
     "zn/designer/shape.rectangle.js",
     "zn/designer/shape.rectanglearea.js",
+    "zn/designer/shape.callout.js",
+    "zn/designer/shape.wedge.rect.js",
+    "zn/designer/shape.text.js",
     "zn/designer/shape.transformer.js",
     "zn/designer/surface/component.js",
     "zn/designer/surface/ng-directive.js"    
@@ -70,6 +75,7 @@
     "zn/ui/textfield/component.css",
     "zn/ui/editable/component.css",
     "zn/ui/toast/component.css",
+    "zn/ui/colorpicker/component.css",
     "zn/designer/surface/component.css"
   ]
 }

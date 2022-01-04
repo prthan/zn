@@ -102,6 +102,11 @@
     },{})
   }
 
+  Component.adjust=(points, offset)=>
+  {
+    return points.map(p=>p+(offset || 0.5));
+  }
+  
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;
 
 })(window);

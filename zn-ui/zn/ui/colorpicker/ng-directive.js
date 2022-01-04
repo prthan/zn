@@ -1,10 +1,10 @@
 (function(window)
 {
   let __package = "zn.ui.components.ng";
-  let __name = "textarea";
+  let __name = "colorpicker";
   
   let directive={};
-  
+
   directive.html=function()
   {
     return "<div></div>";
@@ -17,33 +17,37 @@
       target: element, 
       name: scope.name, 
       label: scope.label, 
-      value: scope.value, 
+      value: scope.value,
       placeholder: scope.placeholder,
-      readonly: scope.readonly === "true",
       error: scope.error ? scope.error : "",
       message: scope.message
     }
 
-    let textarea=new zn.ui.components.TextArea(options);
+    let colorpicker=new zn.ui.components.ColorPicker(options);
 
-    textarea.on("init", ()=>
+    colorpicker.on("init",()=>
     {
-      textarea.on("change", (evt)=>
+      colorpicker.on("change", (evt)=>
       {
         scope.value=evt.newValue;
         scope.$apply();
-        if(scope["onvaluechange"]) scope["onvaluechange"]({$event: evt});
+
+        if(scope.onvaluechange) scope.onvaluechange({$event: evt});
+      })
+      colorpicker.on("input", (evt)=>
+      {
+        if(scope.oninput) scope.oninput({$event: evt});
       })
   
-      scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
-      scope.$watch("error", (nv, ov)=>textarea.message(nv ? nv : "", "error"));
-      scope.$watch("message", (nv, ov)=>textarea.message(nv, "message"));
+      scope.$watch("value", (nv, ov)=>colorpicker.setValue(nv));
+      scope.$watch("error", (nv, ov)=>colorpicker.message(nv ? nv : "", "error"));
+      scope.$watch("message", (nv, ov)=>colorpicker.message(nv, "message"));
     })
 
-    textarea.init();
+    colorpicker.init();
   }
 
-  directive.tag="znTextarea";
+  directive.tag="znColorpicker";
   
   directive.factory=function()
   {
@@ -52,12 +56,12 @@
       {
         name         : "@",
         label        : "@",
-        value        : "=",
         placeholder  : "@",
-        readonly     : "@",
+        value        : "=",
         error        : "=",
         message      : "=",
-        onvaluechange: "&"
+        onvaluechange: "&",
+        oninput      : "&",
       },
       restrict: "A",
       template: "",

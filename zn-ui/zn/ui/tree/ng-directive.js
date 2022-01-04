@@ -1,10 +1,10 @@
 (function(window)
 {
   let __package = "zn.ui.components.ng";
-  let __name = "textarea";
-  
+  let __name = "tree";
+
   let directive={};
-  
+
   directive.html=function()
   {
     return "<div></div>";
@@ -18,32 +18,34 @@
       name: scope.name, 
       label: scope.label, 
       value: scope.value, 
-      placeholder: scope.placeholder,
+      placeholder: scope.placeholder, 
+      icon: scope.icon, 
       readonly: scope.readonly === "true",
       error: scope.error ? scope.error : "",
       message: scope.message
     }
 
-    let textarea=new zn.ui.components.TextArea(options);
+    let tree=new zn.ui.components.TextField(options);
 
-    textarea.on("init", ()=>
+    tree.on("init", ()=>
     {
-      textarea.on("change", (evt)=>
+      tree.on("change", (evt)=>
       {
         scope.value=evt.newValue;
         scope.$apply();
-        if(scope["onvaluechange"]) scope["onvaluechange"]({$event: evt});
-      })
-  
-      scope.$watch("value", (nv, ov)=>textarea.setValue(nv));
-      scope.$watch("error", (nv, ov)=>textarea.message(nv ? nv : "", "error"));
-      scope.$watch("message", (nv, ov)=>textarea.message(nv, "message"));
-    })
 
-    textarea.init();
+        if(scope.onchange) scope.onchange({$event: evt});
+      })
+      tree.on("action", (evt)=>scope.onaction({$event: evt}));
+      
+      scope.$watch("value", (nv, ov)=>tree.setValue(nv))
+      scope.$watch("error", (nv, ov)=>tree.message(nv ? nv : "", "error"));
+      scope.$watch("message", (nv, ov)=>tree.message(nv, "message"));
+    })
+    tree.init();
   }
 
-  directive.tag="znTextarea";
+  directive.tag="znTree";
   
   directive.factory=function()
   {
@@ -54,10 +56,12 @@
         label        : "@",
         value        : "=",
         placeholder  : "@",
+        icon         : "@",
         readonly     : "@",
+        onaction     : "&",
         error        : "=",
         message      : "=",
-        onvaluechange: "&"
+        onchange     : "&"
       },
       restrict: "A",
       template: "",

@@ -75,8 +75,9 @@
     {
       let datefield = this;
       datefield.$target.html(DateField.html(datefield.options));
+      datefield.$inputWrapper=datefield.$target.find(".zn-datefield-input");
       datefield.$input = datefield.$target.find(".zn-datefield-input input");
-      datefield.$calendar = datefield.$target.find(".calendar");
+      //datefield.$calendar = datefield.$target.find(".calendar");
       datefield.$msg = datefield.$target.find(".zn-datefield-msg");
     }
 
@@ -111,21 +112,25 @@
       datefield.$target.find(".zn-datefield-input .action").on("click", (evt) =>
       {
         datefield.$input.focus();
-        datefield.showCalendar();
+        if (!datefield.$calendar) datefield.showCalendar();
       });
     }
 
     showCalendar()
     {
       let datefield = this;
-      datefield.$calendar.addClass("showing");
+      $("body").append(`<div class="zn-datefield-calendar zn-calendar"></div>`);
+      datefield.$calendar=$(".zn-datefield-calendar");
+
       var $body = $("body");
       let hide = () =>
       {
         $body.off("mousedown.zn.ui.components.datefield.calendarpopup");
         $body.off("keydown.zn.ui.components.datefield.calendarpopup");
-        datefield.$calendar.hide();
-        datefield.$calendar.removeClass("showing");
+        datefield.$calendar.remove();
+        datefield.$calendar=null;
+        //datefield.$calendar.hide();
+        //datefield.$calendar.removeClass("showing");
         datefield.$input.focus();
       };
       $body.on("mousedown.zn.ui.components.datefield.calendarpopup", (evt) =>
@@ -155,7 +160,23 @@
 
       calendar.init();
 
-      let p = datefield.$input.position();
+      datefield.$calendar.show();
+
+      let inputRect=datefield.$inputWrapper.get()[0].getBoundingClientRect();
+      let calendarRect=datefield.$calendar.get()[0].getBoundingClientRect();
+
+      let left=inputRect.x + inputRect.width - calendarRect.width;
+      let top= inputRect.y + inputRect.height + 1;
+      let wh = $(window).height();
+      let ww = $(window).width();
+      if (top + calendarRect.height > wh) top =  wh - calendarRect.height;
+      if (left + calendarRect.width > ww) top =  ww - calendarRect.width;
+      top += $(window).scrollTop();
+      left += $(window).scrollLeft();
+      datefield.$calendar.css("top", top + "px").css("left", left + "px")
+
+
+      /*let p = datefield.$input.position();
       let w = datefield.$input.width() + 3;
       let h = datefield.$input.height();
       let top = p.top + h + 9;
@@ -168,7 +189,7 @@
 
       datefield.$calendar.css("top", top + "px")
                          .css("left", left + "px")
-                         .show();
+                         .show();*/
 
     }
 
@@ -187,7 +208,6 @@
         <span class="action"><i class="far fa-calendar-alt"></i></span>
       </div>
       <div class="zn-datefield-msg">${options.error || options.message || ''}</div>
-      <div class="calendar zn-calendar"></div>
       `;
     };
   

@@ -312,6 +312,32 @@
       component.list[index].text=text;
     }
 
+    setColor(type, colorVal)
+    {
+      let component=this;
+      if(type=="stroke-color") component.foreground.stroke(colorVal);
+      if(type=="fill-color") component.background.fill(colorVal);
+      /*if(type=="text-color")
+      {
+        if(props["text.stroke"]) component.text.stroke(colorVal)
+        else component.text.fill(colorVal);
+      }*/
+      component.$shape.getLayer().batchDraw();
+    }
+
+    getColor(type)
+    {
+      let component=this;
+      if(type=="stroke-color") return component.foreground.stroke();
+      if(type=="fill-color") return component.background.fill();
+      /*if(type=="text-color")
+      {
+        if(props["text.stroke"]) return component.text.stroke()
+        else return component.text.fill();
+      }*/
+      return "";
+    }
+
     move(dx, dy)
     {
       let component = this;

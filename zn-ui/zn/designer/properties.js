@@ -40,6 +40,7 @@
 
     "text.family": "monospace",
     "text.size": 12,
+    "text.padding": 10,
     //"text.color": "#376d8a",
     "text.color": "#0f2c3d",
     "text.style": "normal",
@@ -78,9 +79,22 @@
     "lane.separator.stroke": "#cccccc",
     "lane.header.size": 25,
 
+    "text-area.stroke": "#7986cb",
+    "text-area.marker.size": 3,
+
+    "callout.fill": "#C5E1A5",
+    "callout.stroke": "#8bc34a33",
+
+    "wedge-rect.fill": "#C5CAE9",
+    "wedge-rect.stroke": "#3949ab1c",
   }
 
   __package.split(".").reduce((a,e)=> a[e]=a[e]||{}, window)[__name]=Component;
 
 })(window);
 
+/*
+rounded-rect
+M 5 0 l 20 0 a 5 5 0 0 1 5 5 l 0 10 a 5 5 0 0 1 -5 5 l -20 0 a 5 5 0 0 1 -5 -5 l 0 -10 a 5 5 0 0 1 5 -5
+
+*/

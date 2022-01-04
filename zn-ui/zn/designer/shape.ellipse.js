@@ -57,7 +57,7 @@
       let group = component.$shape;
 
       let ellipse = new Konva.Ellipse({
-        x: w / 2 + 0.5, y: h / 2 + 0.5,
+        x: w / 2, y: h / 2,
         radius: { x: w / 2, y: h / 2 },
         fill: props["ellipse.fill"],
         stroke: props["ellipse.stroke"],
@@ -95,13 +95,13 @@
     {
       let component = this;
       let group = component.$shape;
+      let dp=props["text.padding"];
 
-      if (!component.ctx.text)
-        return;
+      if (!component.ctx.text) return;
 
       let text = new Konva.Text({
-        x: 0, y: 0,
-        width: w, height: h,
+        x: dp, y: dp,
+        width: w-2*dp, height: h-2*dp,
         text: ctx.text,
         align: "center",
         verticalAlign: "middle",
@@ -134,6 +134,7 @@
       let component = this;
       let group = component.$shape;
       let s = { width: w, height: h };
+      let dp=props["text.padding"];
 
       group.setSize(s);
 
@@ -147,7 +148,7 @@
       component.selection.position({ x: w / 2 + 0.5, y: h / 2 + 0.5 });
       component.selection.radius({ x: w / 2 + offset, y: h / 2 + offset });
 
-      component.text.size(s);
+      component.text.size({width: w-2*dp, height: h-2*dp});
 
       zn.designer.shape.ConnectorPoint.updateForRectangularShape(component);
     }
@@ -177,6 +178,32 @@
       component.$shape.getLayer().batchDraw();
     }
     
+    setColor(type, colorVal)
+    {
+      let component=this;
+      if(type=="stroke-color") component.ellipse.stroke(colorVal);
+      if(type=="fill-color") component.ellipse.fill(colorVal);
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) component.text.stroke(colorVal)
+        else component.text.fill(colorVal);
+      }
+      component.$shape.getLayer().batchDraw();
+    }
+
+    getColor(type)
+    {
+      let component=this;
+      if(type=="stroke-color") return component.ellipse.stroke();
+      if(type=="fill-color") return component.ellipse.fill();
+      if(type=="text-color")
+      {
+        if(props["text.stroke"]) return component.text.stroke()
+        else return component.text.fill();
+      }
+      return "";
+    }
+
     move(dx, dy)
     {
       let component = this;

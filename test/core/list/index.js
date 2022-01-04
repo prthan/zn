@@ -3889,7 +3889,7 @@ $(()=>
       items.push({
         text: data.name, 
         subtext: data.guid,
-        img: `../../../images/avatars/${images[items.length%images.length]}`
+        img: `/test/images/avatars/${images[items.length%images.length]}`
       });
     }
     return items;

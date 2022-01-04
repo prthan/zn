@@ -110,7 +110,7 @@
     {
       return `
       ${options.label ? TextArea.htmlLabel(options.label) : ''}
-      <div class="zn-textarea-input"><textarea value="${options.value || ''}" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}></textarea></div>
+      <div class="zn-textarea-input"><textarea value="${options.value || ''}" cols="1" placeholder="${options.placeholder || ''}" ${options.readonly ? 'readonly' : ''}></textarea></div>
       <div class="zn-textarea-msg">${options.error || options.message || ''}</div>
       `;
     };

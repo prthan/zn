@@ -86,8 +86,7 @@
       {
         if (evt.keyCode != 40)
           return;
-        if (!dropdownfield.$items.hasClass("showing"))
-          dropdownfield.showDropdownMenuItems();
+        if (!dropdownfield.$items) dropdownfield.showDropdownMenuItems();
       });
       dropdownfield.$target.find(".zn-dropdownfield-input").on("focus", (evt) =>
       {
@@ -106,16 +105,19 @@
     showDropdownMenuItems()
     {
       let dropdownfield = this;
+      $("body").append(`<div class="zn-dropdownfield-items"></div>`);
+      dropdownfield.$items=$(".zn-dropdownfield-items");
       dropdownfield.$items.html(DropdownField.htmlDropdownMenu(dropdownfield.options.items));
-      dropdownfield.$items.addClass("showing");
 
       var $body = $("body");
       let hide = () =>
       {
         $body.off("mousedown.zn.ui.components.dropdownfield.itemspopup");
         $body.off("keydown.zn.ui.components.dropdownfield.itemspopup");
-        dropdownfield.$items.hide();
-        dropdownfield.$items.removeClass("showing");
+        //dropdownfield.$items.hide();
+        //dropdownfield.$items.removeClass("showing");
+        dropdownfield.$items.remove();
+        dropdownfield.$items=null;
       };
       $body.on("mousedown.zn.ui.components.dropdownfield.itemspopup", (evt) =>
       {
@@ -139,20 +141,16 @@
         }
       });
 
-      let p = dropdownfield.$input.position();
-      let w = dropdownfield.$input.width() + 3;
-      let h = dropdownfield.$input.height();
-      let top = p.top + h + 12;
-      let left = p.left + 3;
-      let ch = $(document).height();
+      dropdownfield.$items.show();
+      let inputRect=dropdownfield.$input.get()[0].getBoundingClientRect();
+      let itemsRect=dropdownfield.$items.get()[0].getBoundingClientRect();
 
-      if (top + dropdownfield.$items.height() > ch)
-        top = ch - dropdownfield.$items.height() - 20;
-
-      dropdownfield.$items.width(w)
-        .css("top", top + "px")
-        .css("left", left + "px")
-        .show();
+      let left=inputRect.x;
+      let top= inputRect.y + inputRect.height + 1;
+      let wh = $(window).height();
+      if (top + itemsRect.height > wh) top =  wh - itemsRect.height;
+      top += $(window).scrollTop();
+      dropdownfield.$items.css("top", top + "px").css("left", left + "px").css("width", (inputRect.width > 100 ? inputRect.width : 100) + "px");
 
     }
 
@@ -167,7 +165,6 @@
       ${options.label ? DropdownField.htmlLabel(options.label) : ''}
       <div class="zn-dropdownfield-input" tabindex="0"><span class="value placeholder">${options.placeholder}</span><span class="action"><i class="fas fa-caret-down"></i></span></div>
       <div class="zn-dropdownfield-msg">${options.error || options.message || ''}</div>
-      <div class="zn-dropdownfield-items"></div>
       `;
     };
   
